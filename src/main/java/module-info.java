@@ -1,0 +1,17 @@
+module com.example.giefrontend1 {
+    requires javafx.controls;
+    requires javafx.fxml;
+    requires de.jensd.fx.glyphs.fontawesome;
+    requires java.sql;
+    requires org.xerial.sqlitejdbc;
+
+
+    opens com.example.giefrontend1 to javafx.fxml;
+    exports com.example.giefrontend1;
+    exports com.example.giefrontend1.Controllers;
+    exports com.example.giefrontend1.Controllers.Commercant;
+    exports com.example.giefrontend1.Controllers.Contact;
+    exports com.example.giefrontend1.Models;
+    exports com.example.giefrontend1.Views;
+
+}
