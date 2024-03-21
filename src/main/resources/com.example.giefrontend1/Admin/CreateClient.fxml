@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.CreateContactController">
    <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Client Account" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-   <VBox fillWidth="false" layoutX="13.0" layoutY="40.0" prefHeight="702.0" prefWidth="498.0" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="40.0">
+   <VBox fillWidth="false" layoutX="13.0" layoutY="40.0" prefHeight="702.0" prefWidth="294.0" AnchorPane.leftAnchor="13.0" AnchorPane.topAnchor="40.0">
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="First Name:" />
       <TextField fx:id="fName_tfld" />
       <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Last Name:" />
@@ -21,14 +21,16 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
       <TextField fx:id="email_txtfield" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number:" />
-      <TextField fx:id="phoneNumber_txtField" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number:" />
       <TextField fx:id="phoneNumber_txtfield" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Fax:" />
       <TextField fx:id="fax_textfield" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Adress:" />
       <TextField fx:id="adress_textfield" />
-      <Button fx:id="CreateClient_btn" mnemonicParsing="false" prefHeight="45.0" text="Create Client" />
       <Label fx:id="Error_lbl" layoutX="10.0" layoutY="171.0" styleClass="error_lbl" text="Error" />
+   </VBox>
+   <VBox layoutX="409.0" layoutY="245.0" prefHeight="120.0" prefWidth="170.0">
+      <Button fx:id="CreateClientParticular_btn" mnemonicParsing="false" prefHeight="45.0" text="Create Particulier"/>
+      <Button fx:id="CreateClientEntrprise_btn1" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" prefHeight="45.0"
+              text="Create Entrprise"/>
    </VBox>
 </AnchorPane>

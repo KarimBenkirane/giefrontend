@@ -21,6 +21,8 @@ public class CreateContactController implements Initializable {
     public TextField email_txtfield;
     public TextField legalForm_txtField;
     public TextField CnameTxtField;
+    public Button CreateClientParticular_btn;
+    public Button CreateClientEntrprise_btn1;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
