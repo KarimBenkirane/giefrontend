@@ -28,9 +28,8 @@
       <TextField fx:id="adress_textfield" />
       <Label fx:id="Error_lbl" layoutX="10.0" layoutY="171.0" styleClass="error_lbl" text="Error" />
    </VBox>
-   <VBox layoutX="409.0" layoutY="245.0" prefHeight="120.0" prefWidth="170.0">
-      <Button fx:id="CreateClientParticular_btn" mnemonicParsing="false" prefHeight="45.0" text="Create Particulier"/>
-      <Button fx:id="CreateClientEntrprise_btn1" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" prefHeight="45.0"
-              text="Create Entrprise"/>
+   <VBox layoutX="409.0" layoutY="245.0" prefHeight="120.0" prefWidth="272.0">
+      <Button fx:id="CreateClientParticular_btn" mnemonicParsing="false" prefHeight="45.0" text="Create Particulier" />
+      <Button fx:id="CreateClientEntrprise_btn1" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" prefHeight="45.0" text="Create Entrprise" />
    </VBox>
 </AnchorPane>
