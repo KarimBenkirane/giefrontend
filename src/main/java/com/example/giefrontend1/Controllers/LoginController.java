@@ -54,7 +54,7 @@ public class LoginController implements Initializable {
             if ("ADMIN".equals(username) && "123".equals(password)) {
                 model.getViewFactory().showAdminWindow();
             } else {
-                err_lbl.setText("Invalid username or password"); // Afficher le message d'erreur
+                err_lbl.setText("Invalid username or password");
                 model.getViewFactory().showLoginWindow();
             }
         } else {
