@@ -27,13 +27,13 @@ public class ParserContact {
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();
             System.out.println(body);
-            parse(body);
+            parseGetallContact(body);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return parse(body);
+        return parseGetallContact(body);
     }
-    public static List<ContactDTO> parse(String responseBody) {
+    public static List<ContactDTO> parseGetallContact(String responseBody) {
         List<ContactDTO> listContact = new ArrayList<>();
 
         JsonArray users = new JsonParser().parse(responseBody).getAsJsonArray();

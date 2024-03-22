@@ -19,9 +19,9 @@ public class ContactController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contactList = FXCollections.observableArrayList();
-        client_lstView.setItems(contactsCollector("http://localhost:4567/contacts"));
+        client_lstView.setItems(contactsCollector());
     }
-    public ObservableList<ContactDTO> contactsCollector(String url) {
+    public ObservableList<ContactDTO> contactsCollector() {
         return FXCollections.observableArrayList(ParserContact.GetAllContact());
     }
 }
