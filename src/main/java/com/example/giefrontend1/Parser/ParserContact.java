@@ -15,7 +15,8 @@ import java.util.List;
 
 
 public class ParserContact {
-    public static String responseBodyGenerator(String url) {
+    private static final String url="http://localhost:4567/contacts";
+    public static List<ContactDTO> GetAllContact() {
         OkHttpClient client = new OkHttpClient();
         String body = null;
 
@@ -30,7 +31,7 @@ public class ParserContact {
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        return body;
+        return parse(body);
     }
     public static List<ContactDTO> parse(String responseBody) {
         List<ContactDTO> listContact = new ArrayList<>();

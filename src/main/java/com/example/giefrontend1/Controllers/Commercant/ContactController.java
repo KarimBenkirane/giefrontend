@@ -22,7 +22,6 @@ public class ContactController implements Initializable {
         client_lstView.setItems(contactsCollector("http://localhost:4567/contacts"));
     }
     public ObservableList<ContactDTO> contactsCollector(String url) {
-        String responseBody = ParserContact.responseBodyGenerator(url);
-        return FXCollections.observableArrayList(ParserContact.parse(responseBody));
+        return FXCollections.observableArrayList(ParserContact.GetAllContact());
     }
 }
