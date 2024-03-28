@@ -30,6 +30,6 @@
    </VBox>
    <VBox layoutX="409.0" layoutY="245.0" prefHeight="120.0" prefWidth="272.0">
       <Button fx:id="CreateClientParticular_btn" mnemonicParsing="false" prefHeight="45.0" text="Create Particulier" />
-      <Button fx:id="CreateClientEntrprise_btn1" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" prefHeight="45.0" text="Create Entrprise" />
+      <Button fx:id="CreateClientEnterprise_btn1" layoutX="21.0" layoutY="20.0" mnemonicParsing="false" prefHeight="45.0" text="Create Entrprise" />
    </VBox>
 </AnchorPane>

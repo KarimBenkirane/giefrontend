@@ -8,7 +8,9 @@ public class ContactDTO {
     private String fax;
     private AdresseDTO address;
 
-    public ContactDTO(int id, String name, String email, String telephone, String fax, AdresseDTO address) {
+    public ContactDTO(){}
+
+    public ContactDTO(int id, String name, String email, String telephone, String fax, String s, AdresseDTO address) {
         this.id = id;
         this.name = name;
         this.email = email;
