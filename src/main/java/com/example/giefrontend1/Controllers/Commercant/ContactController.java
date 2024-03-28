@@ -22,6 +22,6 @@ public class ContactController implements Initializable {
         client_lstView.setItems(contactsCollector());
     }
     public ObservableList<ContactDTO> contactsCollector() {
-        return FXCollections.observableArrayList(ParserContact.GetAllContact());
+        return FXCollections.observableArrayList(ParserContact.getAllContacts());
     }
 }

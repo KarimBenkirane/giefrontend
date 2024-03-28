@@ -115,12 +115,12 @@ public class ContactDTO {
         if(this.last_name == null){
             return "Entreprise{" +
                     "id=" + id +
+                    ", raisonSociale='" + raisonSociale + '\'' +
+                    ", formeJuridique='" + formeJuridique + '\'' +
                     ", email='" + email + '\'' +
                     ", telephone='" + telephone + '\'' +
                     ", fax='" + fax + '\'' +
                     ", address=" + address +
-                    ", formeJuridique='" + formeJuridique + '\'' +
-                    ", raisonSociale='" + raisonSociale + '\'' +
                     '}';
         }
         else{
