@@ -19,6 +19,19 @@ public class AdresseDTO {
         this.pays = pays;
     }
 
+    public AdresseDTO(String rue, int numeroRue, String quartier, int codePostal, String ville, String pays) {
+        this.rue = rue;
+        this.numeroRue = numeroRue;
+        this.quartier = quartier;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.pays = pays;
+    }
+
+    public AdresseDTO(){
+
+    }
+
     // Getters et Setters
     public int getId() {
         return id;

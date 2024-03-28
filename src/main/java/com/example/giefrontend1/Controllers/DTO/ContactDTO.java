@@ -2,12 +2,12 @@ package com.example.giefrontend1.Controllers.DTO;
 
 public class ContactDTO {
     private int id;
-    private String first_name;
-    private String last_name;
+    private String prenom;
+    private String nom;
     private String email;
     private String telephone;
     private String fax;
-    private AdresseDTO address;
+    private AdresseDTO adresse;
 
     private String formeJuridique;
     private String raisonSociale;
@@ -17,23 +17,41 @@ public class ContactDTO {
 
 
     //Constructeur pour créer les instances des particuliers
-    public ContactDTO(int id, String first_name, String last_name, String email, String telephone, String fax, AdresseDTO address) {
+    public ContactDTO(int id, String prenom, String nom, String email, String telephone, String fax, AdresseDTO adresse) {
         this.id = id;
-        this.first_name = first_name;
-        this.last_name = last_name;
+        this.prenom = prenom;
+        this.nom = nom;
         this.email = email;
         this.telephone = telephone;
         this.fax = fax;
-        this.address = address;
+        this.adresse = adresse;
+    }
+
+    public ContactDTO(String prenom, String nom, String email, String telephone, String fax, AdresseDTO adresse) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.email = email;
+        this.telephone = telephone;
+        this.fax = fax;
+        this.adresse = adresse;
     }
 
     //Constructeur pour créer les instances des entreprises
-    public ContactDTO(int id, String email, String telephone, String fax, AdresseDTO address, String formeJuridique, String raisonSociale) {
+    public ContactDTO(int id, String email, String telephone, String fax, AdresseDTO adresse, String formeJuridique, String raisonSociale) {
         this.id = id;
         this.email = email;
         this.telephone = telephone;
         this.fax = fax;
-        this.address = address;
+        this.adresse = adresse;
+        this.formeJuridique = formeJuridique;
+        this.raisonSociale = raisonSociale;
+    }
+
+    public ContactDTO(String email, String telephone, String fax, AdresseDTO adresse, String formeJuridique, String raisonSociale) {
+        this.email = email;
+        this.telephone = telephone;
+        this.fax = fax;
+        this.adresse = adresse;
         this.formeJuridique = formeJuridique;
         this.raisonSociale = raisonSociale;
     }
@@ -46,20 +64,20 @@ public class ContactDTO {
         this.id = id;
     }
 
-    public String getFirst_name() {
-        return first_name;
+    public String getPrenom() {
+        return prenom;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getEmail() {
@@ -86,12 +104,12 @@ public class ContactDTO {
         this.fax = fax;
     }
 
-    public AdresseDTO getAddress() {
-        return address;
+    public AdresseDTO getAdresse() {
+        return adresse;
     }
 
-    public void setAddress(AdresseDTO address) {
-        this.address = address;
+    public void setAdresse(AdresseDTO adresse) {
+        this.adresse = adresse;
     }
 
     public String getFormeJuridique() {
@@ -112,7 +130,7 @@ public class ContactDTO {
 
     @Override
     public String toString(){
-        if(this.last_name == null){
+        if(this.nom == null){
             return "Entreprise{" +
                     "id=" + id +
                     ", raisonSociale='" + raisonSociale + '\'' +
@@ -120,18 +138,18 @@ public class ContactDTO {
                     ", email='" + email + '\'' +
                     ", telephone='" + telephone + '\'' +
                     ", fax='" + fax + '\'' +
-                    ", address=" + address +
+                    ", address=" + adresse +
                     '}';
         }
         else{
             return "Particulier{" +
                     "id=" + id +
-                    ", first_name='" + first_name + '\'' +
-                    ", last_name='" + last_name + '\'' +
+                    ", nom='" + nom + '\'' +
+                    ", prenom='" + prenom + '\'' +
                     ", email='" + email + '\'' +
                     ", telephone='" + telephone + '\'' +
                     ", fax='" + fax + '\'' +
-                    ", address=" + address +
+                    ", address=" + adresse +
                     '}';
         }
     }

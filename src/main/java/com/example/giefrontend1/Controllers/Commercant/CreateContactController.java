@@ -3,78 +3,164 @@ package com.example.giefrontend1.Controllers.Commercant;
 import com.example.giefrontend1.Controllers.DTO.AdresseDTO;
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Parser.ParserContact;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.w3c.dom.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CreateContactController implements Initializable {
     @FXML
-    public TextField fName_tfld;
+    public TextField prenomTextField;
+
     @FXML
-    public TextField lNAme_fld;
+    public TextField nomTextField;
+
     @FXML
-    public Label Error_lbl;
+    public TextField emailTextField;
+
     @FXML
-    public TextField adress_textfield;
+    public TextField phoneTextField;
+
     @FXML
-    public TextField fax_textfield;
+    public TextField faxTextField;
+
     @FXML
-    public TextField phoneNumber_txtfield;
+    public TextField quartierTextField;
+
     @FXML
-    public TextField email_txtfield;
-    public TextField legalForm_txtField;
-    public TextField CnameTxtField;
-    public Button CreateClientParticular_btn;
-    public Button CreateClientEnterprise_btn1;
+    public TextField rueTextField;
+
+    @FXML
+    public TextField numRueTextField;
+
+    @FXML
+    public TextField codePostalTextField;
+
+    @FXML
+    public TextField villeTextField;
+
+    @FXML
+    public TextField paysTextField;
+
+    @FXML
+    public Label statusLabel;
+
+    @FXML
+    public Button CreateContactBtn;
+
+    @FXML
+    public ChoiceBox<String> typeContactChoiceBox;
+
+    @FXML
+    public Label nomLabel; // deviendra raisonSociale pour l'entreprise
+
+    @FXML
+    public Label prenomLabel; // deviendra formeJuridique pour l'entreprise
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        CreateClientParticular_btn.setOnAction(event -> createParticularContact());
-        //CreateClientEnterprise_btn1.setOnAction(event -> createEnterpriseContact());
+        typeContactChoiceBox.getItems().add("Particulier");
+        typeContactChoiceBox.getItems().add("Entreprise");
+        typeContactChoiceBox.setValue("Particulier");
+
+        // Add a listener to the ChoiceBox value property
+        typeContactChoiceBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if(newValue.equals("Entreprise")){
+                    nomLabel.setText("Raison Sociale");
+                    prenomLabel.setText("Forme Juridique");
+                } else {
+                    nomLabel.setText("Nom");
+                    prenomLabel.setText("Prénom");
+                }
+            }
+        });
+
+        CreateContactBtn.setOnAction(event -> createContact());
     }
-    public void createParticularContact() {
-        String firstName = fName_tfld.getText();
-        String lastName = lNAme_fld.getText();
-        String email = email_txtfield.getText();
-        String phoneNumber = phoneNumber_txtfield.getText();
-        String fax = fax_textfield.getText();
-        String legalForm = legalForm_txtField.getText();
-        String companyName = CnameTxtField.getText();
-        String address = adress_textfield.getText();
 
-        // Vérifier que les champs obligatoires sont remplis
-        if (firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || phoneNumber.isEmpty()) {
-            Error_lbl.setText("Veuillez remplir tous les champs obligatoires.");
-            return;
+    public void createContact() {
+
+        String nom = null;
+        String prenom = null;
+        String email = null;
+        String telephone = null;
+        String fax = null;
+
+
+        String quartier = null;
+        String rue = null;
+        int numeroRue = -1;
+        int codePostal = -1;
+        String ville = null;
+        String pays = null;
+
+
+        if(!nomTextField.getText().isEmpty())
+            nom = nomTextField.getText();
+
+        if(!prenomTextField.getText().isEmpty())
+            prenom = prenomTextField.getText();
+
+        if(!emailTextField.getText().isEmpty())
+            email = emailTextField.getText();
+
+        if(!phoneTextField.getText().isEmpty())
+            telephone = phoneTextField.getText();
+
+        if(!faxTextField.getText().isEmpty())
+            fax = faxTextField.getText();
+
+
+
+        if(!quartierTextField.getText().isEmpty())
+            quartier = quartierTextField.getText();
+
+        if(!rueTextField.getText().isEmpty())
+            rue = rueTextField.getText();
+
+        if(!numRueTextField.getText().isEmpty())
+            numeroRue = Integer.parseInt(numRueTextField.getText());
+
+        if(!codePostalTextField.getText().isEmpty())
+            codePostal = Integer.parseInt(codePostalTextField.getText());
+
+        if(!villeTextField.getText().isEmpty())
+            ville = villeTextField.getText();
+
+        if(!paysTextField.getText().isEmpty())
+            pays = paysTextField.getText();
+
+        AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
+        if(typeContactChoiceBox.getValue().equals("Particulier")){
+            ContactDTO contactDTO = new ContactDTO(prenom,nom,email,telephone,fax,adresseDTO);
+            boolean status = ParserContact.createContact(contactDTO);
+            if(status)
+                statusLabel.setText("Contact crée avec succès!");
+            else{
+                statusLabel.setText("Erreur lors de la création du contact");
+            }
+        }
+        else{
+            //nom et prénom deviennent raisonSociale et formeJuridique respectivement
+            ContactDTO contactDTO = new ContactDTO(email,telephone,fax,adresseDTO,prenom,nom);
+            boolean status = ParserContact.createContact(contactDTO);
+            if(status)
+                statusLabel.setText("Contact crée avec succès!");
+            else{
+                statusLabel.setText("Erreur lors de la création du contact");
+            }
         }
 
-        AdresseDTO newAddress = new AdresseDTO(0, address, 0, "", 0, "", "");
 
 
-        // Construire l'objet ContactDTO
-        ContactDTO newContact;
-        if (companyName.isEmpty()) {
-            // Si c'est un particulier
-            newContact = new ContactDTO(0, firstName + " " + lastName, email, phoneNumber, fax, fax, newAddress);
-        } else {
-            // Si c'est une entreprise
-            newContact = new ContactDTO(0, companyName, email, legalForm, phoneNumber,fax,newAddress);
-        }
 
-        // Envoyer les données au backend pour créer le contact
-        boolean success = ParserContact.createContact(newContact);
-        System.out.println(success);
-
-        // Afficher un message en cas de succès ou d'échec de la création
-        if (success) {
-            // Le contact a été créé avec succès
-            Error_lbl.setText("Le contact a été créé avec succès.");
-        } else {
-            // Une erreur s'est produite lors de la création du contact
-            Error_lbl.setText("Une erreur s'est produite lors de la création du contact.");
-        }
     }
 }
