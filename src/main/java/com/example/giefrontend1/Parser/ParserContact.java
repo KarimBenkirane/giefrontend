@@ -107,7 +107,7 @@ public class ParserContact {
             OkHttpClient client = new OkHttpClient();
 
             Request request = new Request.Builder()
-                    .url(url +"/api/particuliers/delete?id=" + contactId)
+                    .url(url +"/api/contacts/delete/" + contactId)
                     .delete()
                     .build();
 

@@ -3,6 +3,7 @@ package com.example.giefrontend1.Controllers.Commercant;
 import com.example.giefrontend1.Parser.ParserContact;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
@@ -13,6 +14,7 @@ public class DeleteContact implements Initializable {
     public ListView dleteContact_listView;
     public Button deleteContact_btn;
     public TextField dleteContact_txtField;
+    public Label statusLabel;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -21,15 +23,15 @@ public class DeleteContact implements Initializable {
             try {
                 contactId = Integer.parseInt(dleteContact_txtField.getText());
             } catch (NumberFormatException e) {
-                System.out.println("Veuillez entrer un identifiant de contact valide.");
+                statusLabel.setText("Veuillez entrer un identifiant de contact valide.");
                 return;
             }
 
             boolean success = ParserContact.deleteContact(contactId);
             if (success) {
-                System.out.println("Contact supprimé avec succès!");
+                statusLabel.setText("Suppression effectuée avec succès!");
             } else {
-                System.out.println("Échec de la suppression du contact.");
+                statusLabel.setText("Une erreur s'est produite lors de la suppression du contact.");
             }
         });
     }
