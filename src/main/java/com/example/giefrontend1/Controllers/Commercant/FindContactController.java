@@ -40,18 +40,9 @@ public class FindContactController implements Initializable {
                 searchByID_listView.getItems().add("ID introuvable!");
                 return;
             }
-            String nom = contactDTO.getLast_name();
-            String formeJuridique = contactDTO.getFormeJuridique();
-            String raisonSociale = contactDTO.getRaisonSociale();
 
-            //Particulier
-            if(nom != null){
-                searchByID_listView.getItems().add(contactDTO.toStringParticulier());
-            }
-            //Entreprise
-            if(raisonSociale != null || formeJuridique != null) {
-                searchByID_listView.getItems().add(contactDTO.toStringEntreprise());
-            }
+            searchByID_listView.getItems().add(contactDTO.toString());
+
         });
 
 
@@ -59,7 +50,7 @@ public class FindContactController implements Initializable {
         SearchbyName_btn.setOnAction(event -> {
             SearchByName_listView.getItems().clear();
             String contactName = SearchContactbyName.getText();
-            if(contactName.equals("")){
+            if(contactName.isEmpty()){
                 SearchByName_listView.getItems().add("Veuillez saisir le nom!");
                 return;
             }
@@ -75,18 +66,7 @@ public class FindContactController implements Initializable {
                 return;
             }
             for(ContactDTO contactDTO : contacts){
-                String nom = contactDTO.getLast_name();
-                String formeJuridique = contactDTO.getFormeJuridique();
-                String raisonSociale = contactDTO.getRaisonSociale();
-
-                //Particulier
-                if(nom != null){
-                    SearchByName_listView.getItems().add(contactDTO.toStringParticulier());
-                }
-                //Entreprise
-                if(raisonSociale != null || formeJuridique != null) {
-                    SearchByName_listView.getItems().add(contactDTO.toStringEntreprise());
-                }
+                SearchByName_listView.getItems().add(contactDTO.toString());
             }
 
 

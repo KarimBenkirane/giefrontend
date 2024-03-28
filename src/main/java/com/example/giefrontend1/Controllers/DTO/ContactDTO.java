@@ -12,7 +12,8 @@ public class ContactDTO {
     private String formeJuridique;
     private String raisonSociale;
 
-    public ContactDTO(){}
+    public ContactDTO() {
+    }
 
 
     //Constructeur pour créer les instances des particuliers
@@ -109,28 +110,33 @@ public class ContactDTO {
         this.raisonSociale = raisonSociale;
     }
 
-
-    public String toStringParticulier() {
-        return "Particulier{" +
-                "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", last_name='" + last_name + '\'' +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", fax='" + fax + '\'' +
-                ", address=" + address +
-                '}';
+    @Override
+    public String toString(){
+        if(this.last_name == null){
+            return "Entreprise{" +
+                    "id=" + id +
+                    ", email='" + email + '\'' +
+                    ", telephone='" + telephone + '\'' +
+                    ", fax='" + fax + '\'' +
+                    ", address=" + address +
+                    ", formeJuridique='" + formeJuridique + '\'' +
+                    ", raisonSociale='" + raisonSociale + '\'' +
+                    '}';
+        }
+        else{
+            return "Particulier{" +
+                    "id=" + id +
+                    ", first_name='" + first_name + '\'' +
+                    ", last_name='" + last_name + '\'' +
+                    ", email='" + email + '\'' +
+                    ", telephone='" + telephone + '\'' +
+                    ", fax='" + fax + '\'' +
+                    ", address=" + address +
+                    '}';
+        }
     }
 
-    public String toStringEntreprise() {
-        return "Entreprise{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", telephone='" + telephone + '\'' +
-                ", fax='" + fax + '\'' +
-                ", formeJuridique='" + formeJuridique + '\'' +
-                ", raisonSociale='" + raisonSociale + '\'' +
-                ", address=" + address +
-                '}';
-    }
 }
+
+
+
