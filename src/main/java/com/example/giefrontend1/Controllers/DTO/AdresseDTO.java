@@ -78,7 +78,7 @@ public class AdresseDTO {
 
     @Override
     public String toString() {
-        return "Information Adresse:" +
+        return "Adresse:" +
                 "id=" + id +
                 ", rue='" + rue + '\'' +
                 ", numeroRue=" + numeroRue +

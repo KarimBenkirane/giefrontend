@@ -40,22 +40,17 @@ public class FindContactController implements Initializable {
                 searchByID_listView.getItems().add("ID introuvable!");
                 return;
             }
-            int id = contactDTO.getId();
-            String email = contactDTO.getEmail();
-            String fax = contactDTO.getFax();
-            String telephone = contactDTO.getTelephone();
             String nom = contactDTO.getLast_name();
-            String prenom = contactDTO.getFirst_name();
             String formeJuridique = contactDTO.getFormeJuridique();
             String raisonSociale = contactDTO.getRaisonSociale();
 
             //Particulier
             if(nom != null){
-                searchByID_listView.getItems().add(id + " " + nom + " " + prenom + " " + email + " " + telephone + " " + fax);
+                searchByID_listView.getItems().add(contactDTO.toStringParticulier());
             }
             //Entreprise
             if(raisonSociale != null || formeJuridique != null) {
-                searchByID_listView.getItems().add(id + " " + raisonSociale + " " + formeJuridique + " " + email + " " + telephone + " " + fax);
+                searchByID_listView.getItems().add(contactDTO.toStringEntreprise());
             }
         });
 
@@ -76,22 +71,17 @@ public class FindContactController implements Initializable {
                 return;
             }
             for(ContactDTO contactDTO : contacts){
-                int id = contactDTO.getId();
-                String email = contactDTO.getEmail();
-                String fax = contactDTO.getFax();
-                String telephone = contactDTO.getTelephone();
                 String nom = contactDTO.getLast_name();
-                String prenom = contactDTO.getFirst_name();
                 String formeJuridique = contactDTO.getFormeJuridique();
                 String raisonSociale = contactDTO.getRaisonSociale();
 
                 //Particulier
                 if(nom != null){
-                    SearchByName_listView.getItems().add(id + " " + nom + " " + prenom + " " + email + " " + telephone + " " + fax);
+                    SearchByName_listView.getItems().add(contactDTO.toStringParticulier());
                 }
                 //Entreprise
                 if(raisonSociale != null || formeJuridique != null) {
-                    SearchByName_listView.getItems().add(id + " " + raisonSociale + " " + formeJuridique + " " + email + " " + telephone + " " + fax);
+                    SearchByName_listView.getItems().add(contactDTO.toStringEntreprise());
                 }
             }
 

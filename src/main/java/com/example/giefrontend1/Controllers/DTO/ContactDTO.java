@@ -108,4 +108,29 @@ public class ContactDTO {
     public void setRaisonSociale(String raisonSociale) {
         this.raisonSociale = raisonSociale;
     }
+
+
+    public String toStringParticulier() {
+        return "Particulier{" +
+                "id=" + id +
+                ", first_name='" + first_name + '\'' +
+                ", last_name='" + last_name + '\'' +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", fax='" + fax + '\'' +
+                ", address=" + address +
+                '}';
+    }
+
+    public String toStringEntreprise() {
+        return "Entreprise{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", fax='" + fax + '\'' +
+                ", formeJuridique='" + formeJuridique + '\'' +
+                ", raisonSociale='" + raisonSociale + '\'' +
+                ", address=" + address +
+                '}';
+    }
 }

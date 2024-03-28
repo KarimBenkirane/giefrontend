@@ -140,12 +140,11 @@ public class ParserContact {
             String email = member.get("email").getAsString();
 
             // Vérifier si l'objet JSON contient la clé "raisonSociale"
-            String fax = null;
             if (member.has("raisonSociale")) {
                 String raisonSociale = member.get("raisonSociale").getAsString();
                 String formeJuridique = member.get("formeJuridique").getAsString();
                 String telephone = member.get("telephone").getAsString();
-                fax = member.get("fax").getAsString();
+                String fax = member.get("fax").getAsString();
 
                 JsonObject addressObj = member.get("adresse").getAsJsonObject();
                 int addressId = addressObj.get("id").getAsInt();
@@ -163,6 +162,7 @@ public class ParserContact {
                 String nom = member.get("nom").getAsString();
                 String prenom = member.get("prenom").getAsString();
                 String telephone = member.get("telephone").getAsString();
+                String fax = member.get("fax").getAsString();
 
                 JsonObject addressObj = member.get("adresse").getAsJsonObject();
                 int addressId = addressObj.get("id").getAsInt();
