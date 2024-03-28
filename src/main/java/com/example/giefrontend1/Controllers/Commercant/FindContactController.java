@@ -66,8 +66,12 @@ public class FindContactController implements Initializable {
 
 
             List<ContactDTO> contacts = ParserContact.getParticuliersByName(contactName);
-            if(contacts == null || (contacts != null && contacts.isEmpty())){
+            if(contacts == null){
                 SearchByName_listView.getItems().add("Une erreur s'est produite.");
+                return;
+            }
+            if(contacts.isEmpty()){
+                SearchByName_listView.getItems().add("Aucun contact ayant le nom " + contactName + " n'a été trouvé.");
                 return;
             }
             for(ContactDTO contactDTO : contacts){
