@@ -8,7 +8,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.w3c.dom.Text;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -141,7 +140,7 @@ public class CreateContactController implements Initializable {
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
         if(typeContactChoiceBox.getValue().equals("Particulier")){
             ContactDTO contactDTO = new ContactDTO(prenom,nom,email,telephone,fax,adresseDTO);
-            boolean status = ParserContact.createContact(contactDTO);
+            boolean status = ParserContact.createParticulier(contactDTO);
             if(status)
                 statusLabel.setText("Contact crée avec succès!");
             else{
@@ -151,7 +150,7 @@ public class CreateContactController implements Initializable {
         else{
             //nom et prénom deviennent raisonSociale et formeJuridique respectivement
             ContactDTO contactDTO = new ContactDTO(email,telephone,fax,adresseDTO,prenom,nom);
-            boolean status = ParserContact.createContact(contactDTO);
+            boolean status = ParserContact.createEntreprise(contactDTO); // méthode createEntreprise à ajouter
             if(status)
                 statusLabel.setText("Contact crée avec succès!");
             else{

@@ -204,7 +204,7 @@ public class ParserContact {
             throw new RuntimeException(e);
         }
     }
-    public static boolean createContact(ContactDTO newContact) {
+    public static boolean createParticulier(ContactDTO newContact) {
         Gson gson = new Gson();
         String json = gson.toJson(newContact);
         System.out.println(json);
@@ -212,6 +212,25 @@ public class ParserContact {
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder()
                 .url(url + "/api/particuliers/add")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean createEntreprise(ContactDTO newContact) {
+        Gson gson = new Gson();
+        String json = gson.toJson(newContact);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/entreprises/add")
                 .post(body)
                 .build();
 
