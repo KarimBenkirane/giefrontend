@@ -11,8 +11,10 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+public class UpdateContactController implements Initializable {
+    @FXML
+    public TextField idTextField;
 
-public class CreateContactController implements Initializable {
     @FXML
     public TextField prenomTextField;
 
@@ -50,7 +52,7 @@ public class CreateContactController implements Initializable {
     public Label statusLabel;
 
     @FXML
-    public Button CreateContactBtn;
+    public Button UpdateContactBtn;
 
     @FXML
     public ChoiceBox<String> typeContactChoiceBox;
@@ -82,11 +84,16 @@ public class CreateContactController implements Initializable {
             }
         });
 
-        CreateContactBtn.setOnAction(event -> createContact());
+        UpdateContactBtn.setOnAction(event -> updateContact());
     }
 
-    public void createContact() {
+    public void updateContact() {
 
+        if(idTextField.getText().isEmpty()){
+            statusLabel.setText("Veuillez fournir un ID!");
+            return;
+        }
+        int id = Integer.parseInt(idTextField.getText());
         String nom = null;
         String prenom = null;
         String email = null;
@@ -104,10 +111,6 @@ public class CreateContactController implements Initializable {
 
         if(!nomTextField.getText().isEmpty())
             nom = nomTextField.getText();
-        else{
-            statusLabel.setText("Veuillez saisir au moins le nom/la raison sociale du contact!");
-            return;
-        }
 
         if(!prenomTextField.getText().isEmpty())
             prenom = prenomTextField.getText();
@@ -143,22 +146,22 @@ public class CreateContactController implements Initializable {
 
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
         if(typeContactChoiceBox.getValue().equals("Particulier")){
-            ContactDTO contactDTO = new ContactDTO(prenom,nom,email,telephone,fax,adresseDTO);
-            boolean status = ParserContact.createParticulier(contactDTO);
+            ContactDTO contactDTO = new ContactDTO(id,prenom,nom,email,telephone,fax,adresseDTO);
+            boolean status = ParserContact.updateParticulier(contactDTO);
             if(status)
-                statusLabel.setText("Contact crée avec succès!");
+                statusLabel.setText("Contact modifié avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la création du contact");
+                statusLabel.setText("Erreur lors de la modification du contact");
             }
         }
         else{
             //nom et prénom deviennent raisonSociale et formeJuridique respectivement
-            ContactDTO contactDTO = new ContactDTO(email,telephone,fax,adresseDTO,prenom,nom);
-            boolean status = ParserContact.createEntreprise(contactDTO); // méthode createEntreprise à ajouter
+            ContactDTO contactDTO = new ContactDTO(id,email,telephone,fax,adresseDTO,prenom,nom);
+            boolean status = ParserContact.updateEntreprise(contactDTO);
             if(status)
-                statusLabel.setText("Contact crée avec succès!");
+                statusLabel.setText("Contact modifié avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la création du contact");
+                statusLabel.setText("Erreur lors de la modification du contact");
             }
         }
 

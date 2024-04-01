@@ -79,39 +79,39 @@ public class ParserContact {
 
 
 
-                    if(!(jsonEmail instanceof JsonNull)) {
+                    if(!(jsonEmail == null)) {
                         email = jsonEmail.getAsString();
                     }
-                    if(!(jsonFax instanceof JsonNull)) {
+                    if(!(jsonFax == null)) {
                         fax = jsonFax.getAsString();
                     }
-                    if(!(jsonTelephone instanceof JsonNull)) {
+                    if(!(jsonTelephone == null)) {
                         telephone = jsonTelephone.getAsString();
                     }
-                    if(!(jsonRaisonSociale instanceof JsonNull)) {
+                    if(!(jsonRaisonSociale == null)) {
                         raisonSociale = jsonRaisonSociale.getAsString();
                     }
-                    if(!(jsonFormeJuridique instanceof JsonNull)) {
+                    if(!(jsonFormeJuridique == null)) {
                         formeJuridique = jsonFormeJuridique.getAsString();
                     }
 
 
-                    if(!(jsonRue instanceof JsonNull)) {
+                    if(!(jsonRue == null)) {
                         rue = jsonRue.getAsString();
                     }
-                    if(!(jsonNumeroRue instanceof JsonNull)) {
+                    if(!(jsonNumeroRue == null)) {
                         numeroRue = jsonNumeroRue.getAsInt();
                     }
-                    if(!(jsonCodePostal instanceof JsonNull)) {
+                    if(!(jsonCodePostal == null)) {
                         codePostal = jsonCodePostal.getAsInt();
                     }
-                    if(!(jsonQuartier instanceof JsonNull)) {
+                    if(!(jsonQuartier == null)) {
                         quartier = jsonQuartier.getAsString();
                     }
-                    if(!(jsonVille instanceof JsonNull)) {
+                    if(!(jsonVille == null)) {
                         ville = jsonVille.getAsString();
                     }
-                    if(!(jsonPays instanceof JsonNull)) {
+                    if(!(jsonPays == null)) {
                         pays = jsonPays.getAsString();
                     }
 
@@ -156,39 +156,39 @@ public class ParserContact {
 
 
 
-                    if(!(jsonEmail instanceof JsonNull)) {
+                    if(!(jsonEmail == null)) {
                         email = jsonEmail.getAsString();
                     }
-                    if(!(jsonFax instanceof JsonNull)) {
+                    if(!(jsonFax == null)) {
                         fax = jsonFax.getAsString();
                     }
-                    if(!(jsonTelephone instanceof JsonNull)) {
+                    if(!(jsonTelephone == null)) {
                         telephone = jsonTelephone.getAsString();
                     }
-                    if(!(jsonNom instanceof JsonNull)) {
+                    if(!(jsonNom == null)) {
                         nom = jsonNom.getAsString();
                     }
-                    if(!(jsonPrenom instanceof JsonNull)) {
+                    if(!(jsonPrenom == null)) {
                         prenom = jsonPrenom.getAsString();
                     }
 
 
-                    if(!(jsonRue instanceof JsonNull)) {
+                    if(!(jsonRue == null)) {
                         rue = jsonRue.getAsString();
                     }
-                    if(!(jsonNumeroRue instanceof JsonNull)) {
+                    if(!(jsonNumeroRue == null)) {
                         numeroRue = jsonNumeroRue.getAsInt();
                     }
-                    if(!(jsonCodePostal instanceof JsonNull)) {
+                    if(!(jsonCodePostal == null)) {
                         codePostal = jsonCodePostal.getAsInt();
                     }
-                    if(!(jsonQuartier instanceof JsonNull)) {
+                    if(!(jsonQuartier == null)) {
                         quartier = jsonQuartier.getAsString();
                     }
-                    if(!(jsonVille instanceof JsonNull)) {
+                    if(!(jsonVille == null)) {
                         ville = jsonVille.getAsString();
                     }
-                    if(!(jsonPays instanceof JsonNull)) {
+                    if(!(jsonPays == null)) {
                         pays = jsonPays.getAsString();
                     }
 
@@ -635,6 +635,43 @@ public class ParserContact {
         }
     }
 
+    public static boolean updateParticulier(ContactDTO particulier) {
+        Gson gson = new Gson();
+        String json = gson.toJson(particulier);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/particuliers/change")
+                .put(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean updateEntreprise(ContactDTO entreprise) {
+        Gson gson = new Gson();
+        String json = gson.toJson(entreprise);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/entreprises/change")
+                .put(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
 
