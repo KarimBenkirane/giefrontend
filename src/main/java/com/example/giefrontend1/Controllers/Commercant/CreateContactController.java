@@ -67,7 +67,6 @@ public class CreateContactController implements Initializable {
         typeContactChoiceBox.getItems().add("Particulier");
         typeContactChoiceBox.getItems().add("Entreprise");
         typeContactChoiceBox.setValue("Particulier");
-
         // Add a listener to the ChoiceBox value property
         typeContactChoiceBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -108,7 +107,6 @@ public class CreateContactController implements Initializable {
             statusLabel.setText("Veuillez saisir au moins le nom/la raison sociale du contact!");
             return;
         }
-
         if(!prenomTextField.getText().isEmpty())
             prenom = prenomTextField.getText();
 

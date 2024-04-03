@@ -28,9 +28,7 @@ public class AdresseDTO {
         this.pays = pays;
     }
 
-    public AdresseDTO(){
-
-    }
+    public AdresseDTO(){}
 
     // Getters et Setters
     public int getId() {

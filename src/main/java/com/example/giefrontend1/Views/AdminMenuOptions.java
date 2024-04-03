@@ -6,4 +6,7 @@ public enum AdminMenuOptions {
     SEARCH_CLIENT,
     Update_CLIENT,
     DELETE_CLIENT,
+    SEARCH_ENTREPRISE,
+    UPDATE_ADRESS,
+    DELETE_ADRESS,
 }

@@ -33,20 +33,18 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" />
    </VBox>
    <VBox fillWidth="false" layoutX="439.0" layoutY="150.0" prefHeight="330.0" prefWidth="275.0">
-      <children>
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier" />
-         <TextField fx:id="quartierTextField" />
-         <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue" />
-         <TextField fx:id="rueTextField" layoutX="10.0" layoutY="26.0" />
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue" />
-         <TextField fx:id="numRueTextField" />
-         <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal" />
-         <TextField fx:id="codePostalTextField" />
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville" />
-         <TextField fx:id="villeTextField" />
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays" />
-         <TextField fx:id="paysTextField" prefWidth="255.0" />
-      </children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier"/>
+      <TextField fx:id="quartierTextField"/>
+      <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue"/>
+      <TextField fx:id="rueTextField" layoutX="10.0" layoutY="26.0"/>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue"/>
+      <TextField fx:id="numRueTextField"/>
+      <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal"/>
+      <TextField fx:id="codePostalTextField"/>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville"/>
+      <TextField fx:id="villeTextField"/>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays"/>
+      <TextField fx:id="paysTextField" prefWidth="255.0"/>
    </VBox>
    <Button fx:id="CreateContactBtn" layoutX="212.0" layoutY="598.0" mnemonicParsing="false" prefHeight="45.0" text="Create Contact" />
    <Text layoutX="439.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Informations Adresse" wrappingWidth="208.38827514648438" />

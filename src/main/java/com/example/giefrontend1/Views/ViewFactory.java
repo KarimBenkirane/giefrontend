@@ -8,13 +8,17 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+
 public class ViewFactory {
     private AccountType loginAccountType;
     private AnchorPane FindClientView;
+    private AnchorPane FindEntrepriseView;
     private AnchorPane CreateClientView;
     private AnchorPane ClientView;
     private AnchorPane UpdateContactView;
+    private AnchorPane UpdateAdressView;
     private AnchorPane DeleteContactView;
+    private AnchorPane DeleteAdressView;
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 
     public ViewFactory(){
@@ -65,6 +69,16 @@ public class ViewFactory {
         }
         return FindClientView;
     }
+    public AnchorPane getFindEntrepriseView(){
+        if(FindEntrepriseView == null){
+            try{
+                FindEntrepriseView= new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/FindEntreprise.fxml")).load();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return FindEntrepriseView;
+    }
     public AnchorPane getUpdateClientView(){
         if(UpdateContactView== null){
             try{
@@ -74,7 +88,18 @@ public class ViewFactory {
             }
         }
         return UpdateContactView;
-    } public AnchorPane getDeleteContacttView(){
+    }
+    public AnchorPane getUpdateAdressView(){
+        if(UpdateAdressView== null){
+            try{
+                UpdateAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/UpdateAdress.fxml")).load();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return UpdateAdressView;
+    }
+    public AnchorPane getDeleteContacttView(){
         if(DeleteContactView== null){
             try{
                 DeleteContactView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteContact.fxml")).load();
@@ -83,6 +108,16 @@ public class ViewFactory {
             }
         }
         return DeleteContactView;
+    }
+    public AnchorPane getDeleteAdressViewView(){
+        if(DeleteAdressView== null){
+            try{
+                DeleteAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteAdress.fxml")).load();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return DeleteAdressView;
     }
     public void showAdminWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/Contact.fxml"));

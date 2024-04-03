@@ -243,21 +243,7 @@ public class ParserContact {
     }
 
 
-    public static boolean deleteContact(int contactId) {
-        OkHttpClient client = new OkHttpClient();
 
-        Request request = new Request.Builder()
-                .url(url +"/api/contacts/delete/" + contactId)
-                .delete()
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            return response.isSuccessful();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
     public static ContactDTO getContactById(int id) {
         String body = null;
 
@@ -672,6 +658,57 @@ public class ParserContact {
             return false;
         }
     }
+    /// ajouter dans le backend la partie http de la mise a jour de l'adress
+    public static boolean updateAdress(AdresseDTO adress) {
+        Gson gson = new Gson();
+        String json = gson.toJson(adress);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/adress/change")
+                .put(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean deleteContact(int contactId) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url +"/api/contacts/delete/" + contactId)
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static boolean deleteAdress(int adressId) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url +"/api/contacts/delete/" + adressId)
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 }
 
 
