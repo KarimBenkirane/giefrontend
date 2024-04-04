@@ -92,7 +92,7 @@ public class ViewFactory {
     public AnchorPane getUpdateAdressView(){
         if(UpdateAdressView== null){
             try{
-                UpdateAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/UpdateAdress.fxml")).load();
+                UpdateAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/UpdateAddress.fxml")).load();
             }catch(Exception e){
                 e.printStackTrace();
             }
@@ -112,7 +112,7 @@ public class ViewFactory {
     public AnchorPane getDeleteAdressViewView(){
         if(DeleteAdressView== null){
             try{
-                DeleteAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteAdress.fxml")).load();
+                DeleteAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteAddress.fxml")).load();
             }catch(Exception e){
                 e.printStackTrace();
             }

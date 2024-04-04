@@ -20,7 +20,7 @@ public class ParserContact {
 
         Request request = new Request.Builder()
                 .url(url+ "/api/contacts/all")
-                        .build();
+                .build();
 
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();
@@ -666,7 +666,7 @@ public class ParserContact {
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder()
-                .url(url + "/api/adress/change")
+                .url(url + "/api/adresses/change")
                 .put(body)
                 .build();
 
@@ -693,11 +693,11 @@ public class ParserContact {
         }
     }
 
-    public static boolean deleteAdress(int adressId) {
+    public static boolean deleteAddress(int addressId) {
         OkHttpClient client = new OkHttpClient();
 
         Request request = new Request.Builder()
-                .url(url +"/api/contacts/delete/" + adressId)
+                .url(url +"/api/adresses/delete/" + addressId)
                 .delete()
                 .build();
 
@@ -709,6 +709,231 @@ public class ParserContact {
         }
     }
 
+    public static List<ContactDTO> getEntrepriseByRaisonSociale(String raisonSociale) {
+        List<ContactDTO> entreprises = new ArrayList<>();
+        String body = null;
+
+        Request request = new Request.Builder()
+                .url(url+"/api/entreprises/get/raisonsociale/"+raisonSociale)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            entreprises = parserGetEntreprisesByRaisonSociale(body);
+            return entreprises;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<ContactDTO> parserGetEntreprisesByRaisonSociale(String responseBody) {
+        try{
+            List<ContactDTO> entreprisesByRaisonSociale = new ArrayList<>();
+
+            JsonArray users = new JsonParser().parse(responseBody).getAsJsonArray();
+
+            for (int i = 0; i < users.size(); i++) {
+                JsonObject member = users.get(i).getAsJsonObject();
+
+                // Vérifier si l'objet JSON contient la clé "raisonSociale"
+                if (member.has("raisonSociale")) {
+                    int id = member.get("id").getAsInt();
+                    String email = null;
+                    String fax = null;
+                    String telephone = null;
+                    String raisonSociale = null;
+                    String formeJuridique = null;
+
+
+                    JsonElement jsonEmail = member.get("email");
+                    JsonElement jsonFax = member.get("fax");
+                    JsonElement jsonTelephone = member.get("telephone");
+                    JsonElement jsonRaisonSociale = member.get("raisonSociale");
+                    JsonElement jsonFormeJuridique = member.get("formeJuridique");
+
+
+                    JsonObject addressObj = member.get("adresse").getAsJsonObject();
+
+
+                    int adresse_id = addressObj.get("id").getAsInt();
+                    String rue = null;
+                    int numeroRue = -1;
+                    int codePostal = -1;
+                    String quartier = null;
+                    String ville = null;
+                    String pays = null;
+
+                    JsonElement jsonRue = addressObj.get("rue");
+                    JsonElement jsonNumeroRue = addressObj.get("numeroRue");
+                    JsonElement jsonCodePostal = addressObj.get("codePostal");
+                    JsonElement jsonQuartier = addressObj.get("quartier");
+                    JsonElement jsonVille = addressObj.get("ville");
+                    JsonElement jsonPays = addressObj.get("pays");
+
+
+
+                    if(!(jsonEmail == null)) {
+                        email = jsonEmail.getAsString();
+                    }
+                    if(!(jsonFax == null)) {
+                        fax = jsonFax.getAsString();
+                    }
+                    if(!(jsonTelephone == null)) {
+                        telephone = jsonTelephone.getAsString();
+                    }
+                    if(!(jsonRaisonSociale == null)) {
+                        raisonSociale = jsonRaisonSociale.getAsString();
+                    }
+                    if(!(jsonFormeJuridique == null)) {
+                        formeJuridique = jsonFormeJuridique.getAsString();
+                    }
+
+
+                    if(!(jsonRue == null)) {
+                        rue = jsonRue.getAsString();
+                    }
+                    if(!(jsonNumeroRue == null)) {
+                        numeroRue = jsonNumeroRue.getAsInt();
+                    }
+                    if(!(jsonCodePostal == null)) {
+                        codePostal = jsonCodePostal.getAsInt();
+                    }
+                    if(!(jsonQuartier == null)) {
+                        quartier = jsonQuartier.getAsString();
+                    }
+                    if(!(jsonVille == null)) {
+                        ville = jsonVille.getAsString();
+                    }
+                    if(!(jsonPays == null)) {
+                        pays = jsonPays.getAsString();
+                    }
+
+
+
+                    AdresseDTO address = new AdresseDTO(adresse_id, rue, numeroRue, quartier, codePostal, ville, pays);
+
+                    entreprisesByRaisonSociale.add(new ContactDTO(id, email, telephone,fax, address, formeJuridique, raisonSociale));
+                }
+            }
+            return entreprisesByRaisonSociale;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static List<ContactDTO> getEntrepriseByFormeJuridique(String formeJuridique) {
+        List<ContactDTO> entreprises = new ArrayList<>();
+        String body = null;
+
+        Request request = new Request.Builder()
+                .url(url+"/api/entreprises/get/formejuridique/"+formeJuridique)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            entreprises = parserGetEntreprisesByFormeJuridique(body);
+            return entreprises;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private static List<ContactDTO> parserGetEntreprisesByFormeJuridique(String responseBody) {
+        try{
+            List<ContactDTO> entreprisesByFormeJuridique = new ArrayList<>();
+
+            JsonArray users = new JsonParser().parse(responseBody).getAsJsonArray();
+
+            for (int i = 0; i < users.size(); i++) {
+                JsonObject member = users.get(i).getAsJsonObject();
+
+                // Vérifier si l'objet JSON contient la clé "raisonSociale"
+                if (member.has("raisonSociale")) {
+                    int id = member.get("id").getAsInt();
+                    String email = null;
+                    String fax = null;
+                    String telephone = null;
+                    String raisonSociale = null;
+                    String formeJuridique = null;
+
+
+                    JsonElement jsonEmail = member.get("email");
+                    JsonElement jsonFax = member.get("fax");
+                    JsonElement jsonTelephone = member.get("telephone");
+                    JsonElement jsonRaisonSociale = member.get("raisonSociale");
+                    JsonElement jsonFormeJuridique = member.get("formeJuridique");
+
+
+                    JsonObject addressObj = member.get("adresse").getAsJsonObject();
+
+
+                    int adresse_id = addressObj.get("id").getAsInt();
+                    String rue = null;
+                    int numeroRue = -1;
+                    int codePostal = -1;
+                    String quartier = null;
+                    String ville = null;
+                    String pays = null;
+
+                    JsonElement jsonRue = addressObj.get("rue");
+                    JsonElement jsonNumeroRue = addressObj.get("numeroRue");
+                    JsonElement jsonCodePostal = addressObj.get("codePostal");
+                    JsonElement jsonQuartier = addressObj.get("quartier");
+                    JsonElement jsonVille = addressObj.get("ville");
+                    JsonElement jsonPays = addressObj.get("pays");
+
+
+
+                    if(!(jsonEmail == null)) {
+                        email = jsonEmail.getAsString();
+                    }
+                    if(!(jsonFax == null)) {
+                        fax = jsonFax.getAsString();
+                    }
+                    if(!(jsonTelephone == null)) {
+                        telephone = jsonTelephone.getAsString();
+                    }
+                    if(!(jsonRaisonSociale == null)) {
+                        raisonSociale = jsonRaisonSociale.getAsString();
+                    }
+                    if(!(jsonFormeJuridique == null)) {
+                        formeJuridique = jsonFormeJuridique.getAsString();
+                    }
+
+
+                    if(!(jsonRue == null)) {
+                        rue = jsonRue.getAsString();
+                    }
+                    if(!(jsonNumeroRue == null)) {
+                        numeroRue = jsonNumeroRue.getAsInt();
+                    }
+                    if(!(jsonCodePostal == null)) {
+                        codePostal = jsonCodePostal.getAsInt();
+                    }
+                    if(!(jsonQuartier == null)) {
+                        quartier = jsonQuartier.getAsString();
+                    }
+                    if(!(jsonVille == null)) {
+                        ville = jsonVille.getAsString();
+                    }
+                    if(!(jsonPays == null)) {
+                        pays = jsonPays.getAsString();
+                    }
+
+
+
+                    AdresseDTO address = new AdresseDTO(adresse_id, rue, numeroRue, quartier, codePostal, ville, pays);
+
+                    entreprisesByFormeJuridique.add(new ContactDTO(id, email, telephone,fax, address, formeJuridique, raisonSociale));
+                }
+            }
+            return entreprisesByFormeJuridique;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
 
 

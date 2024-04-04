@@ -8,13 +8,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="850.0" prefWidth="750.0" stylesheets="@../../Style/FindClient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.DeleteAdressContrller">
-    <Text layoutX="40.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete Adress:" />
+<AnchorPane prefHeight="850.0" prefWidth="750.0" stylesheets="@../../Style/FindClient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.DeleteAddressController">
+    <Text layoutX="40.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete Address:" />
     <VBox alignment="CENTER" layoutX="56.0" layoutY="325.0" prefHeight="215.0" prefWidth="637.0">
         <HBox alignment="CENTER" prefHeight="89.0" prefWidth="637.0">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Adress Id:" />
-            <TextField fx:id="adressId_txtFiled" />
-            <Button fx:id="delete_btn" mnemonicParsing="false" onAction="#onDeleteAdress" text="Delete" />
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Insert Address Id:" />
+            <TextField fx:id="addressIdTextField" />
+            <Button fx:id="delete_btn" mnemonicParsing="false" text="Delete" />
         </HBox>
         <Label fx:id="label" alignment="CENTER" prefHeight="89.0" prefWidth="523.0" />
     </VBox>

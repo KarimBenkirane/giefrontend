@@ -8,17 +8,30 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="750.0" prefWidth="800.0" stylesheets="@../../Style/FindClient.css"
-            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.example.giefrontend1.Controllers.Commercant.FindENtrepriseController">
-    <Text layoutX="22.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Entreprise:"/>
-    <VBox layoutX="91.0" layoutY="229.0" prefHeight="246.0" prefWidth="630.0">
-        <HBox alignment="CENTER" prefHeight="70.0" prefWidth="630.0">
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="insert Raison Social:"/>
-            <TextField fx:id="entrepriseRaisonSo_textField"/>
-            <Button fx:id="Search_btn" mnemonicParsing="false" text="Search"/>
-        </HBox>
-        <ListView fx:id="EEnterprise_lstFView" prefHeight="200.0" prefWidth="200.0"/>
-    </VBox>
+<AnchorPane prefHeight="750.0" prefWidth="800.0" stylesheets="@../../Style/FindClient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.FindEntrepriseController">
+    <Text layoutX="22.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Find Entreprise:" />
+   <VBox layoutX="22.0" layoutY="105.0" prefHeight="229.0" prefWidth="820.0">
+      <children>
+         <HBox alignment="CENTER" prefHeight="60.0" prefWidth="820.0">
+            <children>
+               <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search Entreprise by social reason" />
+               <TextField fx:id="raisonSocialeTextField" />
+               <Button fx:id="searchRaisonSocialeButton" mnemonicParsing="false" text="Search" />
+            </children>
+         </HBox>
+         <ListView fx:id="raisonSocialeListView" prefHeight="150.0" prefWidth="829.0" />
+      </children>
+   </VBox>
+   <VBox layoutX="24.0" layoutY="317.0" prefHeight="200.0" prefWidth="820.0">
+      <children>
+         <HBox alignment="CENTER" prefHeight="69.0" prefWidth="820.0">
+            <children>
+               <Text fx:id="SearchByName_btn" strokeType="OUTSIDE" strokeWidth="0.0" text="Search Entreprise by legal status" />
+               <TextField fx:id="formeJuridiqueTextField" />
+               <Button fx:id="searchFormeJuridiqueButton" mnemonicParsing="false" text="Search" />
+            </children>
+         </HBox>
+         <ListView fx:id="formeJuridiqueListView" prefHeight="215.0" prefWidth="820.0" />
+      </children>
+   </VBox>
 </AnchorPane>

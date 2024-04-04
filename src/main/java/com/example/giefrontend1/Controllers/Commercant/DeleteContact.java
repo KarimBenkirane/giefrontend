@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class DeleteContact implements Initializable {
-    public ListView dleteContact_listView;
     public Button deleteContact_btn;
     public TextField dleteContact_txtField;
     public Label statusLabel;

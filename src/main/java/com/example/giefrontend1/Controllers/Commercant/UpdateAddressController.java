@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class UpdateAdressController implements Initializable {
+public class UpdateAddressController implements Initializable {
     public TextField Id_txtField;
     public TextField quartierTextField;
     public TextField rueTextField;
