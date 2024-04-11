@@ -143,6 +143,10 @@ public class SearchContactsController implements Initializable {
                 if(!email.isEmpty()){
                     contacts = ParserContact.getParticuliersByEmail(email);
                 }
+
+                if(nom.isEmpty() && prenom.isEmpty() && email.isEmpty()){
+                    contacts = ParserContact.getAllParticuliers();
+                }
             }
 
             if(entreprisesRadioBtn.isSelected()){
@@ -158,6 +162,9 @@ public class SearchContactsController implements Initializable {
                 }
                 if(!formeJuridique.isEmpty()){
                     contacts = ParserContact.getEntrepriseByFormeJuridique(formeJuridique);
+                }
+                if(formeJuridique.isEmpty() && raisonSociale.isEmpty() && email.isEmpty()){
+                    contacts = ParserContact.getAllEntreprises();
                 }
             }
 

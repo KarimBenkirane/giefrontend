@@ -1185,5 +1185,40 @@ public class ParserContact {
     }
 
 
+    public static List<ContactDTO> getAllParticuliers() {
+        List<ContactDTO> contacts = new ArrayList<>();
+        String body = null;
+
+        Request request = new Request.Builder()
+                .url(url + "/api/particuliers/all")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            contacts = parseGetContactsByFirstName(body);
+            return contacts;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<ContactDTO> getAllEntreprises() {
+        List<ContactDTO> contacts = new ArrayList<>();
+        String body = null;
+
+        Request request = new Request.Builder()
+                .url(url + "/api/entreprises/all")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            contacts = parserGetEntreprisesByRaisonSociale(body);
+            return contacts;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
 }
 
