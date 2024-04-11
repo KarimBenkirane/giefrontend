@@ -62,7 +62,7 @@ public class ViewFactory {
     public AnchorPane getFindClientView(){
         if(FindClientView == null){
             try{
-                FindClientView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/FindClient.fxml")).load();
+                FindClientView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/SearchContact.fxml")).load();
             }catch(Exception e){
                 e.printStackTrace();
             }

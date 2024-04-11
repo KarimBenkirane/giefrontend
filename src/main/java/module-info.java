@@ -6,6 +6,7 @@ module com.example.giefrontend1 {
     requires org.xerial.sqlitejdbc;
     requires okhttp3;
     requires com.google.gson;
+    requires java.desktop;
 
     opens com.example.giefrontend1 to javafx.fxml;
     opens com.example.giefrontend1.Controllers.DTO;
