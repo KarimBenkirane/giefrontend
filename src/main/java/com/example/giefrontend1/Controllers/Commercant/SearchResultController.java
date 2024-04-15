@@ -114,7 +114,33 @@ public class SearchResultController implements Initializable {
                 String email = newValue.getEmail();
                 String telephone = newValue.getTelephone();
                 String fax = newValue.getFax();
-                String adresseComplete = newValue.getAdresse().getId()+" "+newValue.getAdresse().getRue()+" " + newValue.getAdresse().getNumeroRue()+" " + newValue.getAdresse().getQuartier()+" " + newValue.getAdresse().getCodePostal()+" " + newValue.getAdresse().getVille()+" " + newValue.getAdresse().getPays();
+                String adresseComplete = "";
+
+
+                if(newValue.getAdresse().getRue() != null) {
+                    adresseComplete += newValue.getAdresse().getRue() + " ";
+                }
+
+                if(newValue.getAdresse().getNumeroRue() != -1) {
+                    adresseComplete += newValue.getAdresse().getNumeroRue() + " ";
+                }
+
+                if(newValue.getAdresse().getQuartier() != null) {
+                    adresseComplete += newValue.getAdresse().getQuartier() + " ";
+                }
+
+                if(newValue.getAdresse().getCodePostal() != -1) {
+                    adresseComplete += newValue.getAdresse().getCodePostal() + " ";
+                }
+
+                if(newValue.getAdresse().getVille() != null) {
+                    adresseComplete += newValue.getAdresse().getVille() + " ";
+                }
+
+                if(newValue.getAdresse().getPays() != null) {
+                    adresseComplete += newValue.getAdresse().getPays();
+                }
+
 
                 if(newValue.getRaisonSociale() == null){
                     //Particulier

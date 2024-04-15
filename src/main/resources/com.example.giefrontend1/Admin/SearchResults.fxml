@@ -36,7 +36,7 @@
       </TableView>
       <AnchorPane fx:id="contactsSideBarAnchorPane" layoutX="960.0" layoutY="-1.0" prefHeight="824.0" prefWidth="279.0">
          <children>
-            <VBox alignment="CENTER" layoutX="19.0" layoutY="224.0" prefHeight="9.0" prefWidth="245.0" spacing="7.0">
+            <VBox alignment="CENTER" layoutX="4.0" layoutY="224.0" prefHeight="258.0" prefWidth="273.0" spacing="7.0">
                <children>
                   <Label fx:id="resultIDLabel" text="ID" />
                   <HBox alignment="CENTER" prefHeight="0.0" prefWidth="196.0" spacing="6.0">
@@ -48,7 +48,7 @@
                   <Label fx:id="resultEmailLabel" text="Email" />
                   <Label fx:id="resultTelLabel" text="Téléphone" />
                   <Label fx:id="resultFaxLabel" text="Fax" />
-                  <Label fx:id="resultAdresseLabel" text="Adresse complète" />
+                  <Label fx:id="resultAdresseLabel" alignment="CENTER" prefHeight="64.0" prefWidth="271.0" text="Adresse complète" textAlignment="CENTER" wrapText="true" />
                   <HBox prefHeight="0.0" prefWidth="245.0" spacing="20.0">
                      <children>
                         <Button fx:id="modifierContactBtn" mnemonicParsing="false" onAction="#onUpdateBtnClick" text="Modifier" />
