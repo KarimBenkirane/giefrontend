@@ -8,7 +8,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -46,8 +47,6 @@ public class CreateContactController implements Initializable {
     @FXML
     public TextField paysTextField;
 
-    @FXML
-    public Label statusLabel;
 
     @FXML
     public Button CreateContactBtn;
@@ -64,6 +63,7 @@ public class CreateContactController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         typeContactChoiceBox.getItems().add("Particulier");
         typeContactChoiceBox.getItems().add("Entreprise");
         typeContactChoiceBox.setValue("Particulier");
@@ -104,7 +104,7 @@ public class CreateContactController implements Initializable {
         if(!nomTextField.getText().isEmpty())
             nom = nomTextField.getText();
         else{
-            statusLabel.setText("Veuillez saisir au moins le nom/la raison sociale du contact!");
+            showAlert(AlertType.WARNING, "Erreur", "Veuillez au moins saisir le nom / la raison sociale du contact !");
             return;
         }
         if(!prenomTextField.getText().isEmpty())
@@ -144,9 +144,9 @@ public class CreateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(prenom,nom,email,telephone,fax,adresseDTO);
             boolean status = ParserContact.createParticulier(contactDTO);
             if(status)
-                statusLabel.setText("Contact crée avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la création du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact");
             }
         }
         else{
@@ -154,14 +154,22 @@ public class CreateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(email,telephone,fax,adresseDTO,prenom,nom);
             boolean status = ParserContact.createEntreprise(contactDTO); // méthode createEntreprise à ajouter
             if(status)
-                statusLabel.setText("Contact crée avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la création du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact");
             }
         }
 
 
 
 
+    }
+
+    private void showAlert(AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

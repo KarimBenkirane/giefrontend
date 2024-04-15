@@ -4,6 +4,7 @@ import com.example.giefrontend1.Controllers.Commercant.CommercantController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -12,13 +13,8 @@ import javafx.stage.Stage;
 public class ViewFactory {
     private AccountType loginAccountType;
     private AnchorPane FindClientView;
-    private AnchorPane FindEntrepriseView;
     private AnchorPane CreateClientView;
-    private AnchorPane ClientView;
-    private AnchorPane UpdateContactView;
-    private AnchorPane UpdateAdressView;
-    private AnchorPane DeleteContactView;
-    private AnchorPane DeleteAdressView;
+    private AnchorPane SendEmail;
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 
     public ViewFactory(){
@@ -49,16 +45,6 @@ public class ViewFactory {
         }
         return CreateClientView;
     }
-    public AnchorPane getClientView(){
-        if(ClientView == null){
-            try{
-                ClientView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/Clients.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return ClientView;
-    }
     public AnchorPane getFindClientView(){
         if(FindClientView == null){
             try{
@@ -68,56 +54,6 @@ public class ViewFactory {
             }
         }
         return FindClientView;
-    }
-    public AnchorPane getFindEntrepriseView(){
-        if(FindEntrepriseView == null){
-            try{
-                FindEntrepriseView= new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/FindEntreprise.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return FindEntrepriseView;
-    }
-    public AnchorPane getUpdateClientView(){
-        if(UpdateContactView== null){
-            try{
-                UpdateContactView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/UpdateClient.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return UpdateContactView;
-    }
-    public AnchorPane getUpdateAdressView(){
-        if(UpdateAdressView== null){
-            try{
-                UpdateAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/UpdateAddress.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return UpdateAdressView;
-    }
-    public AnchorPane getDeleteContacttView(){
-        if(DeleteContactView== null){
-            try{
-                DeleteContactView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteContact.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return DeleteContactView;
-    }
-    public AnchorPane getDeleteAdressViewView(){
-        if(DeleteAdressView== null){
-            try{
-                DeleteAdressView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/DeleteAddress.fxml")).load();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-        return DeleteAdressView;
     }
     public void showAdminWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/Contact.fxml"));
@@ -146,4 +82,14 @@ public class ViewFactory {
     }
 
 
+    public AnchorPane getSendGmailView(){
+        if(SendEmail== null){
+            try{
+                SendEmail = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/SendGmail.fxml")).load();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return SendEmail;
+    }
 }

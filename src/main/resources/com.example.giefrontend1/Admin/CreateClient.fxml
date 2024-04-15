@@ -33,27 +33,22 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" />
    </VBox>
    <VBox fillWidth="false" layoutX="439.0" layoutY="150.0" prefHeight="330.0" prefWidth="275.0">
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier"/>
-      <TextField fx:id="quartierTextField"/>
-      <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue"/>
-      <TextField fx:id="rueTextField" layoutX="10.0" layoutY="26.0"/>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue"/>
-      <TextField fx:id="numRueTextField"/>
-      <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal"/>
-      <TextField fx:id="codePostalTextField"/>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville"/>
-      <TextField fx:id="villeTextField"/>
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays"/>
-      <TextField fx:id="paysTextField" prefWidth="255.0"/>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier" />
+      <TextField fx:id="quartierTextField" />
+      <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue" />
+      <TextField fx:id="rueTextField" layoutX="10.0" layoutY="26.0" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue" />
+      <TextField fx:id="numRueTextField" />
+      <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal" />
+      <TextField fx:id="codePostalTextField" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville" />
+      <TextField fx:id="villeTextField" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays" />
+      <TextField fx:id="paysTextField" prefWidth="255.0" />
    </VBox>
-   <Button fx:id="CreateContactBtn" layoutX="212.0" layoutY="598.0" mnemonicParsing="false" prefHeight="45.0" text="Create Contact" />
+   <Button fx:id="CreateContactBtn" layoutX="212.0" layoutY="598.0" mnemonicParsing="false" prefHeight="45.0" text="Créer Contact" />
    <Text layoutX="439.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Informations Adresse" wrappingWidth="208.38827514648438" />
    <Text layoutX="14.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Informations Client" wrappingWidth="208.38827514648438" />
    <ChoiceBox fx:id="typeContactChoiceBox" layoutX="110.0" layoutY="115.0" prefHeight="25.0" prefWidth="106.0" />
    <Text layoutX="20.0" layoutY="133.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Type Client" wrappingWidth="80.53593444824207" />
-   <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="142.0" layoutY="560.0" prefHeight="30.0" prefWidth="396.0">
-      <font>
-         <Font size="15.0" />
-      </font>
-   </Label>
 </AnchorPane>

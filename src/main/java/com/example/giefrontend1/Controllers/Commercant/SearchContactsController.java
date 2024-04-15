@@ -122,6 +122,7 @@ public class SearchContactsController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle("Résultat de la recherche");
+        stage.setMaximized(true);
         stage.show();
         this.openedResultStage = stage;
 
@@ -135,10 +136,10 @@ public class SearchContactsController implements Initializable {
                 String prenom = this.prenomTextField.getText();
 
                 if (!nom.isEmpty()) {
-                    contacts = ParserContact.getParticuliersByName(nom);
+                    contacts = ParserContact.getParticuliersByNom(nom);
                 }
                 if (!prenom.isEmpty()) {
-                    contacts = ParserContact.getParticuliersByFirstName(prenom);
+                    contacts = ParserContact.getParticuliersByPrenom(prenom);
                 }
                 if(!email.isEmpty()){
                     contacts = ParserContact.getParticuliersByEmail(email);

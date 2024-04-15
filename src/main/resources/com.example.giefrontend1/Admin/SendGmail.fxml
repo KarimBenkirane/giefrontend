@@ -13,6 +13,6 @@
         <TextField fx:id="sybject_txtfield" />
         <TextArea fx:id="message_txtfield" prefHeight="193.0" prefWidth="515.0" />
     </VBox>
-    <Button fx:id="SendEmail" layoutX="274.0" layoutY="316.0" mnemonicParsing="false" onAction="#onSendEmail" text="Send Email" />
+    <Button fx:id="SendEmail" layoutX="274.0" layoutY="316.0" mnemonicParsing="false" onAction="#onSendEmail" text="Envoyer Email" />
     <Label fx:id="statut_lbl" layoutX="70.0" layoutY="360.0" prefHeight="25.0" prefWidth="499.0" />
 </AnchorPane>

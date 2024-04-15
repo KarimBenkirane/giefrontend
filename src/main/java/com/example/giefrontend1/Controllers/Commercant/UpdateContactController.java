@@ -11,6 +11,9 @@ import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+
 public class UpdateContactController implements Initializable {
     @FXML
     public TextField idTextField;
@@ -109,39 +112,39 @@ public class UpdateContactController implements Initializable {
         String pays = null;
 
 
-        if(!nomTextField.getText().isEmpty())
+        if(!(nomTextField.getText().isEmpty()))
             nom = nomTextField.getText();
 
-        if(!prenomTextField.getText().isEmpty())
+        if(!(prenomTextField.getText().isEmpty()))
             prenom = prenomTextField.getText();
 
-        if(!emailTextField.getText().isEmpty())
+        if(!(emailTextField.getText().isEmpty()))
             email = emailTextField.getText();
 
-        if(!phoneTextField.getText().isEmpty())
+        if(!(phoneTextField.getText().isEmpty()))
             telephone = phoneTextField.getText();
 
-        if(!faxTextField.getText().isEmpty())
+        if(!(faxTextField.getText().isEmpty()))
             fax = faxTextField.getText();
 
 
 
-        if(!quartierTextField.getText().isEmpty())
+        if(!(quartierTextField.getText().isEmpty()))
             quartier = quartierTextField.getText();
 
-        if(!rueTextField.getText().isEmpty())
+        if(!(rueTextField.getText().isEmpty()))
             rue = rueTextField.getText();
 
-        if(!numRueTextField.getText().isEmpty())
+        if(!(numRueTextField.getText().isEmpty()))
             numeroRue = Integer.parseInt(numRueTextField.getText());
 
-        if(!codePostalTextField.getText().isEmpty())
+        if(!(codePostalTextField.getText().isEmpty()))
             codePostal = Integer.parseInt(codePostalTextField.getText());
 
-        if(!villeTextField.getText().isEmpty())
+        if(!(villeTextField.getText().isEmpty()))
             ville = villeTextField.getText();
 
-        if(!paysTextField.getText().isEmpty())
+        if(!(paysTextField.getText().isEmpty()))
             pays = paysTextField.getText();
 
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
@@ -149,9 +152,9 @@ public class UpdateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(id,prenom,nom,email,telephone,fax,adresseDTO);
             boolean status = ParserContact.updateParticulier(contactDTO);
             if(status)
-                statusLabel.setText("Contact modifié avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la modification du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
             }
         }
         else{
@@ -159,14 +162,22 @@ public class UpdateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(id,email,telephone,fax,adresseDTO,prenom,nom);
             boolean status = ParserContact.updateEntreprise(contactDTO);
             if(status)
-                statusLabel.setText("Contact modifié avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
             else{
-                statusLabel.setText("Erreur lors de la modification du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
             }
         }
 
 
 
 
+    }
+
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

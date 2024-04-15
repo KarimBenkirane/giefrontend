@@ -14,13 +14,8 @@ public class CommercantController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().addListener((observableValue,oldVal,newVal) -> {
             switch (newVal){
-                case CLIENTS -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getClientView());
                 case SEARCH_CLIENT -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getFindClientView());
-                case Update_CLIENT -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getUpdateClientView());
-                case DELETE_CLIENT -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getDeleteContacttView());
-                case DELETE_ADRESS -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getDeleteAdressViewView());
-                case UPDATE_ADRESS -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getUpdateAdressView());
-                case SEARCH_ENTREPRISE-> admin_Parent.setCenter(Model.getInstance().getViewFactory().getFindEntrepriseView());
+                case SEND_EMAIL -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getSendGmailView());
                 default -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
             }
         } );
