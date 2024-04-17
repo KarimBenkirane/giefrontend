@@ -10,21 +10,21 @@
 <?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.CreateContactController">
-   <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create New Client Account" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+   <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un nouveau Contact" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
    <VBox fillWidth="false" layoutX="23.0" layoutY="228.0" prefHeight="360.0" prefWidth="256.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="150.0">
-      <Label fx:id="prenomLabel" text="Prénom" textFill="#949494">
+      <Label fx:id="prenomLabel" text="Prénom:" textFill="#949494">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <TextField fx:id="prenomTextField" />
-      <Label fx:id="nomLabel" text="Nom" textFill="#949494">
+      <Label fx:id="nomLabel" text="Nom*:" textFill="#949494">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       <TextField fx:id="nomTextField" layoutX="10.0" layoutY="26.0" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email:" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Email*:" />
       <TextField fx:id="emailTextField" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Phone Number:" />
       <TextField fx:id="phoneTextField" />
@@ -33,17 +33,17 @@
       <Text strokeType="OUTSIDE" strokeWidth="0.0" />
    </VBox>
    <VBox fillWidth="false" layoutX="439.0" layoutY="150.0" prefHeight="330.0" prefWidth="275.0">
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quartier:" />
       <TextField fx:id="quartierTextField" />
-      <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue" />
+      <Text layoutX="10.0" layoutY="23.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rue:" />
       <TextField fx:id="rueTextField" layoutX="10.0" layoutY="26.0" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Numéro Rue:" />
       <TextField fx:id="numRueTextField" />
-      <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal" />
+      <Text layoutX="10.0" layoutY="107.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Code Postal:" />
       <TextField fx:id="codePostalTextField" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ville:" />
       <TextField fx:id="villeTextField" />
-      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Pays:" />
       <TextField fx:id="paysTextField" prefWidth="255.0" />
    </VBox>
    <Button fx:id="CreateContactBtn" layoutX="212.0" layoutY="598.0" mnemonicParsing="false" prefHeight="45.0" text="Créer Contact" />

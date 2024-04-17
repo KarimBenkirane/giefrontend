@@ -2,6 +2,7 @@ package com.example.giefrontend1.Parser;
 
 import com.example.giefrontend1.Controllers.DTO.AdresseDTO;
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
+import com.example.giefrontend1.Controllers.DTO.EmailDTO;
 import com.google.gson.*;
 import okhttp3.*;
 
@@ -238,7 +239,6 @@ public class ParserContact {
             return false;
         }
     }
-
 
 
     public static List<ContactDTO> getParticuliersByNom(String name) {
@@ -650,5 +650,28 @@ public class ParserContact {
             return null;
         }
     }
+
+    public static boolean sendMail(EmailDTO emailDTO) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(emailDTO);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/email/send")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+
 }
 

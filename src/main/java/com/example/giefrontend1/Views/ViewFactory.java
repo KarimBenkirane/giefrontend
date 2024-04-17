@@ -85,7 +85,7 @@ public class ViewFactory {
     public AnchorPane getSendGmailView(){
         if(SendEmail== null){
             try{
-                SendEmail = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/SendGmail.fxml")).load();
+                SendEmail = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/SendEmail.fxml")).load();
             }catch(Exception e){
                 e.printStackTrace();
             }

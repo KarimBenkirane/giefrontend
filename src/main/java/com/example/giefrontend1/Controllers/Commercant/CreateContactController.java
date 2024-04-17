@@ -72,11 +72,39 @@ public class CreateContactController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(newValue.equals("Entreprise")){
-                    nomLabel.setText("Raison Sociale");
-                    prenomLabel.setText("Forme Juridique");
+                    nomLabel.setText("Raison Sociale*:");
+                    prenomLabel.setText("Forme Juridique:");
+
+                    emailTextField.clear();
+                    phoneTextField.clear();
+                    faxTextField.clear();
+                    quartierTextField.clear();
+                    rueTextField.clear();
+                    numRueTextField.clear();
+                    codePostalTextField.clear();
+                    villeTextField.clear();
+                    paysTextField.clear();
+                    nomTextField.clear();
+                    prenomTextField.clear();
+
+
+
                 } else {
-                    nomLabel.setText("Nom");
-                    prenomLabel.setText("Prénom");
+                    nomLabel.setText("Nom*:");
+                    prenomLabel.setText("Prénom:");
+
+                    emailTextField.clear();
+                    phoneTextField.clear();
+                    faxTextField.clear();
+                    quartierTextField.clear();
+                    rueTextField.clear();
+                    numRueTextField.clear();
+                    codePostalTextField.clear();
+                    villeTextField.clear();
+                    paysTextField.clear();
+                    nomTextField.clear();
+                    prenomTextField.clear();
+
                 }
             }
         });
@@ -112,6 +140,10 @@ public class CreateContactController implements Initializable {
 
         if(!emailTextField.getText().isEmpty())
             email = emailTextField.getText();
+        else{
+            showAlert(AlertType.WARNING, "Erreur", "Veuillez saisir l'email du contact !");
+            return;
+        }
 
         if(!phoneTextField.getText().isEmpty())
             telephone = phoneTextField.getText();
