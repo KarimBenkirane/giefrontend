@@ -2,7 +2,6 @@ package com.example.giefrontend1.Parser;
 
 import com.example.giefrontend1.Controllers.DTO.AdresseDTO;
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
-import com.example.giefrontend1.Controllers.DTO.EmailDTO;
 import com.google.gson.*;
 import okhttp3.*;
 
@@ -651,13 +650,11 @@ public class ParserContact {
         }
     }
 
-    public static boolean sendMail(EmailDTO emailDTO) {
+    public static boolean sendMail(String emailJson) {
 
-        Gson gson = new Gson();
-        String json = gson.toJson(emailDTO);
-        System.out.println(json);
+        System.out.println(emailJson);
 
-        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), emailJson);
         Request request = new Request.Builder()
                 .url(url + "/api/email/send")
                 .post(body)

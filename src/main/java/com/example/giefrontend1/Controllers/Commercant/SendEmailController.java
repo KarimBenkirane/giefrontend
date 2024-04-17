@@ -1,6 +1,5 @@
 package com.example.giefrontend1.Controllers.Commercant;
 
-import com.example.giefrontend1.Controllers.DTO.EmailDTO;
 import com.example.giefrontend1.Parser.ParserContact;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,7 +8,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
 import java.net.URL;
@@ -42,9 +40,14 @@ public class SendEmailController implements Initializable {
             return;
         }
 
-        EmailDTO emailDTO = new EmailDTO(recipient,subject,content);
+        String emailJson = "{"
+                + "\"recipient\": \"" + recipient + "\","
+                + "\"subject\": \"" + subject + "\","
+                + "\"content\": \"" + content + "\""
+                + "}";
+
         showAlert(AlertType.INFORMATION,"Envoi en cours","L'email est en cours d'envoi, veuillez patienter");
-        boolean status = ParserContact.sendMail(emailDTO);
+        boolean status = ParserContact.sendMail(emailJson);
         if(status){
             showAlert(AlertType.INFORMATION,"Succès","Email envoyé avec succès !");
         }
