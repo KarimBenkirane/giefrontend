@@ -6,8 +6,10 @@ import com.google.gson.*;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class ParserContact {
@@ -660,13 +662,25 @@ public class ParserContact {
                 .post(body)
                 .build();
 
+        OkHttpClient client = new OkHttpClient.Builder()
+                .readTimeout(30, TimeUnit.SECONDS) // Increase read timeout to 30 seconds
+                .build();
+
         try (Response response = client.newCall(request).execute()) {
-            return response.isSuccessful();
+            if (!response.isSuccessful()) {
+                System.out.println("HTTP Error Code: " + response.code());
+                return false;
+            }
+            return true;
+        } catch (SocketTimeoutException e) {
+            System.out.println("Socket timeout occurred: " + e.getMessage());
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
     }
+
 
 
 

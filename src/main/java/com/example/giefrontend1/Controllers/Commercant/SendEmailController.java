@@ -48,6 +48,7 @@ public class SendEmailController implements Initializable {
 
         showAlert(AlertType.INFORMATION,"Envoi en cours","L'email est en cours d'envoi, veuillez patienter");
         boolean status = ParserContact.sendMail(emailJson);
+
         if(status){
             showAlert(AlertType.INFORMATION,"Succès","Email envoyé avec succès !");
         }
