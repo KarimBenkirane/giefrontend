@@ -84,11 +84,11 @@ public class UpdateContactController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
                 if(newValue.equals("Entreprise")){
-                    nomLabel.setText("Raison Sociale");
-                    prenomLabel.setText("Forme Juridique");
+                    nomLabel.setText("Raison Sociale:");
+                    prenomLabel.setText("Forme Juridique:");
                 } else {
-                    nomLabel.setText("Nom");
-                    prenomLabel.setText("Prénom");
+                    nomLabel.setText("Nom:");
+                    prenomLabel.setText("Prénom:");
                 }
             }
         });
@@ -99,7 +99,7 @@ public class UpdateContactController implements Initializable {
     public void updateContact() {
 
         if(idTextField.getText().isEmpty()){
-            statusLabel.setText("Veuillez fournir un ID!");
+            statusLabel.setText("Veuillez fournir un ID !");
             return;
         }
         int id = Integer.parseInt(idTextField.getText());
@@ -142,10 +142,20 @@ public class UpdateContactController implements Initializable {
             rue = rueTextField.getText();
 
         if(!(numRueTextField.getText().isEmpty()))
-            numeroRue = Integer.parseInt(numRueTextField.getText());
+            try{
+                numeroRue = Integer.parseInt(numRueTextField.getText());
+            }catch (NumberFormatException e){
+                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un numéro de rue valide !");
+                return;
+            }
 
         if(!(codePostalTextField.getText().isEmpty()))
-            codePostal = Integer.parseInt(codePostalTextField.getText());
+            try{
+                codePostal = Integer.parseInt(codePostalTextField.getText());
+            }catch (NumberFormatException e){
+                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un code postal valide !");
+                return;
+            }
 
         if(!(villeTextField.getText().isEmpty()))
             ville = villeTextField.getText();

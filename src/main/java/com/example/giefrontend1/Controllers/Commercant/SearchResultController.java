@@ -242,6 +242,7 @@ public class SearchResultController implements Initializable {
             updateController.idTextField.setDisable(true);
         }
 
+        showAlert(Alert.AlertType.INFORMATION,"Information","Veuillez uniquement saisir les champs que vous désirez modifier !");
         this.contactsTableView.refresh();
 
     }
@@ -264,6 +265,12 @@ public class SearchResultController implements Initializable {
         };
     }
 
-
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
 }

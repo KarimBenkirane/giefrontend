@@ -160,10 +160,20 @@ public class CreateContactController implements Initializable {
             rue = rueTextField.getText();
 
         if(!numRueTextField.getText().isEmpty())
-            numeroRue = Integer.parseInt(numRueTextField.getText());
+            try{
+                numeroRue = Integer.parseInt(numRueTextField.getText());
+            }catch(NumberFormatException e){
+                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un numéro de rue valide !");
+                return;
+            }
 
         if(!codePostalTextField.getText().isEmpty())
-            codePostal = Integer.parseInt(codePostalTextField.getText());
+            try{
+                codePostal = Integer.parseInt(codePostalTextField.getText());
+            }catch (NumberFormatException e){
+                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un code postal valide !");
+                return;
+            }
 
         if(!villeTextField.getText().isEmpty())
             ville = villeTextField.getText();
@@ -176,9 +186,9 @@ public class CreateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(prenom,nom,email,telephone,fax,adresseDTO);
             boolean status = ParserContact.createParticulier(contactDTO);
             if(status)
-                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès !");
             else{
-                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact.");
             }
         }
         else{
@@ -186,9 +196,9 @@ public class CreateContactController implements Initializable {
             ContactDTO contactDTO = new ContactDTO(email,telephone,fax,adresseDTO,prenom,nom);
             boolean status = ParserContact.createEntreprise(contactDTO); // méthode createEntreprise à ajouter
             if(status)
-                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès!");
+                showAlert(AlertType.INFORMATION, "Succès", "Contact créé avec succès !");
             else{
-                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact");
+                showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la création du contact.");
             }
         }
 
