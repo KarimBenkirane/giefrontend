@@ -53,6 +53,14 @@ public class SearchContactsController implements Initializable {
     public TextField formeJuridiqueTextField;
 
 
+    public static String searchType;
+    public static String searchEmail;
+    public static String searchNom;
+    public static String searchPrenom;
+    public static String searchRaisonSociale;
+    public static String searchFormeJuridique;
+
+
     public SearchContactsController() {
 
     }
@@ -122,12 +130,13 @@ public class SearchContactsController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(new Scene(root));
         stage.setTitle("Résultat de la recherche");
-        stage.setMaximized(true);
+        stage.setMaximized(false);
         stage.show();
         this.openedResultStage = stage;
 
         List<ContactDTO> contacts = new ArrayList<>();
         String email = this.emailTextField.getText();
+        searchEmail = email;
 
         if(!allRadioBtn.isSelected()){
 
@@ -135,18 +144,25 @@ public class SearchContactsController implements Initializable {
                 String nom = this.nomTextField.getText();
                 String prenom = this.prenomTextField.getText();
 
+                searchNom = nom;
+                searchPrenom = prenom;
+
                 if (!nom.isEmpty()) {
                     contacts = ParserContact.getParticuliersByNom(nom);
+                    searchType = "particuliersByNom";
                 }
                 if (!prenom.isEmpty()) {
                     contacts = ParserContact.getParticuliersByPrenom(prenom);
+                    searchType = "particuliersByPrenom";
                 }
                 if(!email.isEmpty()){
                     contacts = ParserContact.getParticuliersByEmail(email);
+                    searchType = "particuliersByEmail";
                 }
 
                 if(nom.isEmpty() && prenom.isEmpty() && email.isEmpty()){
                     contacts = ParserContact.getAllParticuliers();
+                    searchType = "particuliersAll";
                 }
             }
 
@@ -154,18 +170,25 @@ public class SearchContactsController implements Initializable {
                 String raisonSociale = this.raisonSocialeTextField.getText();
                 String formeJuridique = this.formeJuridiqueTextField.getText();
 
+                searchRaisonSociale = raisonSociale;
+                searchFormeJuridique = formeJuridique;
+
                 if(!email.isEmpty()){
                     contacts = ParserContact.getEntreprisesByEmail(email);
+                    searchType = "entreprisesByEmail";
                 }
                 if(!raisonSociale.isEmpty()){
                     contacts = ParserContact.getEntrepriseByRaisonSociale(raisonSociale);
+                    searchType = "entreprisesByRaisonSociale";
 
                 }
                 if(!formeJuridique.isEmpty()){
                     contacts = ParserContact.getEntrepriseByFormeJuridique(formeJuridique);
+                    searchType = "entreprisesByFormeJuridique";
                 }
                 if(formeJuridique.isEmpty() && raisonSociale.isEmpty() && email.isEmpty()){
                     contacts = ParserContact.getAllEntreprises();
+                    searchType = "entreprisesAll";
                 }
             }
 
@@ -173,9 +196,11 @@ public class SearchContactsController implements Initializable {
         else{
             if(email.isEmpty()){
                 contacts = ParserContact.getAllContacts();
+                searchType = "contactsAll";
             }
             else{
                 contacts = ParserContact.getContactsByEmail(email);
+                searchType = "contactsByEmail";
             }
         }
 
@@ -192,7 +217,7 @@ public class SearchContactsController implements Initializable {
         else if(contacts.isEmpty()){
             openedResultStage.close();
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Erreur");
+            alert.setTitle("Aucun contact trouvé");
             alert.setHeaderText(null);
             alert.setContentText("Aucun contact trouvé !");
             alert.showAndWait();
@@ -224,6 +249,7 @@ public class SearchContactsController implements Initializable {
 
 
     }
+
 
 
 

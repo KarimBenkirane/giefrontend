@@ -5,6 +5,7 @@ import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Parser.ParserContact;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -66,6 +67,11 @@ public class UpdateContactController implements Initializable {
     @FXML
     public Label prenomLabel; // deviendra formeJuridique pour l'entreprise
 
+    public ObservableList<ContactDTO> contactDTOObservableList;
+
+
+    public UpdateContactController() {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -150,9 +156,14 @@ public class UpdateContactController implements Initializable {
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
         if(typeContactChoiceBox.getValue().equals("Particulier")){
             ContactDTO contactDTO = new ContactDTO(id,prenom,nom,email,telephone,fax,adresseDTO);
+            System.out.println(contactDTO);
             boolean status = ParserContact.updateParticulier(contactDTO);
-            if(status)
+            if(status) {
+                if (contactDTOObservableList != null) {
+                    contactDTOObservableList.setAll(SearchResultController.getUpdatedContactList());
+                }
                 showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
+            }
             else{
                 showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
             }
@@ -160,9 +171,14 @@ public class UpdateContactController implements Initializable {
         else{
             //nom et prénom deviennent raisonSociale et formeJuridique respectivement
             ContactDTO contactDTO = new ContactDTO(id,email,telephone,fax,adresseDTO,prenom,nom);
+            System.out.println(contactDTO);
             boolean status = ParserContact.updateEntreprise(contactDTO);
-            if(status)
+            if(status) {
+                if (contactDTOObservableList != null) {
+                    contactDTOObservableList.setAll(SearchResultController.getUpdatedContactList());
+                }
                 showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
+            }
             else{
                 showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
             }

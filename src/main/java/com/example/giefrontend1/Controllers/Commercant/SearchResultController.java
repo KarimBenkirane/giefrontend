@@ -2,6 +2,7 @@ package com.example.giefrontend1.Controllers.Commercant;
 
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Parser.ParserContact;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class SearchResultController implements Initializable {
@@ -195,11 +198,13 @@ public class SearchResultController implements Initializable {
         if (result == ButtonType.YES) {
             boolean success = ParserContact.deleteContact(contactId);
             if (success) {
+                this.contactsTableView.getItems().setAll(getUpdatedContactList());
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                 successAlert.setTitle("Succès");
                 successAlert.setHeaderText(null);
                 successAlert.setContentText("Le contact a été supprimé avec succès !");
                 successAlert.showAndWait();
+
 
                 this.contactsTableView.refresh();
             } else {
@@ -223,6 +228,7 @@ public class SearchResultController implements Initializable {
         stage.show();
 
         UpdateContactController updateController = loader.getController();
+        updateController.contactDTOObservableList = this.contactsTableView.getItems();
         if(this.type.equals("Particulier")){
             updateController.typeContactChoiceBox.setValue("Particulier");
             updateController.typeContactChoiceBox.setDisable(true);
@@ -240,6 +246,23 @@ public class SearchResultController implements Initializable {
 
     }
 
+    public static List<ContactDTO> getUpdatedContactList() {
+        return switch (SearchContactsController.searchType) {
+            case "particuliersByNom" -> ParserContact.getParticuliersByNom(SearchContactsController.searchNom);
+            case "particuliersByPrenom" -> ParserContact.getParticuliersByPrenom(SearchContactsController.searchPrenom);
+            case "particuliersByEmail" -> ParserContact.getParticuliersByEmail(SearchContactsController.searchEmail);
+            case "particuliersAll" -> ParserContact.getAllParticuliers();
+            case "entreprisesByEmail" -> ParserContact.getEntreprisesByEmail(SearchContactsController.searchEmail);
+            case "entreprisesByRaisonSociale" ->
+                    ParserContact.getEntrepriseByRaisonSociale(SearchContactsController.searchRaisonSociale);
+            case "entreprisesByFormeJuridique" ->
+                    ParserContact.getEntrepriseByFormeJuridique(SearchContactsController.searchFormeJuridique);
+            case "entreprisesAll" -> ParserContact.getAllEntreprises();
+            case "contactsAll" -> ParserContact.getAllContacts();
+            case "contactsByEmail" -> ParserContact.getContactsByEmail(SearchContactsController.searchEmail);
+            default -> new ArrayList<>();
+        };
+    }
 
 
 
