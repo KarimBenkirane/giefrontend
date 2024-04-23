@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-module ma.uiass.eia.giefrontend {
-    requires javafx.controls;
-    requires javafx.fxml;
-
-
-    opens ma.uiass.eia.giefrontend to javafx.fxml;
-    exports ma.uiass.eia.giefrontend;
-}
-=======
 module com.example.giefrontend1 {
     requires javafx.controls;
     requires javafx.fxml;
@@ -29,4 +19,3 @@ module com.example.giefrontend1 {
     exports com.example.giefrontend1.Views;
     exports com.example.giefrontend1.Parser;
 }
->>>>>>> origin/CRM
