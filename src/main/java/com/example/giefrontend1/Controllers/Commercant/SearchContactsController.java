@@ -116,7 +116,11 @@ public class SearchContactsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
+        addListenerToTextField(nomTextField);
+        addListenerToTextField(prenomTextField);
+        addListenerToTextField(raisonSocialeTextField);
+        addListenerToTextField(emailTextField);
+        addListenerToTextField(formeJuridiqueTextField);
     }
 
 
@@ -208,19 +212,11 @@ public class SearchContactsController implements Initializable {
 
         if(contacts == null){
             openedResultStage.close();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText(null);
-            alert.setContentText("Une erreur s'est produite !");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite !");
         }
         else if(contacts.isEmpty()){
             openedResultStage.close();
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Aucun contact trouvé");
-            alert.setHeaderText(null);
-            alert.setContentText("Aucun contact trouvé !");
-            alert.showAndWait();
+            showAlert(Alert.AlertType.INFORMATION,"Aucun contact trouvé","Aucun contact trouvé !");
         }
         else{
             ObservableList<ContactDTO> contactList = FXCollections.observableArrayList();
@@ -257,6 +253,34 @@ public class SearchContactsController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    private void enableAllTextFields() {
+        nomTextField.setDisable(false);
+        prenomTextField.setDisable(false);
+        raisonSocialeTextField.setDisable(false);
+        emailTextField.setDisable(false);
+        formeJuridiqueTextField.setDisable(false);
+    }
+
+    private void disableAllTextFieldsExcept(TextField exceptTextField) {
+        nomTextField.setDisable(true);
+        prenomTextField.setDisable(true);
+        raisonSocialeTextField.setDisable(true);
+        emailTextField.setDisable(true);
+        formeJuridiqueTextField.setDisable(true);
+
+        exceptTextField.setDisable(false);
+    }
+
+    private void addListenerToTextField(TextField textField) {
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.isEmpty()) {
+                disableAllTextFieldsExcept(textField);
+            } else {
+                enableAllTextFields();
+            }
+        });
     }
 
 
