@@ -285,7 +285,6 @@ public class SearchResultController implements Initializable {
         assert contactDTO != null;
         String email = contactDTO.getEmail();
         controller.recipientTextField.setText(email);
-        controller.recipientTextField.setDisable(true);
     }
 
 
