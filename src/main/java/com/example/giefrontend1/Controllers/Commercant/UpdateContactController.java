@@ -118,30 +118,30 @@ public class UpdateContactController implements Initializable {
         String pays = null;
 
 
-        if(!(nomTextField.getText().isEmpty()))
+        if(nomTextField.getText() != null)
             nom = nomTextField.getText();
 
-        if(!(prenomTextField.getText().isEmpty()))
+        if(prenomTextField.getText() != null)
             prenom = prenomTextField.getText();
 
-        if(!(emailTextField.getText().isEmpty()))
+        if(emailTextField.getText() != null)
             email = emailTextField.getText();
 
-        if(!(phoneTextField.getText().isEmpty()))
+        if(phoneTextField.getText() != null)
             telephone = phoneTextField.getText();
 
-        if(!(faxTextField.getText().isEmpty()))
+        if(faxTextField.getText() != null)
             fax = faxTextField.getText();
 
 
 
-        if(!(quartierTextField.getText().isEmpty()))
+        if(quartierTextField.getText() != null)
             quartier = quartierTextField.getText();
 
-        if(!(rueTextField.getText().isEmpty()))
+        if(rueTextField.getText() != null)
             rue = rueTextField.getText();
 
-        if(!(numRueTextField.getText().isEmpty()))
+        if(numRueTextField.getText() != null)
             try{
                 numeroRue = Integer.parseInt(numRueTextField.getText());
             }catch (NumberFormatException e){
@@ -149,7 +149,7 @@ public class UpdateContactController implements Initializable {
                 return;
             }
 
-        if(!(codePostalTextField.getText().isEmpty()))
+        if(codePostalTextField.getText() != null)
             try{
                 codePostal = Integer.parseInt(codePostalTextField.getText());
             }catch (NumberFormatException e){
@@ -157,10 +157,10 @@ public class UpdateContactController implements Initializable {
                 return;
             }
 
-        if(!(villeTextField.getText().isEmpty()))
+        if(villeTextField.getText() != null)
             ville = villeTextField.getText();
 
-        if(!(paysTextField.getText().isEmpty()))
+        if(paysTextField.getText() != null)
             pays = paysTextField.getText();
 
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);

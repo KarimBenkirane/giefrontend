@@ -2,7 +2,6 @@ package com.example.giefrontend1.Controllers.Commercant;
 
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Parser.ParserContact;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -29,6 +28,8 @@ public class SearchResultController implements Initializable {
     public Button modifierContactBtn;
     @FXML
     public Button supprimerContactBtn;
+    @FXML
+    public Button contacterContactBtn;
 
     @FXML
     public Label resultAdresseLabel;
@@ -177,6 +178,8 @@ public class SearchResultController implements Initializable {
                     this.contactsSideBarAnchorPane.setVisible(true);
                 }
 
+            }else{
+                this.contactsSideBarAnchorPane.setVisible(false);
             }
         });
     }
@@ -189,7 +192,7 @@ public class SearchResultController implements Initializable {
         alert.setContentText("Voulez-vous vraiment supprimer ce contact ?");
 
         // Customize the buttons in the confirmation dialog
-        alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+        alert.getButtonTypes().setAll(ButtonType.NO, ButtonType.YES);
 
         // Show the confirmation dialog and wait for the user's response
         ButtonType result = alert.showAndWait().orElse(ButtonType.NO);
@@ -229,23 +232,63 @@ public class SearchResultController implements Initializable {
 
         UpdateContactController updateController = loader.getController();
         updateController.contactDTOObservableList = this.contactsTableView.getItems();
+
+
+        ContactDTO contactDTO = ParserContact.getContactByID(contactId);
+
+        updateController.emailTextField.setText(contactDTO.getEmail());
+        updateController.phoneTextField.setText(contactDTO.getTelephone());
+        updateController.faxTextField.setText(contactDTO.getFax());
+
+        updateController.codePostalTextField.setText(String.valueOf(contactDTO.getAdresse().getCodePostal()));
+        updateController.numRueTextField.setText(String.valueOf(contactDTO.getAdresse().getNumeroRue()));
+        updateController.rueTextField.setText(contactDTO.getAdresse().getRue());
+        updateController.paysTextField.setText(contactDTO.getAdresse().getPays());
+        updateController.quartierTextField.setText(contactDTO.getAdresse().getQuartier());
+        updateController.villeTextField.setText(contactDTO.getAdresse().getVille());
+
+
         if(this.type.equals("Particulier")){
             updateController.typeContactChoiceBox.setValue("Particulier");
             updateController.typeContactChoiceBox.setDisable(true);
             updateController.idTextField.setText(String.valueOf(contactId));
             updateController.idTextField.setDisable(true);
+
+            updateController.prenomTextField.setText(contactDTO.getPrenom());
+            updateController.nomTextField.setText(contactDTO.getNom());
+
         }
         else if(this.type.equals("Entreprise")){
             updateController.typeContactChoiceBox.setValue("Entreprise");
             updateController.typeContactChoiceBox.setDisable(true);
             updateController.idTextField.setText(String.valueOf(contactId));
             updateController.idTextField.setDisable(true);
-        }
 
-        showAlert(Alert.AlertType.INFORMATION,"Information","Veuillez uniquement saisir les champs que vous désirez modifier !");
+
+            updateController.prenomTextField.setText(contactDTO.getFormeJuridique());
+            updateController.nomTextField.setText(contactDTO.getRaisonSociale());
+
+        }
         this.contactsTableView.refresh();
 
     }
+
+    public void onContactBtnClick(ActionEvent e) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/SendEmail.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.show();
+        SendEmailController controller = loader.getController();
+        ContactDTO contactDTO = ParserContact.getContactByID(contactId);
+        assert contactDTO != null;
+        String email = contactDTO.getEmail();
+        controller.recipientTextField.setText(email);
+        controller.recipientTextField.setDisable(true);
+    }
+
+
 
     public static List<ContactDTO> getUpdatedContactList() {
         return switch (SearchContactsController.searchType) {

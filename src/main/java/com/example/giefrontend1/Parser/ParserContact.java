@@ -681,7 +681,187 @@ public class ParserContact {
         }
     }
 
+    public static ContactDTO getContactByID(int id) {
+        String body = null;
+        ContactDTO contact = null;
 
+        Request request = new Request.Builder()
+                .url(url + "/api/contacts/get/"+id)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            contact = parseContactByID(body);
+            return contact;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+
+
+    public static ContactDTO parseContactByID(String responseBody) {
+        try {
+
+            JsonObject contactJson = JsonParser.parseString(responseBody).getAsJsonObject();
+
+            // Vérifier si l'objet JSON contient la clé "raisonSociale"
+            if (contactJson.has("raisonSociale")) {
+                int id = contactJson.get("id").getAsInt();
+                String email = null;
+                String fax = null;
+                String telephone = null;
+                String raisonSociale = null;
+                String formeJuridique = null;
+
+
+                JsonElement jsonEmail = contactJson.get("email");
+                JsonElement jsonFax = contactJson.get("fax");
+                JsonElement jsonTelephone = contactJson.get("telephone");
+                JsonElement jsonRaisonSociale = contactJson.get("raisonSociale");
+                JsonElement jsonFormeJuridique = contactJson.get("formeJuridique");
+
+
+                JsonObject addressObj = contactJson.get("adresse").getAsJsonObject();
+
+
+                int adresse_id = addressObj.get("id").getAsInt();
+                String rue = null;
+                int numeroRue = -1;
+                int codePostal = -1;
+                String quartier = null;
+                String ville = null;
+                String pays = null;
+
+                JsonElement jsonRue = addressObj.get("rue");
+                JsonElement jsonNumeroRue = addressObj.get("numeroRue");
+                JsonElement jsonCodePostal = addressObj.get("codePostal");
+                JsonElement jsonQuartier = addressObj.get("quartier");
+                JsonElement jsonVille = addressObj.get("ville");
+                JsonElement jsonPays = addressObj.get("pays");
+
+
+                if (!(jsonEmail == null)) {
+                    email = jsonEmail.getAsString();
+                }
+                if (!(jsonFax == null)) {
+                    fax = jsonFax.getAsString();
+                }
+                if (!(jsonTelephone == null)) {
+                    telephone = jsonTelephone.getAsString();
+                }
+                if (!(jsonRaisonSociale == null)) {
+                    raisonSociale = jsonRaisonSociale.getAsString();
+                }
+                if (!(jsonFormeJuridique == null)) {
+                    formeJuridique = jsonFormeJuridique.getAsString();
+                }
+
+
+                if (!(jsonRue == null)) {
+                    rue = jsonRue.getAsString();
+                }
+                if (!(jsonNumeroRue == null)) {
+                    numeroRue = jsonNumeroRue.getAsInt();
+                }
+                if (!(jsonCodePostal == null)) {
+                    codePostal = jsonCodePostal.getAsInt();
+                }
+                if (!(jsonQuartier == null)) {
+                    quartier = jsonQuartier.getAsString();
+                }
+                if (!(jsonVille == null)) {
+                    ville = jsonVille.getAsString();
+                }
+                if (!(jsonPays == null)) {
+                    pays = jsonPays.getAsString();
+                }
+
+
+                AdresseDTO adresse = new AdresseDTO(adresse_id, rue, numeroRue, quartier, codePostal, ville, pays);
+
+                return new ContactDTO(id, email, telephone, fax, adresse, formeJuridique, raisonSociale);
+            } else { // Si la clé "raisonSociale" n'existe pas, supposons qu'il s'agit d'un particulier
+                int id = contactJson.get("id").getAsInt();
+                String email = null;
+                String fax = null;
+                String telephone = null;
+                String nom = null;
+                String prenom = null;
+
+
+                JsonElement jsonEmail = contactJson.get("email");
+                JsonElement jsonFax = contactJson.get("fax");
+                JsonElement jsonTelephone = contactJson.get("telephone");
+                JsonElement jsonNom = contactJson.get("nom");
+                JsonElement jsonPrenom = contactJson.get("prenom");
+
+
+                JsonObject addressObj = contactJson.get("adresse").getAsJsonObject();
+
+
+                int adresse_id = addressObj.get("id").getAsInt();
+                String rue = null;
+                int numeroRue = -1;
+                int codePostal = -1;
+                String quartier = null;
+                String ville = null;
+                String pays = null;
+
+                JsonElement jsonRue = addressObj.get("rue");
+                JsonElement jsonNumeroRue = addressObj.get("numeroRue");
+                JsonElement jsonCodePostal = addressObj.get("codePostal");
+                JsonElement jsonQuartier = addressObj.get("quartier");
+                JsonElement jsonVille = addressObj.get("ville");
+                JsonElement jsonPays = addressObj.get("pays");
+
+
+                if (!(jsonEmail == null)) {
+                    email = jsonEmail.getAsString();
+                }
+                if (!(jsonFax == null)) {
+                    fax = jsonFax.getAsString();
+                }
+                if (!(jsonTelephone == null)) {
+                    telephone = jsonTelephone.getAsString();
+                }
+                if (!(jsonNom == null)) {
+                    nom = jsonNom.getAsString();
+                }
+                if (!(jsonPrenom == null)) {
+                    prenom = jsonPrenom.getAsString();
+                }
+
+
+                if (!(jsonRue == null)) {
+                    rue = jsonRue.getAsString();
+                }
+                if (!(jsonNumeroRue == null)) {
+                    numeroRue = jsonNumeroRue.getAsInt();
+                }
+                if (!(jsonCodePostal == null)) {
+                    codePostal = jsonCodePostal.getAsInt();
+                }
+                if (!(jsonQuartier == null)) {
+                    quartier = jsonQuartier.getAsString();
+                }
+                if (!(jsonVille == null)) {
+                    ville = jsonVille.getAsString();
+                }
+                if (!(jsonPays == null)) {
+                    pays = jsonPays.getAsString();
+                }
+
+
+                AdresseDTO adresse = new AdresseDTO(adresse_id, rue, numeroRue, quartier, codePostal, ville, pays);
+
+                return new ContactDTO(id, prenom, nom, email, telephone, fax, adresse);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }

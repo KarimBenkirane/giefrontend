@@ -37,7 +37,7 @@
       </TableView>
       <AnchorPane fx:id="contactsSideBarAnchorPane" layoutX="950.0" layoutY="-1.0" prefHeight="668.0" prefWidth="289.0">
          <children>
-            <VBox alignment="CENTER" layoutX="4.0" layoutY="224.0" prefHeight="258.0" prefWidth="273.0" spacing="7.0">
+            <VBox alignment="CENTER" layoutX="7.0" layoutY="139.0" prefHeight="336.0" prefWidth="273.0" spacing="7.0">
                <children>
                   <Label fx:id="resultIDLabel" text="ID">
                      <font>
@@ -67,14 +67,22 @@
                      <font>
                         <Font size="17.0" />
                      </font></Label>
-                  <Label fx:id="resultAdresseLabel" alignment="CENTER" prefHeight="64.0" prefWidth="271.0" text="Adresse complète" textAlignment="CENTER" wrapText="true">
+                  <Label fx:id="resultAdresseLabel" alignment="CENTER" prefHeight="61.0" prefWidth="271.0" text="Adresse complète" textAlignment="CENTER" wrapText="true">
                      <font>
                         <Font size="17.0" />
                      </font></Label>
+                  <VBox prefHeight="35.0" prefWidth="273.0" />
                   <HBox prefHeight="0.0" prefWidth="245.0" spacing="20.0">
                      <children>
                         <Button fx:id="modifierContactBtn" mnemonicParsing="false" onAction="#onUpdateBtnClick" text="Modifier" />
                         <Button fx:id="supprimerContactBtn" mnemonicParsing="false" onAction="#onDeleteBtnClick" text="Supprimer" />
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" prefHeight="34.0" prefWidth="225.0">
+                     <children>
+                        <HBox prefHeight="34.0" prefWidth="150.0" />
+                        <Button fx:id="contacterContactBtn" mnemonicParsing="false" onAction="#onContactBtnClick" prefHeight="34.0" prefWidth="139.0" text="Contacter" />
+                        <HBox prefHeight="34.0" prefWidth="150.0" />
                      </children>
                   </HBox>
                </children>
