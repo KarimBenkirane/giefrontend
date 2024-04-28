@@ -117,51 +117,39 @@ public class UpdateContactController implements Initializable {
         String ville = null;
         String pays = null;
 
+        if(nomTextField.getText().isEmpty()){
+            showAlert(AlertType.WARNING,"Erreur","Veuillez saisir le nom !");
+            return;
+        }
+        if(emailTextField.getText().isEmpty()){
+            showAlert(AlertType.WARNING,"Erreur","Veuillez saisir l'email !");
+            return;
+        }
+        nom = nomTextField.getText();
+        prenom = prenomTextField.getText();
+        email = emailTextField.getText();
+        telephone = phoneTextField.getText();
+        fax = faxTextField.getText();
+        quartier = quartierTextField.getText();
+        rue = rueTextField.getText();
 
-        if(nomTextField.getText() != null)
-            nom = nomTextField.getText();
+        try {
+            numeroRue = Integer.parseInt(numRueTextField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un numéro de rue valide !");
+            return;
+        }
 
-        if(prenomTextField.getText() != null)
-            prenom = prenomTextField.getText();
+        try {
+            codePostal = Integer.parseInt(codePostalTextField.getText());
+        } catch (NumberFormatException e) {
+            showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un code postal valide !");
+            return;
+        }
 
-        if(emailTextField.getText() != null)
-            email = emailTextField.getText();
+        ville = villeTextField.getText();
+        pays = paysTextField.getText();
 
-        if(phoneTextField.getText() != null)
-            telephone = phoneTextField.getText();
-
-        if(faxTextField.getText() != null)
-            fax = faxTextField.getText();
-
-
-
-        if(quartierTextField.getText() != null)
-            quartier = quartierTextField.getText();
-
-        if(rueTextField.getText() != null)
-            rue = rueTextField.getText();
-
-        if(numRueTextField.getText() != null)
-            try{
-                numeroRue = Integer.parseInt(numRueTextField.getText());
-            }catch (NumberFormatException e){
-                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un numéro de rue valide !");
-                return;
-            }
-
-        if(codePostalTextField.getText() != null)
-            try{
-                codePostal = Integer.parseInt(codePostalTextField.getText());
-            }catch (NumberFormatException e){
-                showAlert(AlertType.ERROR,"Erreur","Veuillez saisir un code postal valide !");
-                return;
-            }
-
-        if(villeTextField.getText() != null)
-            ville = villeTextField.getText();
-
-        if(paysTextField.getText() != null)
-            pays = paysTextField.getText();
 
         AdresseDTO adresseDTO = new AdresseDTO(rue,numeroRue,quartier,codePostal,ville,pays);
         if(typeContactChoiceBox.getValue().equals("Particulier")){
