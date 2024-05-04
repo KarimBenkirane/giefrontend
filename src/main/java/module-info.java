@@ -18,4 +18,5 @@ module com.example.giefrontend1 {
     exports com.example.giefrontend1.Models;
     exports com.example.giefrontend1.Views;
     exports com.example.giefrontend1.Parser;
+    exports com.example.giefrontend1.Controllers.Vente;
 }

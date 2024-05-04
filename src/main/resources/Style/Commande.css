@@ -1,0 +1,72 @@
+/* StackPane */
+.stack-pane {
+    -fx-background-color: #f0f0f0; /* Couleur de fond */
+}
+
+/* TabPane */
+.tab-pane {
+    -fx-background-color: #ffffff; /* Couleur de fond */
+}
+
+/* Tab */
+.tab {
+    -fx-background-color: #007bff; /* Couleur de fond */
+    -fx-text-fill: #ffffff; /* Couleur du texte */
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* AnchorPane */
+.anchor-pane {
+    -fx-background-color: #ffffff; /* Couleur de fond */
+    -fx-padding: 20px; /* Rembourrage */
+}
+
+/* GridPane */
+.grid-pane {
+    -fx-padding: 20px; /* Rembourrage */
+}
+
+/* Title */
+.title {
+    -fx-font-size: 24px; /* Taille de police */
+    -fx-font-weight: bold; /* Gras */
+}
+
+/* Label */
+.label {
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* ChoiceBox */
+.choice-box {
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* TextField */
+.text-field {
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* DatePicker */
+.date-picker {
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* Button */
+.button {
+    -fx-font-size: 16px; /* Taille de police */
+    -fx-background-color: #007bff; /* Couleur de fond */
+    -fx-text-fill: #ffffff; /* Couleur du texte */
+}
+
+/* Total Price Field */
+.total-price-field {
+    -fx-font-size: 16px; /* Taille de police */
+}
+
+/* Confirmation Message */
+.confirmation-message {
+    -fx-font-size: 16px; /* Taille de police */
+    -fx-font-weight: bold; /* Gras */
+    -fx-fill: #28a745; /* Couleur du texte (vert) */
+}
