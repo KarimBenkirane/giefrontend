@@ -1,5 +1,7 @@
 package com.example.giefrontend1.Parser;
 
+import com.example.giefrontend1.Controllers.Commercant.ProduitController;
+import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Controllers.DTO.ProduitDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -124,6 +126,43 @@ public class ParserProduit {
             e.printStackTrace();
             return false;
         }
+    }
+
+    public static ProduitDTO getProduitByID(int id) {
+        String body = null;
+        ProduitDTO produitDTO = null;
+
+        Request request = new Request.Builder()
+                .url(url + "/api/produits/get/id/"+id)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            produitDTO = parseProduitByID(body);
+            return produitDTO;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private static ProduitDTO parseProduitByID(String body) {
+        JsonObject productJson = JsonParser.parseString(body).getAsJsonObject();
+        int id = productJson.get("id").getAsInt();
+        String marque = productJson.has("marque") ?
+                productJson.get("marque").getAsString() : null;
+        String modele = productJson.has("modele") ?
+                productJson.get("modele").getAsString() : null;
+        String description = productJson.has("description") ?
+                productJson.get("description").getAsString() : null;
+        String categorie = productJson.has("categorieProduit") ?
+                productJson.get("categorieProduit").getAsString() : null;
+        int qteStock = productJson.has("qteStock") ?
+                productJson.get("qteStock").getAsInt() : 0;
+        double prix = productJson.has("prix") ?
+                productJson.get("prix").getAsDouble() : 0;
+
+        return new ProduitDTO(id,marque,modele,description,categorie,qteStock,prix);
     }
 
 

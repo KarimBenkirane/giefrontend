@@ -295,7 +295,9 @@ public class ProduitController implements Initializable {
             boolean status = ParserProduit.createProduit(produitDTO);
             if (status) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit crée avec succès !");
+                ProduitController.this.searchResultTableView.getItems().clear();
                 ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
+                ProduitController.this.searchResultTableView.refresh();
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création du produit.");
             }
@@ -309,21 +311,102 @@ public class ProduitController implements Initializable {
         populateComboBoxMarquesCategories("categories",produitController.updateCategorieComboBox);
         populateComboBoxMarquesCategories("marques",produitController.updateMarqueComboBox);
 
+        ProduitDTO produit = ParserProduit.getProduitByID(8);
+        produitController.updateCategorieComboBox.setValue(produit.getCategorie());
+        produitController.updateMarqueComboBox.setValue(produit.getMarque());
+        produitController.updateModeleTextField.setText(produit.getModele());
+        produitController.updatePrixTextField.setText(String.valueOf(produit.getPrix()));
+        produitController.updateQtStockTextField.setText(String.valueOf(produit.getQteStock()));
+        produitController.updateDescriptionTextField.setText(produit.getDescription());
+
         produitController.modifierProduitBtn.setOnAction(event -> {
+
             String categorie = produitController.updateCategorieComboBox.getValue();
             String marque = produitController.updateMarqueComboBox.getValue();
-            String modele = produitController.updateModeleTextField.getText();
-            double prix = produitController.updatePrixTextField.getText().isEmpty() ? 0 : Double.parseDouble(produitController.updatePrixTextField.getText());
-            int qteStock = produitController.updateQtStockTextField.getText().isEmpty() ? 0 : Integer.parseInt(produitController.updateQtStockTextField.getText());
-            String description = produitController.updateDescriptionTextField.getText();
+            String description = produitController.updateDescriptionTextField.getText().isEmpty() ?
+                    null :
+                    produitController.updateDescriptionTextField.getText();
+            String modele = null;
+            if(produitController.updateModeleTextField.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le modèle !");
+                return;
+            }else{
+                modele = produitController.updateModeleTextField.getText();
+            }
+
+            if (produitController.updatePrixTextField.getText().isEmpty()) {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez ne pas laisser le champ du prix vide !");
+                return; // Return if price is empty to avoid NumberFormatException
+            }
+
+            double prix = 0;
+            // Get the price text from the text field
+            String priceText = produitController.updatePrixTextField.getText();
+
+            // Check if the text is empty or null
+            if (!priceText.isEmpty()) {
+                try {
+                    // Try parsing the text to a double
+                    double price = Double.parseDouble(priceText);
+
+                    // Check if the parsed number is positive
+                    if (price > 0) {
+                        // The price is valid, assign it to the prix variable
+                        prix = price;
+                    } else {
+                        // Show an error message for non-positive price
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre positif.");
+                        return; // Return to stop further execution
+                    }
+                } catch (NumberFormatException nfe) {
+                    // Show an error message for invalid number format
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre valide.");
+                    return; // Return to stop further execution
+                }
+            } else {
+                // Show an error message for empty price
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le prix.");
+                return; // Return to stop further execution
+            }
+
+            // Get the quantity text from the text field
+            String quantityText = produitController.updateQtStockTextField.getText();
+
+            // Check if the text is empty or null, and set qteStock to 0 as default
+            int qteStock = 0;
+
+            if (!quantityText.isEmpty()) {
+                try {
+                    // Try parsing the text to an integer
+                    int quantity = Integer.parseInt(quantityText);
+
+                    // Check if the parsed integer is positive
+                    if (quantity >= 0) {
+                        // Set qteStock to the parsed integer
+                        qteStock = quantity;
+                    } else {
+                        // Show an error message for negative quantity
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                        return; // Return to stop further execution
+                    }
+                } catch (NumberFormatException nfex) {
+                    // Show an error message for invalid integer format
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                    return; // Return to stop further execution
+                }
+            }
 
             ProduitDTO produitDTO = new ProduitDTO(marque,modele,description,categorie,qteStock,prix);
             boolean status = ParserProduit.updateProduit(produitDTO,8);
-            if (status){
-                System.out.println("Success");
-            }else{
-                System.out.println("failed");
+            if (status) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit modifié avec succès !");
+                ProduitController.this.searchResultTableView.getItems().clear();
+                ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
+                ProduitController.this.searchResultTableView.refresh();
+            } else {
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du produit.");
             }
+
         });
 
 
