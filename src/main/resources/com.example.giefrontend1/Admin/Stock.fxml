@@ -12,7 +12,7 @@
       <font>
          <Font size="23.0" />
       </font></Text>
-   <TableView fx:id="searchResultTableView" layoutX="8.0" layoutY="204.0" prefHeight="532.0" prefWidth="832.0">
+   <TableView fx:id="searchResultTableView" layoutX="8.0" layoutY="204.0" prefHeight="495.0" prefWidth="832.0">
      <columns>
        <TableColumn fx:id="idProduitColumn" prefWidth="75.0" text="ID" />
        <TableColumn fx:id="categorieProduitColumn" prefWidth="75.0" text="Catégorie" />

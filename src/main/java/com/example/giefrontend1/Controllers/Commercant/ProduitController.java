@@ -2,6 +2,10 @@ package com.example.giefrontend1.Controllers.Commercant;
 
 import com.example.giefrontend1.Controllers.DTO.ProduitDTO;
 import com.example.giefrontend1.Parser.ParserProduit;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,44 +17,43 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
+import javax.swing.text.html.parser.Parser;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class ProduitController implements Initializable {
 
     @FXML
-    public TableColumn<?, ?> actionProduitColumn;
-
-    @FXML
     public Button advSearchBtn;
-
-    @FXML
-    public TableColumn<?, ?> categorieProduitColumn;
 
     @FXML
     public Button createProduitBtn;
 
     @FXML
-    public TableColumn<?, ?> descriptionProduitColumn;
+    public TableColumn<ProduitDTO, Long> idProduitColumn;
 
     @FXML
-    public TableColumn<?, ?> idProduitColumn;
+    public TableColumn<ProduitDTO, String> marqueProduitColumn;
 
     @FXML
-    public TableColumn<?, ?> marqueProduitColumn;
+    public TableColumn<ProduitDTO, String> modeleProduitColumn;
 
     @FXML
-    public TableColumn<?, ?> modeleProduitColumn;
+    public TableColumn<ProduitDTO, String> descriptionProduitColumn;
 
     @FXML
-    public TableColumn<?, ?> prixProduitColumn;
+    public TableColumn<ProduitDTO, String> categorieProduitColumn;
 
     @FXML
-    public TableColumn<?, ?> qtStockProduitColumn;
+    public TableColumn<ProduitDTO, Integer> qtStockProduitColumn;
 
     @FXML
-    public TableView<?> searchResultTableView;
+    public TableColumn<ProduitDTO, Double> prixProduitColumn;
+
+    @FXML
+    public TableView<ProduitDTO> searchResultTableView;
 
     public RadioButton allRadioBtn;
 
@@ -132,7 +135,7 @@ public class ProduitController implements Initializable {
 
     @FXML
     public Button creerProduitBtn;
-
+    private static boolean initialized = false;
 
 
     public FXMLLoader loadScene(String fxmlName,String windowTitle) throws IOException {
@@ -148,6 +151,21 @@ public class ProduitController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        if(!initialized){// Set cell value factories for each column
+            idProduitColumn.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
+            marqueProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMarque()));
+            modeleProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getModele()));
+            descriptionProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
+            categorieProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCategorie()));
+            qtStockProduitColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQteStock()).asObject());
+            prixProduitColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrix()).asObject());
+
+            // Populate TableView with data
+            List<ProduitDTO> produits = ParserProduit.getAllProduits();
+            searchResultTableView.getItems().addAll(produits);
+            initialized = true;
+        }
 
     }
 
@@ -213,14 +231,71 @@ public class ProduitController implements Initializable {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez ne pas laisser le champ du prix vide !");
                 return; // Return if price is empty to avoid NumberFormatException
             }
-            double prix = Double.parseDouble(produitController.createPrixTextField.getText());
 
-            int qteStock = produitController.createQtStockTextField.getText().isEmpty() ? 0 : Integer.parseInt(produitController.createQtStockTextField.getText());
+            double prix = 0;
+            // Get the price text from the text field
+            String priceText = produitController.createPrixTextField.getText();
+
+            // Check if the text is empty or null
+            if (!priceText.isEmpty()) {
+                try {
+                    // Try parsing the text to a double
+                    double price = Double.parseDouble(priceText);
+
+                    // Check if the parsed number is positive
+                    if (price > 0) {
+                        // The price is valid, assign it to the prix variable
+                        prix = price;
+                    } else {
+                        // Show an error message for non-positive price
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre positif.");
+                        return; // Return to stop further execution
+                    }
+                } catch (NumberFormatException nfe) {
+                    // Show an error message for invalid number format
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre valide.");
+                    return; // Return to stop further execution
+                }
+            } else {
+                // Show an error message for empty price
+                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le prix.");
+                return; // Return to stop further execution
+            }
+
+
+            // Get the quantity text from the text field
+            String quantityText = produitController.createQtStockTextField.getText();
+
+            // Check if the text is empty or null, and set qteStock to 0 as default
+            int qteStock = 0;
+
+            if (!quantityText.isEmpty()) {
+                try {
+                    // Try parsing the text to an integer
+                    int quantity = Integer.parseInt(quantityText);
+
+                    // Check if the parsed integer is positive
+                    if (quantity >= 0) {
+                        // Set qteStock to the parsed integer
+                        qteStock = quantity;
+                    } else {
+                        // Show an error message for negative quantity
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                        return; // Return to stop further execution
+                    }
+                } catch (NumberFormatException nfex) {
+                    // Show an error message for invalid integer format
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                    return; // Return to stop further execution
+                }
+            }
+
             String description = produitController.createDescriptionTextField.getText();
             ProduitDTO produitDTO = new ProduitDTO(marque, modele, description, categorie, qteStock, prix);
             boolean status = ParserProduit.createProduit(produitDTO);
             if (status) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit crée avec succès !");
+                ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
             } else {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la création du produit.");
             }
