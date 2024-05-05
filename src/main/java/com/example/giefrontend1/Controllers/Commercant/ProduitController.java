@@ -53,7 +53,11 @@ public class ProduitController implements Initializable {
     public TableColumn<ProduitDTO, Double> prixProduitColumn;
 
     @FXML
+    public TableColumn<?,?> actionProduitColumn;
+
+    @FXML
     public TableView<ProduitDTO> searchResultTableView;
+
 
     public RadioButton allRadioBtn;
 
@@ -323,9 +327,7 @@ public class ProduitController implements Initializable {
 
             String categorie = produitController.updateCategorieComboBox.getValue();
             String marque = produitController.updateMarqueComboBox.getValue();
-            String description = produitController.updateDescriptionTextField.getText().isEmpty() ?
-                    null :
-                    produitController.updateDescriptionTextField.getText();
+            String description = produitController.updateDescriptionTextField.getText();
             String modele = null;
             if(produitController.updateModeleTextField.getText().isEmpty()) {
                 showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le modèle !");
