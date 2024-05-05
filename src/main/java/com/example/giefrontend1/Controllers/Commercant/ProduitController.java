@@ -53,9 +53,6 @@ public class ProduitController implements Initializable {
     public TableColumn<ProduitDTO, Double> prixProduitColumn;
 
     @FXML
-    public TableColumn<?,?> actionProduitColumn;
-
-    @FXML
     public TableView<ProduitDTO> searchResultTableView;
 
 
@@ -155,8 +152,8 @@ public class ProduitController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        if(!initialized){// Set cell value factories for each column
+        if (!initialized) {
+            // Set cell value factories for each column
             idProduitColumn.setCellValueFactory(cellData -> new SimpleLongProperty(cellData.getValue().getId()).asObject());
             marqueProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getMarque()));
             modeleProduitColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getModele()));
@@ -165,13 +162,195 @@ public class ProduitController implements Initializable {
             qtStockProduitColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQteStock()).asObject());
             prixProduitColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrix()).asObject());
 
+            // Add edit button column
+            TableColumn<ProduitDTO, Void> editColumn = new TableColumn<>("Edit");
+            editColumn.setCellFactory(column -> {
+                return new TableCell<>() {
+                    private final Button editButton = new Button("Edit");
+
+                    {
+                        editButton.setOnAction(event -> {
+                            ProduitDTO produit = getTableView().getItems().get(getIndex());
+                            long produit_id = produit.getId();
+                            FXMLLoader loader = null;
+                            try {
+                                loader = ProduitController.this.loadScene("StockUpdate","Mettre à jour un produit");
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            ProduitController produitController = loader.getController();
+                            populateComboBoxMarquesCategories("categories",produitController.updateCategorieComboBox);
+                            populateComboBoxMarquesCategories("marques",produitController.updateMarqueComboBox);
+
+                            produitController.updateCategorieComboBox.setValue(produit.getCategorie());
+                            produitController.updateMarqueComboBox.setValue(produit.getMarque());
+                            produitController.updateModeleTextField.setText(produit.getModele());
+                            produitController.updatePrixTextField.setText(String.valueOf(produit.getPrix()));
+                            produitController.updateQtStockTextField.setText(String.valueOf(produit.getQteStock()));
+                            produitController.updateDescriptionTextField.setText(produit.getDescription());
+
+                            produitController.modifierProduitBtn.setOnAction(evt -> {
+
+                                String categorie = produitController.updateCategorieComboBox.getValue();
+                                String marque = produitController.updateMarqueComboBox.getValue();
+                                String description = produitController.updateDescriptionTextField.getText();
+                                String modele = null;
+                                if(produitController.updateModeleTextField.getText().isEmpty()) {
+                                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le modèle !");
+                                    return;
+                                }else{
+                                    modele = produitController.updateModeleTextField.getText();
+                                }
+
+                                if (produitController.updatePrixTextField.getText().isEmpty()) {
+                                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez ne pas laisser le champ du prix vide !");
+                                    return; // Return if price is empty to avoid NumberFormatException
+                                }
+
+                                double prix = 0;
+                                // Get the price text from the text field
+                                String priceText = produitController.updatePrixTextField.getText();
+
+                                // Check if the text is empty or null
+                                if (!priceText.isEmpty()) {
+                                    try {
+                                        // Try parsing the text to a double
+                                        double price = Double.parseDouble(priceText);
+
+                                        // Check if the parsed number is positive
+                                        if (price > 0) {
+                                            // The price is valid, assign it to the prix variable
+                                            prix = price;
+                                        } else {
+                                            // Show an error message for non-positive price
+                                            showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre positif.");
+                                            return; // Return to stop further execution
+                                        }
+                                    } catch (NumberFormatException nfe) {
+                                        // Show an error message for invalid number format
+                                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre valide.");
+                                        return; // Return to stop further execution
+                                    }
+                                } else {
+                                    // Show an error message for empty price
+                                    showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le prix.");
+                                    return; // Return to stop further execution
+                                }
+
+                                // Get the quantity text from the text field
+                                String quantityText = produitController.updateQtStockTextField.getText();
+
+                                // Check if the text is empty or null, and set qteStock to 0 as default
+                                int qteStock = 0;
+
+                                if (!quantityText.isEmpty()) {
+                                    try {
+                                        // Try parsing the text to an integer
+                                        int quantity = Integer.parseInt(quantityText);
+
+                                        // Check if the parsed integer is positive
+                                        if (quantity >= 0) {
+                                            // Set qteStock to the parsed integer
+                                            qteStock = quantity;
+                                        } else {
+                                            // Show an error message for negative quantity
+                                            showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                                            return; // Return to stop further execution
+                                        }
+                                    } catch (NumberFormatException nfex) {
+                                        // Show an error message for invalid integer format
+                                        showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
+                                        return; // Return to stop further execution
+                                    }
+                                }
+
+                                ProduitDTO produitDTO = new ProduitDTO(marque,modele,description,categorie,qteStock,prix);
+                                boolean status = ParserProduit.updateProduit(produitDTO,produit_id);
+                                if (status) {
+                                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit modifié avec succès !");
+                                    ProduitController.this.searchResultTableView.getItems().clear();
+                                    ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
+                                    ProduitController.this.searchResultTableView.refresh();
+
+                                } else {
+                                    showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du produit.");
+                                }
+
+                            });
+
+
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(editButton);
+                        }
+                    }
+                };
+            });
+
+            // Add delete button column
+            TableColumn<ProduitDTO, Void> deleteColumn = new TableColumn<>("Delete");
+            deleteColumn.setCellFactory(column -> {
+                return new TableCell<>() {
+                    private final Button deleteButton = new Button("Delete");
+
+                    {
+                        deleteButton.setOnAction(event -> {
+                            ProduitDTO produit = getTableView().getItems().get(getIndex());
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Confirmation");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Voulez-vous vraiment supprimer ce produit ? Note: si ce produit est rattaché à un achat ou une commande, vous ne pourrez pas le supprimer !");
+
+                            // Customize the buttons in the confirmation dialog
+                            alert.getButtonTypes().setAll(ButtonType.NO, ButtonType.YES);
+
+                            // Show the confirmation dialog and wait for the user's response
+                            ButtonType result = alert.showAndWait().orElse(ButtonType.NO);
+
+                            // If the user clicks YES, proceed with the deletion
+                            if (result == ButtonType.YES) {
+                                boolean success = ParserProduit.deleteProduitByID(produit.getId());
+                                if (success) {
+                                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit supprimé avec succès !");
+                                    ProduitController.this.searchResultTableView.getItems().clear();
+                                    ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
+                                    ProduitController.this.searchResultTableView.refresh();
+                                } else {
+                                    showAlert(Alert.AlertType.ERROR,"Erreur","Erreur lors de la suppression du produit.");
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(deleteButton);
+                        }
+                    }
+                };
+
+            });
+            // Add columns to TableView
+            searchResultTableView.getColumns().addAll(editColumn, deleteColumn);
+
             // Populate TableView with data
             List<ProduitDTO> produits = ParserProduit.getAllProduits();
             searchResultTableView.getItems().addAll(produits);
             initialized = true;
         }
-
     }
+
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);

@@ -16,12 +16,11 @@
      <columns>
        <TableColumn fx:id="idProduitColumn" prefWidth="75.0" text="ID" />
        <TableColumn fx:id="categorieProduitColumn" prefWidth="75.0" text="Catégorie" />
-         <TableColumn fx:id="descriptionProduitColumn" prefWidth="150.0" text="Description" />
-         <TableColumn fx:id="marqueProduitColumn" prefWidth="75.0" text="Marque" />
-         <TableColumn fx:id="modeleProduitColumn" prefWidth="75.0" text="Modèle" />
-         <TableColumn fx:id="prixProduitColumn" prefWidth="75.0" text="Prix" />
-         <TableColumn fx:id="qtStockProduitColumn" prefWidth="150.0" text="Quantité en stock" />
-         <TableColumn fx:id="actionProduitColumn" prefWidth="75.0" text="Action" />
+         <TableColumn fx:id="descriptionProduitColumn" prefWidth="222.0" text="Description" />
+         <TableColumn fx:id="marqueProduitColumn" prefWidth="97.0" text="Marque" />
+         <TableColumn fx:id="modeleProduitColumn" prefWidth="93.0" text="Modèle" />
+         <TableColumn fx:id="prixProduitColumn" prefWidth="76.0" text="Prix" />
+         <TableColumn fx:id="qtStockProduitColumn" prefWidth="156.0" text="Quantité en stock" />
      </columns>
       <columnResizePolicy>
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -47,9 +46,4 @@
          <Font size="15.0" />
       </font>
    </Text>
-   <Button layoutX="305.0" layoutY="137.0" mnemonicParsing="false" onAction="#onUpdateProductBtn" prefHeight="38.0" prefWidth="186.0" text="tempUpdate">
-      <font>
-         <Font size="17.0" />
-      </font>
-   </Button>
 </AnchorPane>

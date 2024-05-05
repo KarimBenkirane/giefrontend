@@ -109,7 +109,7 @@ public class ParserProduit {
         }
     }
 
-    public static boolean updateProduit(ProduitDTO produitDTO, int id) {
+    public static boolean updateProduit(ProduitDTO produitDTO, long id) {
         Gson gson = new Gson();
         String json = gson.toJson(produitDTO);
         System.out.println(json);
@@ -166,5 +166,18 @@ public class ParserProduit {
     }
 
 
+    public static boolean deleteProduitByID(long id) {
+        Request request = new Request.Builder()
+                .url(url + "/api/produits/delete/" + id)
+                .delete()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
 
