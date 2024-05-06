@@ -15,13 +15,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import javax.swing.text.html.parser.Parser;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProduitController implements Initializable {
 
@@ -100,9 +101,44 @@ public class ProduitController implements Initializable {
     @FXML
     public ComboBox<String> updateMarqueComboBox;
 
-    @FXML
-    public ComboBox<String> categorieSearchComboBox;
+//    @FXML
+//    public CheckBox accessChk;
+//
+//    @FXML
+//    public CheckBox appvChk;
+//
+//    @FXML
+//    public CheckBox avChk;
+//
+//    @FXML
+//    public CheckBox compoChk;
+//
+//    @FXML
+//    public CheckBox imprChk;
+//
+//    @FXML
+//    public CheckBox logChk;
+//
+//    @FXML
+//    public CheckBox ordTabChk;
+//
+//    @FXML
+//    public CheckBox otherChk;
+//
+//    @FXML
+//    public CheckBox periphChk;
+//
+//    @FXML
+//    public CheckBox rsxChk;
+//
+//    @FXML
+//    public CheckBox sphoneChk;
 
+    @FXML
+    public AnchorPane anchorPane1;
+
+    @FXML
+    public AnchorPane anchorPane2;
 
     @FXML
     public TextField updateModeleTextField;
@@ -137,6 +173,7 @@ public class ProduitController implements Initializable {
     @FXML
     public Button creerProduitBtn;
     private static boolean initialized = false;
+    private List<CheckBox> catCheckBoxes;
 
 
     public FXMLLoader loadScene(String fxmlName,String windowTitle) throws IOException {
@@ -149,6 +186,14 @@ public class ProduitController implements Initializable {
         stage.show();
         return loader;
     }
+
+    public List<CheckBox> getAllCheckboxes(AnchorPane anchorPane) {
+        return anchorPane.getChildren().stream()
+                .filter(node -> node instanceof CheckBox)
+                .map(node -> (CheckBox) node)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -488,117 +533,83 @@ public class ProduitController implements Initializable {
 
     }
 
-    public void onUpdateProductBtn(ActionEvent e) throws IOException {
-        FXMLLoader loader = this.loadScene("StockUpdate","Mettre à jour un produit");
-        ProduitController produitController = loader.getController();
-        populateComboBoxMarquesCategories("categories",produitController.updateCategorieComboBox);
-        populateComboBoxMarquesCategories("marques",produitController.updateMarqueComboBox);
-
-        ProduitDTO produit = ParserProduit.getProduitByID(8);
-        produitController.updateCategorieComboBox.setValue(produit.getCategorie());
-        produitController.updateMarqueComboBox.setValue(produit.getMarque());
-        produitController.updateModeleTextField.setText(produit.getModele());
-        produitController.updatePrixTextField.setText(String.valueOf(produit.getPrix()));
-        produitController.updateQtStockTextField.setText(String.valueOf(produit.getQteStock()));
-        produitController.updateDescriptionTextField.setText(produit.getDescription());
-
-        produitController.modifierProduitBtn.setOnAction(event -> {
-
-            String categorie = produitController.updateCategorieComboBox.getValue();
-            String marque = produitController.updateMarqueComboBox.getValue();
-            String description = produitController.updateDescriptionTextField.getText();
-            String modele = null;
-            if(produitController.updateModeleTextField.getText().isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le modèle !");
-                return;
-            }else{
-                modele = produitController.updateModeleTextField.getText();
-            }
-
-            if (produitController.updatePrixTextField.getText().isEmpty()) {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez ne pas laisser le champ du prix vide !");
-                return; // Return if price is empty to avoid NumberFormatException
-            }
-
-            double prix = 0;
-            // Get the price text from the text field
-            String priceText = produitController.updatePrixTextField.getText();
-
-            // Check if the text is empty or null
-            if (!priceText.isEmpty()) {
-                try {
-                    // Try parsing the text to a double
-                    double price = Double.parseDouble(priceText);
-
-                    // Check if the parsed number is positive
-                    if (price > 0) {
-                        // The price is valid, assign it to the prix variable
-                        prix = price;
-                    } else {
-                        // Show an error message for non-positive price
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre positif.");
-                        return; // Return to stop further execution
-                    }
-                } catch (NumberFormatException nfe) {
-                    // Show an error message for invalid number format
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "Le prix doit être un nombre valide.");
-                    return; // Return to stop further execution
-                }
-            } else {
-                // Show an error message for empty price
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le prix.");
-                return; // Return to stop further execution
-            }
-
-            // Get the quantity text from the text field
-            String quantityText = produitController.updateQtStockTextField.getText();
-
-            // Check if the text is empty or null, and set qteStock to 0 as default
-            int qteStock = 0;
-
-            if (!quantityText.isEmpty()) {
-                try {
-                    // Try parsing the text to an integer
-                    int quantity = Integer.parseInt(quantityText);
-
-                    // Check if the parsed integer is positive
-                    if (quantity >= 0) {
-                        // Set qteStock to the parsed integer
-                        qteStock = quantity;
-                    } else {
-                        // Show an error message for negative quantity
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
-                        return; // Return to stop further execution
-                    }
-                } catch (NumberFormatException nfex) {
-                    // Show an error message for invalid integer format
-                    showAlert(Alert.AlertType.ERROR, "Erreur", "La quantité doit être un nombre entier positif ou 0.");
-                    return; // Return to stop further execution
-                }
-            }
-
-            ProduitDTO produitDTO = new ProduitDTO(marque,modele,description,categorie,qteStock,prix);
-            boolean status = ParserProduit.updateProduit(produitDTO,8);
-            if (status) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit modifié avec succès !");
-                ProduitController.this.searchResultTableView.getItems().clear();
-                ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
-                ProduitController.this.searchResultTableView.refresh();
-            } else {
-                showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la modification du produit.");
-            }
-
-        });
-
-
-    }
-
     public void onSearchProductBtn(ActionEvent e) throws IOException {
         FXMLLoader loader = this.loadScene("StockSearch","Rechercher un produit");
         ProduitController produitController = loader.getController();
-        populateComboBoxMarquesCategories("categories",produitController.categorieSearchComboBox);
+        produitController.marqueSearchComboBox.getItems().add("Toutes les marques");
         populateComboBoxMarquesCategories("marques",produitController.marqueSearchComboBox);
 
+        List<CheckBox> checkBoxes = produitController.getAllCheckboxes(produitController.anchorPane1);
+        checkBoxes.addAll(produitController.getAllCheckboxes(produitController.anchorPane2));
+
+        ProduitController.this.catCheckBoxes = checkBoxes;
+        produitController.marqueSearchComboBox.setValue("Toutes les marques");
+
+        produitController.searchProductsBtn.setOnAction(event -> {
+            String marque = produitController.marqueSearchComboBox.getValue() == null ?
+                    null:
+                    produitController.marqueSearchComboBox.getValue();
+            List<String> categories = new ArrayList<>();
+            for(CheckBox checkBox : ProduitController.this.catCheckBoxes) {
+                if(checkBox.isSelected()) {
+                    categories.add(checkBox.getText());
+                }
+            }
+            System.out.println(categories);
+            String modele = produitController.modeleSearchTextField.getText().isEmpty() ?
+                    null:
+                    produitController.modeleSearchTextField.getText();
+            if(marque != null && marque.equals("Toutes les marques")){
+                marque = null;
+            }
+            String description = produitController.descriptionSearchTextField.getText().isEmpty() ?
+                    null:
+                    produitController.descriptionSearchTextField.getText();
+
+            Double prixMin = produitController.prixMinSearchTextField.getText().isEmpty() ?
+                    null:
+                    Double.parseDouble(produitController.prixMinSearchTextField.getText());
+            Double prixMax = produitController.prixMaxSearchTextField.getText().isEmpty() ?
+                    null:
+                    Double.parseDouble(produitController.prixMaxSearchTextField.getText());
+
+            Integer qtStock = produitController.qtStockSupSearchTextField.getText().isEmpty() ?
+                    null:
+                    Integer.parseInt(produitController.qtStockSupSearchTextField.getText());
+            String disponibilite = "tout";
+            if(produitController.dispoRadioBtn.isSelected())
+                disponibilite = "disponible";
+            else if(produitController.indispoRadioBtn.isSelected())
+                disponibilite = "indisponible";
+
+            Map<Object , Object> searchInfos = new HashMap<>();
+            searchInfos.put("marque",marque);
+            searchInfos.put("categorie",categories);
+            searchInfos.put("modele",modele);
+            searchInfos.put("description",description);
+            searchInfos.put("prixMin",prixMin);
+            searchInfos.put("prixMax",prixMax);
+            searchInfos.put("qtStock",qtStock);
+            searchInfos.put("disponibilite",disponibilite);
+
+            List<ProduitDTO> searchResult = ParserProduit.getProduitsByAdvSearch(searchInfos);
+            if(searchResult == null){
+                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite.");
+            }else if (searchResult.isEmpty()){
+                showAlert(Alert.AlertType.INFORMATION,"Aucun produit trouvé","Aucun produit ne correspond à votre recherche !");
+            }else{
+                ProduitController.this.searchResultTableView.getItems().clear();
+                ProduitController.this.searchResultTableView.getItems().addAll(searchResult);
+                showAlert(Alert.AlertType.INFORMATION,"Succès","Des produits on été trouvés, veuillez consulter le tableau !");
+            }
+        });
+    }
+
+    public void disableQteStockTextField(){
+        this.qtStockSupSearchTextField.setDisable(true);
+    }
+    public void enableQteStockTextField(){
+        this.qtStockSupSearchTextField.setDisable(false);
     }
 
 }

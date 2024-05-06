@@ -1,7 +1,5 @@
 package com.example.giefrontend1.Parser;
 
-import com.example.giefrontend1.Controllers.Commercant.ProduitController;
-import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Controllers.DTO.ProduitDTO;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,6 +10,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ParserProduit {
 
@@ -179,5 +178,32 @@ public class ParserProduit {
             return false;
         }
     }
+
+    public static List<ProduitDTO> getProduitsByAdvSearch(Map<Object, Object> searchInfos) {
+        Gson gson = new Gson();
+        String json = gson.toJson(searchInfos);
+        System.out.println(json);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/produits/advSearch")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                // Read response body and parse it
+                String responseBody = response.body().string();
+                return parseAllProduits(responseBody);
+            } else {
+                System.err.println("Error: " + response.code() + " " + response.message());
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }
 
