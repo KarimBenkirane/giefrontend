@@ -5,6 +5,7 @@ import com.example.giefrontend1.Controllers.DTO.ContactDTO;
 import com.example.giefrontend1.Controllers.DTO.DetailAchatDTO;
 import com.example.giefrontend1.Controllers.DTO.ProduitDTO;
 import com.example.giefrontend1.Parser.ParserAchat;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -57,10 +58,19 @@ public class AchatController implements Initializable {
     public TableColumn<DetailAchatDTO, String> mesDetailsProduitColumn;
 
     @FXML
+    public TableColumn<DetailAchatDTO, String> mesDetailsProduitMarqueColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, String> mesDetailsProduitModeleColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, String> mesDetailsPrixUnitaireColumn;
+
+    @FXML
     public TableColumn<DetailAchatDTO, Integer> mesDetailsQtAcheteeColumn;
 
     @FXML
-    public TableColumn<DetailAchatDTO, Double> mesDetailsReductionColumn;
+    public TableColumn<DetailAchatDTO, String> mesDetailsReductionColumn;
 
     @FXML
     public TableView<DetailAchatDTO> mesDetailsTableView;
@@ -136,17 +146,45 @@ public class AchatController implements Initializable {
                         achatController.mesDetailsIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
                         achatController.mesDetailsPrixColumn.setCellValueFactory(new PropertyValueFactory<>("prixAchat"));
                         achatController.mesDetailsQtAcheteeColumn.setCellValueFactory(new PropertyValueFactory<>("qteAchetee"));
-                        achatController.mesDetailsReductionColumn.setCellValueFactory(new PropertyValueFactory<>("reduction"));
+//                        achatController.mesDetailsReductionColumn.setCellValueFactory(new PropertyValueFactory<>("reduction"));
 
                         // Set a custom cell value factory for the produit column
-                        achatController.mesDetailsProduitColumn.setCellValueFactory(cellData -> {
+                        achatController.mesDetailsProduitMarqueColumn.setCellValueFactory(cellData -> {
                             ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
                             if (produitDTO != null) {
-                                return new SimpleStringProperty(produitDTO.getMarque()+" "+produitDTO.getModele());
+                                return new SimpleStringProperty(produitDTO.getMarque());
                             } else {
                                 return new SimpleStringProperty("");
                             }
                         });
+
+                        achatController.mesDetailsProduitModeleColumn.setCellValueFactory(cellData -> {
+                            ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
+                            if (produitDTO != null) {
+                                return new SimpleStringProperty(produitDTO.getModele());
+                            } else {
+                                return new SimpleStringProperty("");
+                            }
+                        });
+
+                        achatController.mesDetailsPrixUnitaireColumn.setCellValueFactory(cellData -> {
+                            ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
+                            if (produitDTO != null) {
+                                return new SimpleStringProperty(String.valueOf(produitDTO.getPrix()));
+                            } else {
+                                return new SimpleStringProperty("");
+                            }
+                        });
+
+                        achatController.mesDetailsReductionColumn.setCellValueFactory(cellData -> {
+                            DetailAchatDTO detailAchatDTO = cellData.getValue();
+                            if (detailAchatDTO != null) {
+                                return new SimpleStringProperty(String.valueOf(detailAchatDTO.getReduction() * 100) + "%");
+                            } else {
+                                return new SimpleStringProperty("");
+                            }
+                        });
+
 
 
                         if(achatController.mesDetailsTableView.getItems().isEmpty()){
