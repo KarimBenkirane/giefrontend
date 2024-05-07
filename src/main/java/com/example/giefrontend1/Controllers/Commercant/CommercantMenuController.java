@@ -18,6 +18,7 @@ public class CommercantMenuController implements Initializable {
     public Button logout_btn;
     public Button sendMail_button;
     public Button consulterStockBtn;
+    public Button mesAchatsBtn;
 
 
     @Override
@@ -30,6 +31,7 @@ public class CommercantMenuController implements Initializable {
         sendMail_button.setOnAction(actionEvent -> onSendGmail());
         consulterStockBtn.setOnAction(event -> onConsulterStock());
         logout_btn.setOnAction(actionEvent -> onLogout());
+        mesAchatsBtn.setOnAction(actionEvent -> onMesAchats());
         
     }
 
@@ -41,6 +43,11 @@ public class CommercantMenuController implements Initializable {
     @FXML
     public void onConsulterStock(){
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.STOCK);
+    }
+
+    @FXML
+    public void onMesAchats(){
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.MY_PURCHASES);
     }
 
     @FXML

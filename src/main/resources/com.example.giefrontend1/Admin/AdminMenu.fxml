@@ -15,6 +15,7 @@
          <Button fx:id="Search_btn" mnemonicParsing="false" onAction="#onFindClient" text="Rechercher contact" />
          <Button fx:id="sendMail_button" mnemonicParsing="false" onAction="#onSendGmail" text="Envoyer email" />
          <Button fx:id="consulterStockBtn" mnemonicParsing="false" onAction="#onConsulterStock" text="Consulter stock" />
+         <Button fx:id="mesAchatsBtn" mnemonicParsing="false" onAction="#onMesAchats" text="Mes achats" />
          <Button fx:id="logout_btn" mnemonicParsing="false" styleClass="alt_menu_btn" text="Quitter" />
       </VBox>
    </AnchorPane>
