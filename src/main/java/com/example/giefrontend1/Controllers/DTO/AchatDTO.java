@@ -28,6 +28,9 @@ public class AchatDTO {
         this.statutAchat = statutAchat;
     }
 
+    public AchatDTO() {
+    }
+
     public long getId() {
         return id;
     }

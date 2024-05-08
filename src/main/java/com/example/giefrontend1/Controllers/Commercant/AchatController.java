@@ -28,6 +28,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -519,10 +520,27 @@ public class AchatController implements Initializable {
         });
 
         achatController.confirmAchatBtn.setOnAction(event -> {
-            //pour chaque détail achat, aller prendre la qt achetée l'ajouter au produit de base dans le stock
-            //et créer l'instance achat qui va être persistée!
-
-            System.out.println("Achat confirmé !");
+            ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
+            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"EN_COURS");
+            double prix_total = 0;
+            for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
+                ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                int qteAchetee = detailAchatDTO.getQteAchetee();
+                //Ajouter cette qteAchetee au produit -> méthode à implémenter
+                prix_total += detailAchatDTO.getPrixAchat();
+            }
+            achatDTO.setPrix(prix_total);
+            System.out.println(achatDTO);
+            boolean status = ParserAchat.createAchat(achatDTO);
+            if(status) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                achatController.confirmAchatBtn.setDisable(true);
+                AchatController.this.mesAchatsTableView.getItems().clear();
+                AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                AchatController.this.mesAchatsTableView.refresh();
+            }else{
+                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+            }
         });
 
     }
