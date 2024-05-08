@@ -491,6 +491,21 @@ public class AchatController implements Initializable {
 
                 //Populate Details
 
+                achatController.DetailsPrixColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrixAchat()).asObject());
+                achatController.DetailsPrixUnitaireColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getProduitObjet().getPrix() / data.getValue().getQteAchetee()).asObject());
+                achatController.DetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().toString()));
+                achatController.DetailsQtAcheteeColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQteAchetee()).asObject());
+                achatController.DetailsReductionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReduction()*100 +"%"));
+                achatController.DetailsProduitMarqueColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getMarque()));
+                achatController.DetailsProduitModeleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getModele()));
+
+                // Retrieve data from wherever you get it
+                List<DetailAchatDTO> detailsAchats = AchatController.this.detailsAchats;
+
+                // Populate the TableView with data
+                ObservableList<DetailAchatDTO> detailsAchatsList = FXCollections.observableArrayList(detailsAchats);
+                achatController.DetailsAchatsTableView.setItems(detailsAchatsList);
+
                 achatController.statusLabel.setText("Résumé de votre achat");
                 achatController.reductionTextField.setVisible(false);
                 achatController.confirmAchatBtn.setVisible(true);
