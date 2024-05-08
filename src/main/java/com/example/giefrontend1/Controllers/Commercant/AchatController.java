@@ -8,10 +8,7 @@ import com.example.giefrontend1.Parser.ParserAchat;
 import com.example.giefrontend1.Parser.ParserContact;
 import com.example.giefrontend1.Parser.ParserProduit;
 import com.google.gson.JsonArray;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -493,7 +490,11 @@ public class AchatController implements Initializable {
                 //Populate Details
 
                 achatController.DetailsPrixColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrixAchat()).asObject());
-                achatController.DetailsPrixUnitaireColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getProduitObjet().getPrix() / data.getValue().getQteAchetee()).asObject());
+                achatController.DetailsPrixUnitaireColumn.setCellValueFactory(data -> {
+                    ProduitDTO produitDTO = data.getValue().getProduitObjet();
+                    DoubleProperty prixProperty = new SimpleDoubleProperty(produitDTO.getPrix());
+                    return prixProperty.asObject();
+                });
                 achatController.DetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().toString()));
                 achatController.DetailsQtAcheteeColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQteAchetee()).asObject());
                 achatController.DetailsReductionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReduction()*100 +"%"));
@@ -525,8 +526,10 @@ public class AchatController implements Initializable {
             double prix_total = 0;
             for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
                 ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                long produit_id = produitDTO.getId();
                 int qteAchetee = detailAchatDTO.getQteAchetee();
-                //Ajouter cette qteAchetee au produit -> méthode à implémenter
+                produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                ParserProduit.updateProduit(produitDTO,produit_id);
                 prix_total += detailAchatDTO.getPrixAchat();
             }
             achatDTO.setPrix(prix_total);
