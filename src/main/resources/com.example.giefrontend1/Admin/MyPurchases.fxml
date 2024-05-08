@@ -24,12 +24,22 @@
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
    </TableView>
-   <Button fx:id="advSearchAchatBtn" layoutX="338.0" layoutY="118.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
+   <Button fx:id="advSearchAchatBtn" layoutX="616.0" layoutY="119.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
       <font>
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="318.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
+   <Text layoutX="596.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Text>
+   <Button fx:id="newAchatBtn" layoutX="39.0" layoutY="115.0" mnemonicParsing="false" onAction="#onCreateAchat" prefHeight="38.0" prefWidth="186.0" text="Nouvel achat">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
+   <Text layoutX="87.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nouvel achat">
       <font>
          <Font size="15.0" />
       </font>

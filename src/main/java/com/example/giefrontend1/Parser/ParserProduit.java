@@ -127,7 +127,7 @@ public class ParserProduit {
         }
     }
 
-    public static ProduitDTO getProduitByID(int id) {
+    public static ProduitDTO getProduitByID(long id) {
         String body = null;
         ProduitDTO produitDTO = null;
 
