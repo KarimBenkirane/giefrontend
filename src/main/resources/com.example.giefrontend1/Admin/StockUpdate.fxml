@@ -29,7 +29,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Modèle" GridPane.rowIndex="1">
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Désignation" GridPane.rowIndex="1">
                      <font>
                         <Font size="18.0" />
                      </font>
@@ -39,7 +39,7 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="updateDescriptionTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TextField fx:id="updateDescriptionTextField" alignment="TOP_LEFT" prefHeight="115.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.rowIndex="3">
                      <font>
                         <Font size="18.0" />

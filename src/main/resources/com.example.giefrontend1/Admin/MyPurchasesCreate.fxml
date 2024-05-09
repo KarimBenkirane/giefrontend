@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="611.0" prefWidth="1019.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
+<AnchorPane prefHeight="708.0" prefWidth="1019.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
    <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer un nouvel achat" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <font>
          <Font size="23.0" />
@@ -68,26 +68,36 @@
          <TableColumn fx:id="DetailsPrixColumn" prefWidth="128.0" text="Prix Total" />
       </columns>
    </TableView>
-   <Button fx:id="nextBtn" layoutX="421.0" layoutY="625.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="172.0" text="Suivant">
-      <font>
-         <Font size="24.0" />
-      </font>
-   </Button>
-   <Button fx:id="confirmAchatBtn" layoutX="758.0" layoutY="624.0" mnemonicParsing="false" prefHeight="51.0" prefWidth="190.0" text="Confirmer achat" visible="false">
+   <Button fx:id="nextBtn" layoutX="572.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Suivant">
       <font>
          <Font size="20.0" />
       </font>
    </Button>
-   <Label fx:id="statusLabel" contentDisplay="CENTER" layoutX="339.0" layoutY="57.0" prefHeight="32.0" prefWidth="323.0" text="Veuillez choisir votre fournisseur">
+   <Button fx:id="confirmAchatBtn" layoutX="816.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Confirmer achat" visible="false">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Button>
+   <Label fx:id="statusLabel" contentDisplay="CENTER" layoutX="339.0" layoutY="55.0" prefHeight="32.0" prefWidth="323.0" text="Veuillez choisir votre fournisseur">
       <font>
          <Font size="22.0" />
       </font>
    </Label>
-   <Spinner fx:id="spinnerQt" editable="true" layoutX="41.0" layoutY="637.0" visible="false" />
-   <Button fx:id="addToBasketBtn" layoutX="192.0" layoutY="631.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="172.0" text="Ajouter au panier" visible="false">
+   <Spinner fx:id="spinnerQt" editable="true" layoutX="19.0" layoutY="611.0" prefHeight="37.0" prefWidth="149.0" visible="false" />
+   <Button fx:id="addToBasketBtn" layoutX="171.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Ajouter au panier" visible="false">
       <font>
          <Font size="17.0" />
       </font>
    </Button>
-   <TextField fx:id="reductionTextField" layoutX="190.0" layoutY="598.0" prefHeight="25.0" prefWidth="198.0" promptText="Réduction (en %). Laisser vide si 0" visible="false" />
+   <TextField fx:id="reductionTextField" layoutX="11.0" layoutY="654.0" prefHeight="25.0" prefWidth="198.0" promptText="Réduction (en %). Laisser vide si 0" visible="false" />
+   <Button fx:id="retourBtn" layoutX="387.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Retour" visible="false">
+      <font>
+         <Font size="20.0" />
+      </font>
+   </Button>
+   <Button fx:id="saveAchatBtn" layoutX="637.0" layoutY="611.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="169.0" text="Sauvegarder achat" visible="false">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
 </AnchorPane>

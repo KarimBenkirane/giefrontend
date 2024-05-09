@@ -23,6 +23,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.swing.text.html.parser.Parser;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -32,6 +33,7 @@ import java.util.ResourceBundle;
 
 public class AchatController implements Initializable {
 
+    private AchatDTO selectedAchatToUpdateStatus;
     private Stage stageDetailsAchats = null;
     @FXML
     public Button advSearchAchatBtn;
@@ -186,6 +188,12 @@ public class AchatController implements Initializable {
     public Button addToBasketBtn;
 
     @FXML
+    public Button retourBtn;
+
+    @FXML
+    public Button saveAchatBtn;
+
+    @FXML
     public Spinner<Integer> spinnerQt;
 
     private static boolean initialized = false;
@@ -202,6 +210,11 @@ public class AchatController implements Initializable {
     private List<ProduitDTO> liste_produits_achat;
     private long selected_produit_id;
     private List<DetailAchatDTO> detailsAchats = new ArrayList<>();
+    @FXML
+    public Button updateStatusButton;
+
+    @FXML
+    public ComboBox<String> updateStatusComboBox;
 
 
     public AchatController() {
@@ -331,6 +344,67 @@ public class AchatController implements Initializable {
             });
 
             mesAchatsTableView.getColumns().add(detailsColumn);
+            // Create "Edit" column with buttons dynamically
+            TableColumn<AchatDTO, Void> editColumn = new TableColumn<>("Edit");
+            editColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button editButton = new Button("Edit");
+
+                {
+                    editButton.setOnAction(event -> {
+                        AchatDTO selectedAchat = getTableView().getItems().get(getIndex());
+                        if(!selectedAchat.getStatutAchat().equals("CONFIRMÉ")){
+                            showAlert(Alert.AlertType.ERROR,"Erreur","Vous ne pouvez pas modifier le statut de cet achat !");
+                        }else{
+                            AchatController.this.selectedAchatToUpdateStatus = selectedAchat;
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/MyPurchasesUpdate.fxml"));
+                            Parent root = null;
+                            try {
+                                root = loader.load();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            AchatController achatController = loader.getController();
+                            Stage stage = new Stage();
+                            Scene scene = new Scene(root);
+                            stage.setScene(scene);
+                            stage.setTitle("Modifier statut achat");
+                            stage.show();
+                            achatController.updateStatusComboBox.setValue("LIVRÉ");
+                            achatController.updateStatusComboBox.getItems().add("ANNULÉ");
+                            achatController.updateStatusComboBox.getItems().add("LIVRÉ");;
+
+                            achatController.updateStatusButton.setOnAction(evnt -> {
+                                String statut = achatController.updateStatusComboBox.getValue();
+                                AchatController.this.selectedAchatToUpdateStatus.setStatutAchat(statut);
+
+                                boolean status = ParserAchat.updateAchat(AchatController.this.selectedAchatToUpdateStatus,AchatController.this.selectedAchatToUpdateStatus.getId());
+                                if(status){
+                                    showAlert(Alert.AlertType.INFORMATION,"Succès","Statut modifié avec succès !");
+                                    AchatController.this.mesAchatsTableView.getItems().clear();
+                                    AchatController.this.mesAchatsTableView.getItems().setAll(ParserAchat.getAllAchats());
+                                    AchatController.this.mesAchatsTableView.refresh();
+                                }else{
+                                    showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de la modification du statut.");
+                                }
+                            });
+                        }
+
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(editButton);
+                    }
+                }
+            });
+
+            mesAchatsTableView.getColumns().add(editColumn);
+
             initialized = true;
         }
     }
@@ -353,6 +427,8 @@ public class AchatController implements Initializable {
         stage.setScene(scene);
         stage.setTitle("Créer un nouvel achat");
         stage.show();
+
+        stage.setOnCloseRequest(event -> AchatController.this.detailsAchats.clear());
 
 
 
@@ -459,9 +535,30 @@ public class AchatController implements Initializable {
             }
         });
 
-        achatController.nextBtn.setOnAction(event ->
 
-        {
+
+
+        achatController.retourBtn.setOnAction(event ->{
+            if(achatController.produitTableView.isVisible()){
+                achatController.produitTableView.setVisible(false);
+                achatController.contactsTableView.setVisible(true);
+                achatController.retourBtn.setVisible(false);
+                achatController.reductionTextField.setVisible(false);
+                achatController.spinnerQt.setVisible(false);
+                achatController.addToBasketBtn.setVisible(false);
+                achatController.statusLabel.setText("Veuillez choisir votre fournisseur");
+            }else if(achatController.DetailsAchatsTableView.isVisible()){
+                achatController.DetailsAchatsTableView.setVisible(false);
+                achatController.produitTableView.setVisible(true);
+                achatController.nextBtn.setVisible(true);
+                achatController.statusLabel.setText("Veuillez choisir vos produits");
+                achatController.reductionTextField.setVisible(true);
+                achatController.spinnerQt.setVisible(true);
+                achatController.addToBasketBtn.setVisible(true);
+            }
+        });
+
+        achatController.nextBtn.setOnAction(event -> {
 
             if (achatController.contactsTableView.isVisible()) {
                 if (achatController.contactsTableView.getSelectionModel().getSelectedItem() == null) {
@@ -474,6 +571,7 @@ public class AchatController implements Initializable {
                     achatController.contactsTableView.setVisible(false);
                     achatController.produitTableView.setVisible(true);
                     achatController.addToBasketBtn.setVisible(true);
+                    achatController.retourBtn.setVisible(true);
                     SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
                     achatController.spinnerQt.setValueFactory(valueFactory);
                     achatController.spinnerQt.setVisible(true);
@@ -522,7 +620,7 @@ public class AchatController implements Initializable {
 
         achatController.confirmAchatBtn.setOnAction(event -> {
             ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
-            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"EN_COURS");
+            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"CONFIRMÉ");
             double prix_total = 0;
             for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
                 ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();

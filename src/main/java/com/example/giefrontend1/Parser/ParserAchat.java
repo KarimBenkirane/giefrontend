@@ -207,6 +207,25 @@ public class ParserAchat {
         }
     }
 
+    public static boolean updateAchat(AchatDTO achatDTO, long id) {
+        Gson gson = new Gson();
+        String json = gson.toJson(achatDTO);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/achats/update/"+id)
+                .put(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
 
 
