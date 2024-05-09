@@ -63,7 +63,7 @@ public class ProduitController implements Initializable {
     public ToggleGroup availableStockGroup;
 
     @FXML
-    public TextField descriptionSearchTextField;
+    public TextArea descriptionSearchTextArea;
 
     @FXML
     public RadioButton dispoRadioBtn;
@@ -96,7 +96,7 @@ public class ProduitController implements Initializable {
     public Button modifierProduitBtn;
 
     @FXML
-    public TextField updateDescriptionTextField;
+    public TextArea updateDescriptionTextArea;
 
     @FXML
     public ComboBox<String> updateMarqueComboBox;
@@ -153,7 +153,7 @@ public class ProduitController implements Initializable {
     public ComboBox<String> createCategorieComboBox;
 
     @FXML
-    public TextField createDescriptionTextField;
+    public TextArea createDescriptionTextArea;
 
     @FXML
     public ComboBox<String> createMarqueComboBox;
@@ -208,10 +208,10 @@ public class ProduitController implements Initializable {
             prixProduitColumn.setCellValueFactory(cellData -> new SimpleDoubleProperty(cellData.getValue().getPrix()).asObject());
 
             // Add edit button column
-            TableColumn<ProduitDTO, Void> editColumn = new TableColumn<>("Edit");
+            TableColumn<ProduitDTO, Void> editColumn = new TableColumn<>("Modifier");
             editColumn.setCellFactory(column -> {
                 return new TableCell<>() {
-                    private final Button editButton = new Button("Edit");
+                    private final Button editButton = new Button("Modifier");
 
                     {
                         editButton.setOnAction(event -> {
@@ -232,13 +232,13 @@ public class ProduitController implements Initializable {
                             produitController.updateModeleTextField.setText(produit.getModele());
                             produitController.updatePrixTextField.setText(String.valueOf(produit.getPrix()));
                             produitController.updateQtStockTextField.setText(String.valueOf(produit.getQteStock()));
-                            produitController.updateDescriptionTextField.setText(produit.getDescription());
+                            produitController.updateDescriptionTextArea.setText(produit.getDescription());
 
                             produitController.modifierProduitBtn.setOnAction(evt -> {
 
                                 String categorie = produitController.updateCategorieComboBox.getValue();
                                 String marque = produitController.updateMarqueComboBox.getValue();
-                                String description = produitController.updateDescriptionTextField.getText();
+                                String description = produitController.updateDescriptionTextArea.getText();
                                 String modele = null;
                                 if(produitController.updateModeleTextField.getText().isEmpty()) {
                                     showAlert(Alert.AlertType.ERROR, "Erreur", "Veuillez saisir le modèle !");
@@ -340,10 +340,10 @@ public class ProduitController implements Initializable {
             });
 
             // Add delete button column
-            TableColumn<ProduitDTO, Void> deleteColumn = new TableColumn<>("Delete");
+            TableColumn<ProduitDTO, Void> deleteColumn = new TableColumn<>("Supprimer");
             deleteColumn.setCellFactory(column -> {
                 return new TableCell<>() {
-                    private final Button deleteButton = new Button("Delete");
+                    private final Button deleteButton = new Button("Supprimer");
 
                     {
                         deleteButton.setOnAction(event -> {
@@ -518,7 +518,7 @@ public class ProduitController implements Initializable {
                 }
             }
 
-            String description = produitController.createDescriptionTextField.getText();
+            String description = produitController.createDescriptionTextArea.getText();
             ProduitDTO produitDTO = new ProduitDTO(marque, modele, description, categorie, qteStock, prix);
             boolean status = ParserProduit.createProduit(produitDTO);
             if (status) {
@@ -562,9 +562,9 @@ public class ProduitController implements Initializable {
             if(marque != null && marque.equals("Toutes les marques")){
                 marque = null;
             }
-            String description = produitController.descriptionSearchTextField.getText().isEmpty() ?
+            String description = produitController.descriptionSearchTextArea.getText().isEmpty() ?
                     null:
-                    produitController.descriptionSearchTextField.getText();
+                    produitController.descriptionSearchTextArea.getText();
 
             Double prixMin = produitController.prixMinSearchTextField.getText().isEmpty() ?
                     null:

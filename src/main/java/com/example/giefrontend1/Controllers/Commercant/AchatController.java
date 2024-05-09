@@ -66,12 +66,6 @@ public class AchatController implements Initializable {
     public TableColumn<DetailAchatDTO, String> mesDetailsProduitColumn;
 
     @FXML
-    public TableColumn<DetailAchatDTO, String> mesDetailsProduitMarqueColumn;
-
-    @FXML
-    public TableColumn<DetailAchatDTO, String> mesDetailsProduitModeleColumn;
-
-    @FXML
     public TableColumn<DetailAchatDTO, String> mesDetailsPrixUnitaireColumn;
 
     @FXML
@@ -154,12 +148,6 @@ public class AchatController implements Initializable {
 
     @FXML
     public TableColumn<DetailAchatDTO, String> DetailsReductionColumn;
-
-    @FXML
-    public TableColumn<DetailAchatDTO, String> DetailsProduitMarqueColumn;
-
-    @FXML
-    public TableColumn<DetailAchatDTO, String> DetailsProduitModeleColumn;
 
     @FXML
     public TableView<ProduitDTO> produitTableView;
@@ -284,22 +272,12 @@ public class AchatController implements Initializable {
                         achatController.mesDetailsIDColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
                         achatController.mesDetailsPrixColumn.setCellValueFactory(new PropertyValueFactory<>("prixAchat"));
                         achatController.mesDetailsQtAcheteeColumn.setCellValueFactory(new PropertyValueFactory<>("qteAchetee"));
-//                        achatController.mesDetailsReductionColumn.setCellValueFactory(new PropertyValueFactory<>("reduction"));
 
-                        // Set a custom cell value factory for the produit column
-                        achatController.mesDetailsProduitMarqueColumn.setCellValueFactory(cellData -> {
+
+                        achatController.mesDetailsProduitColumn.setCellValueFactory(cellData -> {
                             ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
                             if (produitDTO != null) {
-                                return new SimpleStringProperty(produitDTO.getMarque());
-                            } else {
-                                return new SimpleStringProperty("");
-                            }
-                        });
-
-                        achatController.mesDetailsProduitModeleColumn.setCellValueFactory(cellData -> {
-                            ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
-                            if (produitDTO != null) {
-                                return new SimpleStringProperty(produitDTO.getModele());
+                                return new SimpleStringProperty(produitDTO.getMarque() + " " + produitDTO.getModele());
                             } else {
                                 return new SimpleStringProperty("");
                             }
@@ -345,9 +323,9 @@ public class AchatController implements Initializable {
 
             mesAchatsTableView.getColumns().add(detailsColumn);
             // Create "Edit" column with buttons dynamically
-            TableColumn<AchatDTO, Void> editColumn = new TableColumn<>("Edit");
+            TableColumn<AchatDTO, Void> editColumn = new TableColumn<>("Modifier statut");
             editColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button editButton = new Button("Edit");
+                private final Button editButton = new Button("Modifier statut");
 
                 {
                     editButton.setOnAction(event -> {
@@ -405,6 +383,35 @@ public class AchatController implements Initializable {
 
             mesAchatsTableView.getColumns().add(editColumn);
 
+            TableColumn<AchatDTO, Void> reprendreColumn = new TableColumn<>("Reprendre achat");
+            reprendreColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button reprendreButton = new Button("Reprendre achat");
+
+                {
+                    reprendreButton.setOnAction(event -> {
+                        AchatDTO selectedAchat = getTableView().getItems().get(getIndex());
+                        if(!selectedAchat.getStatutAchat().equals("INITIALISÉ")){
+                            showAlert(Alert.AlertType.ERROR,"Erreur","Vous ne pouvez pas modifier les détails de cet achat !");
+                        }else{
+
+                        }
+
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(reprendreButton);
+                    }
+                }
+            });
+
+            mesAchatsTableView.getColumns().add(reprendreColumn);
+
             initialized = true;
         }
     }
@@ -429,7 +436,6 @@ public class AchatController implements Initializable {
         stage.show();
 
         stage.setOnCloseRequest(event -> AchatController.this.detailsAchats.clear());
-
 
 
         AchatController achatController = loader.getController();
@@ -528,10 +534,24 @@ public class AchatController implements Initializable {
                     }
                 }
                 double prix_reduit = prix_achat - (prix_achat*reduction);
-                DetailAchatDTO detailAchatDTO = new DetailAchatDTO(produitDTO,qtAchetee,prix_reduit,reduction);
-                AchatController.this.detailsAchats.add(detailAchatDTO);
-                System.out.println(detailAchatDTO);
-                showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
+                boolean exists = false;
+                for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
+                    if( (detailAchatDTO.getProduitObjet().getModele().equals(produitDTO.getModele())) && (detailAchatDTO.getReduction() == reduction) && (detailAchatDTO.getProduitObjet().getMarque().equals(produitDTO.getMarque())) ){
+                        exists = true;
+                        showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
+                        detailAchatDTO.setQteAchetee(detailAchatDTO.getQteAchetee() + qtAchetee);
+                        detailAchatDTO.setPrixAchat(detailAchatDTO.getPrixAchat() + prix_reduit);
+                        System.out.println(detailAchatDTO);
+                        break;
+                    }
+                }
+                if(!exists){
+                    DetailAchatDTO detailAchatDTO = new DetailAchatDTO(produitDTO,qtAchetee,prix_reduit,reduction);
+                    AchatController.this.detailsAchats.add(detailAchatDTO);
+                    System.out.println(detailAchatDTO);
+                    showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
+                }
+
             }
         });
 
@@ -546,6 +566,8 @@ public class AchatController implements Initializable {
                 achatController.reductionTextField.setVisible(false);
                 achatController.spinnerQt.setVisible(false);
                 achatController.addToBasketBtn.setVisible(false);
+                achatController.retourBtn.setVisible(true);
+                achatController.retourBtn.setDisable(true);
                 achatController.statusLabel.setText("Veuillez choisir votre fournisseur");
             }else if(achatController.DetailsAchatsTableView.isVisible()){
                 achatController.DetailsAchatsTableView.setVisible(false);
@@ -555,6 +577,8 @@ public class AchatController implements Initializable {
                 achatController.reductionTextField.setVisible(true);
                 achatController.spinnerQt.setVisible(true);
                 achatController.addToBasketBtn.setVisible(true);
+                achatController.confirmAchatBtn.setVisible(false);
+                achatController.saveAchatBtn.setVisible(false);
             }
         });
 
@@ -567,6 +591,7 @@ public class AchatController implements Initializable {
                     ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
                     System.out.println(fournisseur);
                     achatController.statusLabel.setText("Veuillez choisir vos produits");
+                    achatController.retourBtn.setDisable(false);
                     achatController.reductionTextField.setVisible(true);
                     achatController.contactsTableView.setVisible(false);
                     achatController.produitTableView.setVisible(true);
@@ -587,6 +612,9 @@ public class AchatController implements Initializable {
 
                 //Populate Details
 
+                achatController.DetailsAchatsTableView.getItems().clear();
+                achatController.DetailsAchatsTableView.refresh();
+
                 achatController.DetailsPrixColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrixAchat()).asObject());
                 achatController.DetailsPrixUnitaireColumn.setCellValueFactory(data -> {
                     ProduitDTO produitDTO = data.getValue().getProduitObjet();
@@ -596,19 +624,21 @@ public class AchatController implements Initializable {
                 achatController.DetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().toString()));
                 achatController.DetailsQtAcheteeColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQteAchetee()).asObject());
                 achatController.DetailsReductionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReduction()*100 +"%"));
-                achatController.DetailsProduitMarqueColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getMarque()));
-                achatController.DetailsProduitModeleColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getModele()));
+                achatController.DetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getMarque()+ " " +data.getValue().getProduitObjet().getModele()));
 
                 // Retrieve data from wherever you get it
                 List<DetailAchatDTO> detailsAchats = AchatController.this.detailsAchats;
+                System.out.println(detailsAchats);
 
                 // Populate the TableView with data
                 ObservableList<DetailAchatDTO> detailsAchatsList = FXCollections.observableArrayList(detailsAchats);
                 achatController.DetailsAchatsTableView.setItems(detailsAchatsList);
 
+
                 achatController.statusLabel.setText("Résumé de votre achat");
                 achatController.reductionTextField.setVisible(false);
                 achatController.confirmAchatBtn.setVisible(true);
+                achatController.saveAchatBtn.setVisible(true);
                 achatController.nextBtn.setVisible(false);
                 achatController.spinnerQt.setVisible(false);
                 achatController.addToBasketBtn.setVisible(false);
@@ -617,6 +647,33 @@ public class AchatController implements Initializable {
 
             }
         });
+
+        achatController.saveAchatBtn.setOnAction(event -> {
+            ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
+            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"INITIALISÉ");
+            double prix_total = 0;
+            for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
+                ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                long produit_id = produitDTO.getId();
+                int qteAchetee = detailAchatDTO.getQteAchetee();
+                produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                ParserProduit.updateProduit(produitDTO,produit_id);
+                prix_total += detailAchatDTO.getPrixAchat();
+            }
+            achatDTO.setPrix(prix_total);
+            System.out.println(achatDTO);
+            boolean status = ParserAchat.createAchat(achatDTO);
+            if(status) {
+                showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat sauvegardé avec succès !");
+                achatController.confirmAchatBtn.setDisable(true);
+                AchatController.this.mesAchatsTableView.getItems().clear();
+                AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                AchatController.this.mesAchatsTableView.refresh();
+            }else{
+                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de la sauvegarde de cet achat.");
+            }
+        });
+
 
         achatController.confirmAchatBtn.setOnAction(event -> {
             ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);

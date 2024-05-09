@@ -4,6 +4,7 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -38,7 +39,6 @@
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextField fx:id="descriptionSearchTextField" prefHeight="79.0" prefWidth="319.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.rowIndex="3">
                      <font>
                         <Font size="18.0" />
@@ -154,6 +154,7 @@
                         </CheckBox>
                      </children>
                   </AnchorPane>
+                  <TextArea fx:id="descriptionSearchTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>
             <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Filtrer par disponibilité">

@@ -15,10 +15,10 @@
    <TableView fx:id="mesAchatsTableView" layoutX="3.0" layoutY="165.0" prefHeight="517.0" prefWidth="844.0">
      <columns>
        <TableColumn fx:id="idAchatColumn" prefWidth="75.0" text="ID" />
-       <TableColumn fx:id="fournisseurAchatColumn" prefWidth="199.33334350585938" text="Fournisseur" />
-         <TableColumn fx:id="dateAchatColumn" prefWidth="65.66665649414062" text="Date achat" />
-         <TableColumn fx:id="prixAchatColumn" prefWidth="192.6666259765625" text="Prix" />
-         <TableColumn fx:id="statutAchatColumn" prefWidth="245.3333740234375" text="Statut" />
+       <TableColumn fx:id="fournisseurAchatColumn" prefWidth="160.0" text="Fournisseur" />
+         <TableColumn fx:id="dateAchatColumn" prefWidth="142.0" text="Date achat" />
+         <TableColumn fx:id="prixAchatColumn" prefWidth="113.0" text="Prix" />
+         <TableColumn fx:id="statutAchatColumn" prefWidth="343.0" text="Statut" />
      </columns>
       <columnResizePolicy>
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

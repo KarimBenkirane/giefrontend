@@ -16,16 +16,12 @@
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
       <columns>
-         <TableColumn fx:id="mesDetailsIDColumn" prefWidth="39.0" text="ID" />
-         <TableColumn fx:id="mesDetailsProduitColumn" prefWidth="339.0" text="Produit">
-            <columns>
-               <TableColumn fx:id="mesDetailsProduitMarqueColumn" prefWidth="128.0" text="Marque" />
-               <TableColumn fx:id="mesDetailsProduitModeleColumn" prefWidth="124.0" text="Modèle" />
-            </columns></TableColumn>
-         <TableColumn fx:id="mesDetailsPrixUnitaireColumn" prefWidth="81.0" text="Prix unitaire" />
-         <TableColumn fx:id="mesDetailsQtAcheteeColumn" prefWidth="61.0" text="Qte achetée" />
-         <TableColumn fx:id="mesDetailsReductionColumn" prefWidth="92.0" text="Réduction" />
-         <TableColumn fx:id="mesDetailsPrixColumn" prefWidth="128.0" text="Prix Total" />
+         <TableColumn fx:id="mesDetailsIDColumn" prefWidth="56.0" text="ID" />
+         <TableColumn fx:id="mesDetailsProduitColumn" prefWidth="242.0" text="Produit" />
+         <TableColumn fx:id="mesDetailsPrixUnitaireColumn" prefWidth="92.0" text="Prix unitaire" />
+         <TableColumn fx:id="mesDetailsQtAcheteeColumn" prefWidth="93.0" text="Qte achetée" />
+         <TableColumn fx:id="mesDetailsReductionColumn" prefWidth="148.0" text="Réduction" />
+         <TableColumn fx:id="mesDetailsPrixColumn" prefWidth="191.0" text="Prix Total" />
       </columns>
    </TableView>
 </AnchorPane>

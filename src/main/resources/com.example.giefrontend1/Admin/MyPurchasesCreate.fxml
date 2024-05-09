@@ -56,12 +56,7 @@
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
       <columns>
-         <TableColumn fx:id="DetailsProduitColumn" prefWidth="339.0" text="Produit">
-            <columns>
-               <TableColumn fx:id="DetailsProduitMarqueColumn" prefWidth="128.0" text="Marque" />
-               <TableColumn fx:id="DetailsProduitModeleColumn" prefWidth="124.0" text="Modèle" />
-            </columns>
-         </TableColumn>
+         <TableColumn fx:id="DetailsProduitColumn" prefWidth="339.0" text="Produit" />
          <TableColumn fx:id="DetailsPrixUnitaireColumn" prefWidth="81.0" text="Prix unitaire" />
          <TableColumn fx:id="DetailsQtAcheteeColumn" prefWidth="61.0" text="Qte achetée" />
          <TableColumn fx:id="DetailsReductionColumn" prefWidth="92.0" text="Réduction" />
@@ -90,14 +85,14 @@
       </font>
    </Button>
    <TextField fx:id="reductionTextField" layoutX="11.0" layoutY="654.0" prefHeight="25.0" prefWidth="198.0" promptText="Réduction (en %). Laisser vide si 0" visible="false" />
-   <Button fx:id="retourBtn" layoutX="387.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Retour" visible="false">
+   <Button fx:id="retourBtn" disable="true" layoutX="387.0" layoutY="611.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="169.0" text="Retour">
       <font>
          <Font size="20.0" />
       </font>
    </Button>
-   <Button fx:id="saveAchatBtn" layoutX="637.0" layoutY="611.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="169.0" text="Sauvegarder achat" visible="false">
+   <Button fx:id="saveAchatBtn" layoutX="616.0" layoutY="611.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="190.0" text="Sauvegarder achat" visible="false">
       <font>
-         <Font size="17.0" />
+         <Font size="20.0" />
       </font>
    </Button>
 </AnchorPane>
