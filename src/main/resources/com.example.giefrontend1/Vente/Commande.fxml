@@ -63,7 +63,7 @@
                         </HBox>
                         <Text styleClass="confirmation-message" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                         <Label fx:id="ConfirmationMsg" prefHeight="86.0" prefWidth="365.0" styleClass="confirmation-message" GridPane.rowIndex="2" />
-                         <ChoiceBox fx:id="etatCommandeBox" prefWidth="200.0" GridPane.rowIndex="2" />
+                        <ChoiceBox fx:id="etatCommandeBox" prefWidth="200.0" GridPane.rowIndex="2" />
                     </GridPane>
                 </AnchorPane>
             </Tab>
@@ -137,6 +137,24 @@
                     <HBox prefHeight="43.0" prefWidth="850.0" />
                     <Button fx:id="rechercherBtn" mnemonicParsing="false" onAction="#onButtonClick" text="Rechercher" />
                 </VBox>
+            </Tab>
+            <Tab text="AllDetails">
+                <content>
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <children>
+                            <TableView layoutX="1.0" layoutY="2.0" prefHeight="666.0" prefWidth="850.0">
+                                <columns>
+                                    <TableColumn minWidth="0.0" prefWidth="116.0" text="details_cmd_id" />
+                                    <TableColumn prefWidth="172.00002479553223" text="Commande_id" />
+                                    <TableColumn prefWidth="126.39996337890625" text="produit_id" />
+                                    <TableColumn prefWidth="129.60006713867188" text="remise" />
+                                    <TableColumn minWidth="0.0" prefWidth="151.20001220703125" text="quantité" />
+                                    <TableColumn prefWidth="154.40008544921875" text="prix" />
+                                </columns>
+                            </TableView>
+                        </children>
+                    </AnchorPane>
+                </content>
             </Tab>
         </TabPane>
     </StackPane>
