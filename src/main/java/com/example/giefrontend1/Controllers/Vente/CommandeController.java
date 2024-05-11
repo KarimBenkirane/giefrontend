@@ -82,7 +82,7 @@ public class CommandeController implements Initializable {
 
         // Mettre à jour le TableView avec la commande trouvée
         ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commande);
-        tableView.setItems(observableList);ach
+        tableView.setItems(observableList);
 
     }
 
