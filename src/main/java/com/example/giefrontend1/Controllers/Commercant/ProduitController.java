@@ -172,8 +172,13 @@ public class ProduitController implements Initializable {
 
     @FXML
     public Button creerProduitBtn;
+
+    @FXML
+    public Button refreshBtn;
+
     private static boolean initialized = false;
     private List<CheckBox> catCheckBoxes;
+
 
 
     public FXMLLoader loadScene(String fxmlName,String windowTitle) throws IOException {
@@ -531,6 +536,12 @@ public class ProduitController implements Initializable {
             }
         });
 
+    }
+
+    public void onRefreshBtn(ActionEvent e){
+        this.searchResultTableView.getItems().clear();
+        this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
+        this.searchResultTableView.refresh();
     }
 
     public void onSearchProductBtn(ActionEvent e) throws IOException {

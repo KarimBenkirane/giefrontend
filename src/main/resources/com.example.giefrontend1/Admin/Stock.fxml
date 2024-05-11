@@ -26,12 +26,12 @@
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
    </TableView>
-   <Button fx:id="advSearchBtn" layoutX="603.0" layoutY="159.0" mnemonicParsing="false" onAction="#onSearchProductBtn" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
+   <Button fx:id="advSearchBtn" layoutX="603.0" layoutY="156.0" mnemonicParsing="false" onAction="#onSearchProductBtn" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
       <font>
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="583.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
+   <Text layoutX="583.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
       <font>
          <Font size="15.0" />
       </font>
@@ -42,6 +42,16 @@
       </font>
    </Button>
    <Text layoutX="63.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un nouveau produit">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Text>
+   <Button fx:id="refreshBtn" layoutX="333.0" layoutY="156.0" mnemonicParsing="false" onAction="#onRefreshBtn" prefHeight="38.0" prefWidth="186.0" text="Rafraîchir">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
+   <Text layoutX="333.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rafraîchir la liste des produits">
       <font>
          <Font size="15.0" />
       </font>

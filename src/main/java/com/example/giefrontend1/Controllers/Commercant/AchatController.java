@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 
 public class AchatController implements Initializable {
 
+    private AchatDTO selectedAchatToResume;
     private AchatDTO selectedAchatToUpdateStatus;
     private Stage stageDetailsAchats = null;
     @FXML
@@ -187,6 +188,80 @@ public class AchatController implements Initializable {
     private static boolean initialized = false;
 
 
+    @FXML
+    public TableView<DetailAchatDTO> repriseDetailsAchatsTableView;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, Double> repriseDetailsPrixColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, Double> repriseDetailsPrixUnitaireColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, String> repriseDetailsProduitColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, Integer> repriseDetailsQtAcheteeColumn;
+
+    @FXML
+    public TableColumn<DetailAchatDTO, String> repriseDetailsReductionColumn;
+
+
+    @FXML
+    public TableView<ProduitDTO> repriseproduitTableView;
+    @FXML
+    public TableColumn<ProduitDTO,String> repriseProductsModeleProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,Integer> repriseProductsQtStockProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,String> repriseProductsmarqueProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,Double> repriseProductsprixProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,String> repriseproductsCategorieProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,String> repriseproductsDescriptionProduitColumn;
+
+    @FXML
+    public TableColumn<ProduitDTO,Long> repriseproductsIdProduitColumn;
+
+
+
+
+    @FXML
+    public Button repriseaddToBasketBtn;
+
+    @FXML
+    public Button repriseconfirmAchatBtn;
+
+    @FXML
+    public Button reprisenextBtn;
+
+
+
+
+
+    @FXML
+    public TextField reprisereductionTextField;
+
+    @FXML
+    public Button repriseretourBtn;
+
+    @FXML
+    public Button reprisesaveAchatBtn;
+
+    @FXML
+    public Spinner<Integer> reprisespinnerQt;
+
+    @FXML
+    public Label reprisestatusLabel;
+
+
 
     @FXML
     public Button confirmAchatBtn;
@@ -197,7 +272,9 @@ public class AchatController implements Initializable {
     private int selected_fournisseur_id;
     private List<ProduitDTO> liste_produits_achat;
     private long selected_produit_id;
+    private long selected_produit_id_reprise;
     private List<DetailAchatDTO> detailsAchats = new ArrayList<>();
+    private List<DetailAchatDTO> detailsAchatsReprise = new ArrayList<>();
     @FXML
     public Button updateStatusButton;
 
@@ -390,9 +467,251 @@ public class AchatController implements Initializable {
                 {
                     reprendreButton.setOnAction(event -> {
                         AchatDTO selectedAchat = getTableView().getItems().get(getIndex());
+                        AchatController.this.selectedAchatToResume = selectedAchat;
                         if(!selectedAchat.getStatutAchat().equals("INITIALISÉ")){
                             showAlert(Alert.AlertType.ERROR,"Erreur","Vous ne pouvez pas modifier les détails de cet achat !");
                         }else{
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/MyPurchasesResume.fxml"));
+                            try {
+                                Parent root = loader.load();
+                                Stage stage  = new Stage();
+                                Scene scene = new Scene(root);
+                                stage.setScene(scene);
+                                stage.setTitle("Reprendre mon achat");
+                                stage.show();
+
+                                stage.setOnCloseRequest(evnt -> AchatController.this.detailsAchatsReprise.clear());
+
+                                AchatController achatController = loader.getController();
+
+
+
+
+                                achatController.repriseDetailsPrixColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrixAchat()).asObject());
+                                achatController.repriseDetailsPrixUnitaireColumn.setCellValueFactory(data -> {
+                                    ProduitDTO produitDTO = data.getValue().getProduitObjet();
+                                    DoubleProperty prixProperty = new SimpleDoubleProperty(produitDTO.getPrix());
+                                    return prixProperty.asObject();
+                                });
+                                achatController.repriseDetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().toString()));
+                                achatController.repriseDetailsQtAcheteeColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQteAchetee()).asObject());
+                                achatController.repriseDetailsReductionColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getReduction()*100 +"%"));
+                                achatController.repriseDetailsProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getProduitObjet().getMarque()+ " " +data.getValue().getProduitObjet().getModele()));
+
+                                // Retrieve data from wherever you get it
+
+                                List<DetailAchatDTO> detailsAchats = selectedAchat.getDetailsAchat();
+                                AchatController.this.detailsAchatsReprise.addAll(detailsAchats);
+                                System.out.println(detailsAchats);
+
+                                // Populate the TableView with data
+                                ObservableList<DetailAchatDTO> detailsAchatsList = FXCollections.observableArrayList(detailsAchats);
+                                achatController.repriseDetailsAchatsTableView.setItems(detailsAchatsList);
+
+                                TableColumn<DetailAchatDTO, Void> deleteColumn = new TableColumn<>("Supprimer produit");
+                                deleteColumn.setCellFactory(param -> new TableCell<>() {
+                                    private final Button deleteButton = new Button("Supprimer");
+
+                                    {
+                                        deleteButton.setOnAction(event -> {
+                                            DetailAchatDTO selectedDetailAchat = getTableView().getItems().get(getIndex());
+                                            System.out.println(selectedDetailAchat.getId());
+                                            AchatController.this.detailsAchatsReprise.remove(selectedDetailAchat);
+                                            achatController.repriseDetailsAchatsTableView.getItems().clear();
+                                            achatController.repriseDetailsAchatsTableView.getItems().addAll(AchatController.this.detailsAchatsReprise);
+                                            achatController.repriseDetailsAchatsTableView.refresh();
+                                            showAlert(Alert.AlertType.INFORMATION,"Succès","Produit supprimé avec succès !");
+
+
+                                        });
+                                    }
+
+                                    @Override
+                                    protected void updateItem(Void item, boolean empty) {
+                                        super.updateItem(item, empty);
+                                        if (empty) {
+                                            setGraphic(null);
+                                        } else {
+                                            setGraphic(deleteButton);
+                                        }
+                                    }
+                                });
+
+                                achatController.repriseDetailsAchatsTableView.getColumns().add(deleteColumn);
+
+                                //Populate Products
+
+                                achatController.repriseProductsModeleProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getModele()));
+                                achatController.repriseProductsQtStockProduitColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getQteStock()).asObject());
+                                achatController.repriseProductsmarqueProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getMarque()));
+                                achatController.repriseProductsprixProduitColumn.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getPrix()).asObject());
+                                achatController.repriseproductsCategorieProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getCategorie()));
+                                achatController.repriseproductsDescriptionProduitColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getDescription()));
+                                achatController.repriseproductsIdProduitColumn.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getId()).asObject());
+
+                                // Retrieve data from wherever you get it
+                                List<ProduitDTO> produits = ParserProduit.getAllProduits();
+
+                                // Populate the TableView with data
+                                ObservableList<ProduitDTO> produitsList = FXCollections.observableArrayList(produits);
+                                achatController.repriseproduitTableView.setItems(produitsList);
+
+                                achatController.repriseproduitTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ProduitDTO>() {
+                                    @Override
+                                    public void changed(ObservableValue<? extends ProduitDTO> observable, ProduitDTO oldValue, ProduitDTO newValue) {
+                                        if (newValue != null) {
+                                            long selected_produit_id_reprise = newValue.getId();
+                                            AchatController.this.selected_produit_id_reprise = selected_produit_id_reprise;
+                                        }
+                                    }
+                                });
+
+
+                                achatController.repriseaddToBasketBtn.setOnAction(evnt -> {
+                                    if(achatController.repriseproduitTableView.getSelectionModel().getSelectedItem() == null){
+                                        showAlert(Alert.AlertType.ERROR,"Erreur","Veuillez sélectionner un produit avant de l'ajouter au panier !");
+                                    }else{
+                                        int qtAchetee = achatController.reprisespinnerQt.getValue();
+                                        ProduitDTO produitDTO = ParserProduit.getProduitByID(AchatController.this.selected_produit_id_reprise);
+                                        double prix_achat = (produitDTO.getPrix() * qtAchetee);
+                                        double reduction = 0;
+                                        if(achatController.reprisereductionTextField.getText().isEmpty()){
+                                            reduction = 0;
+                                        }else{
+                                            try{
+                                                reduction = Double.parseDouble(achatController.reprisereductionTextField.getText()) / 100;
+                                                if(reduction*100 < 0 || reduction*100 > 100){
+                                                    showAlert(Alert.AlertType.ERROR,"Erreur","Veuillez saisir la réduction correctement !");
+                                                    return;
+                                                }
+                                            }catch (NumberFormatException nfexc){
+                                                showAlert(Alert.AlertType.ERROR,"Erreur","Veuillez saisir la réduction correctement !");
+                                                return;
+                                            }
+                                        }
+                                        double prix_reduit = prix_achat - (prix_achat*reduction);
+                                        boolean exists = false;
+                                        for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise){
+                                            if( (detailAchatDTO.getProduitObjet().getModele().equals(produitDTO.getModele())) && (detailAchatDTO.getProduitObjet().getDescription().equals(produitDTO.getDescription())) && (detailAchatDTO.getReduction() == reduction) && (detailAchatDTO.getProduitObjet().getMarque().equals(produitDTO.getMarque())) ){
+                                                exists = true;
+                                                showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
+                                                detailAchatDTO.setQteAchetee(detailAchatDTO.getQteAchetee() + qtAchetee);
+                                                detailAchatDTO.setPrixAchat(detailAchatDTO.getPrixAchat() + prix_reduit);
+                                                System.out.println(detailAchatDTO);
+                                                break;
+                                            }
+                                        }
+                                        if(!exists){
+                                            DetailAchatDTO detailAchatDTO = new DetailAchatDTO(produitDTO,qtAchetee,prix_reduit,reduction);
+                                            AchatController.this.detailsAchatsReprise.add(detailAchatDTO);
+                                            System.out.println(detailAchatDTO);
+                                            showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
+                                        }  }
+                                });
+
+                                achatController.repriseretourBtn.setOnAction(evt ->{
+                                    if(achatController.repriseDetailsAchatsTableView.isVisible()){
+                                        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1);
+                                        achatController.reprisespinnerQt.setValueFactory(valueFactory);
+                                        achatController.reprisespinnerQt.setVisible(true);
+                                        achatController.repriseDetailsAchatsTableView.setVisible(false);
+                                        achatController.repriseproduitTableView.setVisible(true);
+                                        achatController.reprisenextBtn.setVisible(true);
+                                        achatController.repriseretourBtn.setVisible(true);
+                                        achatController.repriseretourBtn.setDisable(true);
+                                        achatController.reprisestatusLabel.setText("Veuillez choisir vos produits");
+                                        achatController.reprisereductionTextField.setVisible(true);
+                                        achatController.reprisespinnerQt.setVisible(true);
+                                        achatController.repriseaddToBasketBtn.setVisible(true);
+                                        achatController.repriseconfirmAchatBtn.setVisible(false);
+                                        achatController.reprisesaveAchatBtn.setVisible(false);
+                                    }
+                                });
+
+                                achatController.reprisenextBtn.setOnAction(evt -> {
+
+                                    if (achatController.repriseproduitTableView.isVisible()) {
+                                        if(AchatController.this.detailsAchatsReprise.isEmpty()){
+                                            showAlert(Alert.AlertType.ERROR,"Erreur","Veuillez choisir des produits avant de procéder !");
+                                            return;
+                                        }
+                                        achatController.repriseDetailsAchatsTableView.getItems().clear();
+                                        achatController.repriseDetailsAchatsTableView.refresh();
+                                        achatController.repriseDetailsAchatsTableView.getItems().setAll(AchatController.this.detailsAchatsReprise);
+                                        achatController.repriseretourBtn.setVisible(true);
+                                        achatController.repriseretourBtn.setDisable(false);
+                                        achatController.reprisestatusLabel.setText("Résumé de votre achat");
+                                        achatController.reprisereductionTextField.setVisible(false);
+                                        achatController.repriseconfirmAchatBtn.setVisible(true);
+                                        achatController.reprisesaveAchatBtn.setVisible(true);
+                                        achatController.reprisenextBtn.setVisible(false);
+                                        achatController.reprisespinnerQt.setVisible(false);
+                                        achatController.repriseaddToBasketBtn.setVisible(false);
+                                        achatController.repriseproduitTableView.setVisible(false);
+                                        achatController.repriseDetailsAchatsTableView.setVisible(true);
+
+                                    }
+                                });
+
+                                achatController.reprisesaveAchatBtn.setOnAction(evnt -> {
+                                    AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
+                                    double prix_total = 0;
+                                    for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise){
+                                        prix_total += detailAchatDTO.getPrixAchat();
+                                    }
+                                    achatDTO.setPrix(prix_total);
+                                    achatDTO.setStatutAchat("INITIALISÉ");
+                                    achatDTO.setDetailsAchat(AchatController.this.detailsAchatsReprise);
+                                    System.out.println(achatDTO);
+                                    boolean status = ParserAchat.updateAchat(achatDTO,achatDTO.getId());
+                                    if(status) {
+                                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat sauvegardé avec succès !");
+                                        achatController.repriseconfirmAchatBtn.setDisable(true);
+                                        achatController.reprisesaveAchatBtn.setDisable(true);
+                                        achatController.repriseretourBtn.setDisable(true);
+                                        achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                        AchatController.this.mesAchatsTableView.getItems().clear();
+                                        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                                        AchatController.this.mesAchatsTableView.refresh();
+                                    }else{
+                                        showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de la sauvegarde de cet achat.");
+                                    }
+                                });
+//
+//
+                                achatController.repriseconfirmAchatBtn.setOnAction(evt -> {
+                                    AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
+                                    double prix_total = 0;
+                                    for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise){
+                                        ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                                        long produit_id = produitDTO.getId();
+                                        int qteAchetee = detailAchatDTO.getQteAchetee();
+                                        produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                                        ParserProduit.updateProduit(produitDTO,produit_id);
+                                        prix_total += detailAchatDTO.getPrixAchat();
+                                    }
+                                    achatDTO.setPrix(prix_total);
+                                    achatDTO.setStatutAchat("CONFIRMÉ");
+                                    System.out.println(achatDTO);
+                                    boolean status = ParserAchat.updateAchat(achatDTO,achatDTO.getId());
+                                    if(status) {
+                                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                                        achatController.repriseconfirmAchatBtn.setDisable(true);
+                                        achatController.reprisesaveAchatBtn.setDisable(true);
+                                        achatController.repriseretourBtn.setDisable(true);
+                                        achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                        AchatController.this.mesAchatsTableView.getItems().clear();
+                                        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                                        AchatController.this.mesAchatsTableView.refresh();
+                                    }else{
+                                        showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+                                    }
+                                });
+
+
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
 
                         }
 
@@ -536,7 +855,7 @@ public class AchatController implements Initializable {
                 double prix_reduit = prix_achat - (prix_achat*reduction);
                 boolean exists = false;
                 for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
-                    if( (detailAchatDTO.getProduitObjet().getModele().equals(produitDTO.getModele())) && (detailAchatDTO.getReduction() == reduction) && (detailAchatDTO.getProduitObjet().getMarque().equals(produitDTO.getMarque())) ){
+                    if( (detailAchatDTO.getProduitObjet().getModele().equals(produitDTO.getModele())) && (detailAchatDTO.getProduitObjet().getDescription().equals(produitDTO.getDescription())) && (detailAchatDTO.getReduction() == reduction) && (detailAchatDTO.getProduitObjet().getMarque().equals(produitDTO.getMarque())) ){
                         exists = true;
                         showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté au panier avec succès !");
                         detailAchatDTO.setQteAchetee(detailAchatDTO.getQteAchetee() + qtAchetee);
@@ -653,11 +972,6 @@ public class AchatController implements Initializable {
             AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"INITIALISÉ");
             double prix_total = 0;
             for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
-                ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
-                long produit_id = produitDTO.getId();
-                int qteAchetee = detailAchatDTO.getQteAchetee();
-                produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
-                ParserProduit.updateProduit(produitDTO,produit_id);
                 prix_total += detailAchatDTO.getPrixAchat();
             }
             achatDTO.setPrix(prix_total);
@@ -666,6 +980,8 @@ public class AchatController implements Initializable {
             if(status) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat sauvegardé avec succès !");
                 achatController.confirmAchatBtn.setDisable(true);
+                achatController.saveAchatBtn.setDisable(true);
+                achatController.retourBtn.setDisable(true);
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                 AchatController.this.mesAchatsTableView.refresh();
@@ -693,6 +1009,8 @@ public class AchatController implements Initializable {
             if(status) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
                 achatController.confirmAchatBtn.setDisable(true);
+                achatController.saveAchatBtn.setDisable(true);
+                achatController.retourBtn.setDisable(true);
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                 AchatController.this.mesAchatsTableView.refresh();
