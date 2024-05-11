@@ -2,13 +2,8 @@ package com.example.giefrontend1.Parser;
 
 import com.example.giefrontend1.Controllers.DTO.CommandeDTO;
 import com.example.giefrontend1.Controllers.DTO.ContactDTO;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import com.google.gson.*;
+import okhttp3.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +64,24 @@ public class ParserCommande {
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+    public static boolean createCommande(CommandeDTO newCommande) {
+        Gson gson = new Gson();
+        String json = gson.toJson(newCommande);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/commandes/add")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
     }
     public static CommandeDTO parseCommande(String responseBody) {

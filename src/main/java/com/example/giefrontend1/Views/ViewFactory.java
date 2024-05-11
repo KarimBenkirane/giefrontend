@@ -38,7 +38,7 @@ public class ViewFactory {
     public AnchorPane getCreateClientView() {
         if(CreateClientView == null){
             try{
-                CreateClientView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Vente/Commande.fxml")).load();
+                CreateClientView = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/CreateClient.fxml")).load();
             }catch(Exception e){
                 e.printStackTrace();
             }

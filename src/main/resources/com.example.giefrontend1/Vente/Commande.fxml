@@ -21,7 +21,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.skin.TabPaneSkin.TabContentRegion?>
 <AnchorPane prefHeight="700.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Vente.CommandeController">
     <StackPane layoutX="10.0" layoutY="10.0" prefHeight="700.0" prefWidth="850.0" styleClass="stack-pane" stylesheets="@../../Style/Commande.css">
         <TabPane prefHeight="700.0" prefWidth="859.0" tabClosingPolicy="UNAVAILABLE">
@@ -42,7 +41,7 @@
                         <Text styleClass="title" text="Créer une Commande" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label text="Client" />
-                            <ChoiceBox fx:id="ClientField" prefWidth="200.0" />
+                            <ChoiceBox fx:id="ClientField" onAction="#loadClients" prefWidth="200.0" />
                             <Label text="Produit" />
                             <ChoiceBox fx:id="ProductField" prefWidth="200.0" />
                             <Label text="Quantité" />
@@ -60,7 +59,7 @@
                             <TextField fx:id="ShowTotalPriceField" prefHeight="45.0" prefWidth="227.0" styleClass="total-price-field" />
                         </HBox>
                         <HBox prefHeight="74.0" prefWidth="368.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                            <Button fx:id="CreateCommandeButton" prefHeight="36.0" prefWidth="365.0" text="Confirmer Commande" />
+                            <Button fx:id="CreateCommandeButton" onAction="#onCreateCommande" prefHeight="36.0" prefWidth="365.0" text="Confirmer Commande" />
                         </HBox>
                         <Text styleClass="confirmation-message" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                         <Label fx:id="ConfirmationMsg" prefHeight="86.0" prefWidth="365.0" styleClass="confirmation-message" GridPane.rowIndex="2" />
@@ -88,10 +87,10 @@
                                 <Font size="16.0" />
                             </font>
                             <toggleGroup>
-                                <ToggleGroup fx:id="typeCommandeGroup"/>
+                                <ToggleGroup fx:id="typeCommandeGroup" />
                             </toggleGroup>
                         </RadioButton>
-                        <RadioButton fx:id="detailcommandeRadioBtn" mnemonicParsing="false" onAction="#handleRadioSelection" text="Detail Commande" toggleGroup="$typeCommandeGroup"/>
+                        <RadioButton fx:id="detailcommandeRadioBtn" mnemonicParsing="false" onAction="#handleRadioSelection" text="Detail Commande" toggleGroup="$typeCommandeGroup" />
                     </HBox>
                     <HBox prefHeight="29.0" prefWidth="850.0" />
                     <GridPane alignment="CENTER" prefHeight="135.0" prefWidth="401.0">

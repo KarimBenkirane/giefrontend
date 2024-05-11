@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 
 public class SearchContactsController implements Initializable {
 
+    public ToggleGroup typeClientGroup;
     private Stage openedResultStage;
 
     @FXML
@@ -219,8 +220,9 @@ public class SearchContactsController implements Initializable {
             showAlert(Alert.AlertType.INFORMATION,"Aucun contact trouvé","Aucun contact trouvé !");
         }
         else{
-            ObservableList<ContactDTO> contactList = FXCollections.observableArrayList();
+             ObservableList<ContactDTO> contactList = FXCollections.observableArrayList();
             contactList.addAll(contacts);
+
 
             resultController.idColumn.setCellValueFactory(new PropertyValueFactory<ContactDTO,Integer>("id"));
             resultController.nomColumn.setCellValueFactory(new PropertyValueFactory<ContactDTO,String >("nom"));
@@ -245,6 +247,7 @@ public class SearchContactsController implements Initializable {
 
 
     }
+
 
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {

@@ -72,8 +72,8 @@ public class ContactDTO {
         this.prenom = prenom;
     }
 
-    public String getNom() {
-        return nom;
+    public  String getNom() {
+        return this.nom;
     }
 
     public void setNom(String nom) {
