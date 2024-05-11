@@ -92,8 +92,8 @@ public class CommandeController implements Initializable {
             String etatCommande = EtatCommandeTextField.getText();
             String dateCommande = DateCommandeTextField.getText();
 
-<<<<<<< HEAD
-            if(numBonCommande!=null) {
+
+            if (numBonCommande != null) {
                 // Appel de la méthode pour rechercher la commande par son numéro
                 CommandeDTO commande = ParserCommande.getCommandeById(Long.parseLong(numBonCommande));
 
@@ -104,18 +104,15 @@ public class CommandeController implements Initializable {
                 // Mettre à jour le TableView avec la commande trouvée
                 ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commande);
                 tableView.setItems(observableList);
-            }if(etatCommande!=null){
+            }
+            if (etatCommande != null) {
                 CommandeDTO commande = ParserCommande.getCommandeById(Long.parseLong(numBonCommande));
-
+                //Mettre à jour le TableView avec la commande trouvée
+                ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commande);
+                tableView.setItems(observableList);
             }
         }
-=======
-        // Mettre à jour le TableView avec la commande trouvée
-        ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commande);
-        tableView.setItems(observableList);
->>>>>>> 68b48b8b937e6fbbd119a9b203ce9e030eaab2af
-
-    }
+        }
 
     public void commandeBtnMethod(ActionEvent actionEvent) {}
 

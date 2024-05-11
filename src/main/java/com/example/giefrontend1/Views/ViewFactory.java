@@ -17,6 +17,7 @@ public class ViewFactory {
     private AnchorPane SendEmail;
     private AnchorPane stockView;
     private AnchorPane myPurchasesView;
+    private AnchorPane myCommandesView;
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
 
     public ViewFactory(){
@@ -78,6 +79,16 @@ public class ViewFactory {
             }
         }
         return myPurchasesView;
+    }
+    public AnchorPane getMyCommandesView(){
+        if(myCommandesView == null){
+            try{
+                myCommandesView=new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Vente/Commande.fxml")).load();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return myCommandesView;
     }
 
     public void showAdminWindow(){

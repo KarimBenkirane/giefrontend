@@ -19,6 +19,7 @@ public class CommercantMenuController implements Initializable {
     public Button sendMail_button;
     public Button consulterStockBtn;
     public Button mesAchatsBtn;
+    public Button mesCommandeBtn;
 
 
     @Override
@@ -32,7 +33,13 @@ public class CommercantMenuController implements Initializable {
         consulterStockBtn.setOnAction(event -> onConsulterStock());
         logout_btn.setOnAction(actionEvent -> onLogout());
         mesAchatsBtn.setOnAction(actionEvent -> onMesAchats());
+        mesCommandeBtn.setOnAction(actionEvent -> onMesCommandes());
         
+    }
+
+    @FXML
+    public void onMesCommandes() {
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOptions.My_CMMANDES);
     }
 
     @FXML

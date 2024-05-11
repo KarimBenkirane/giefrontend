@@ -18,6 +18,7 @@ public class CommercantController implements Initializable {
                 case MY_PURCHASES -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getMyPurchasesView());
                 case SEARCH_CLIENT -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getFindClientView());
                 case SEND_EMAIL -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getSendGmailView());
+                case My_CMMANDES -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getMyCommandesView());
                 default -> admin_Parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
             }
         } );
