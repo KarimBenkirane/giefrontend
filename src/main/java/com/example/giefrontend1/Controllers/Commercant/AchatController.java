@@ -27,9 +27,7 @@ import javax.swing.text.html.parser.Parser;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class AchatController implements Initializable {
 
@@ -261,6 +259,27 @@ public class AchatController implements Initializable {
     @FXML
     public Label reprisestatusLabel;
 
+
+    @FXML
+    public Button RechercherButton;
+
+    @FXML
+    public DatePicker apresDatePicker;
+
+    @FXML
+    public DatePicker avantDatePicker;
+
+    @FXML
+    public ComboBox<String> fournisseurSearchComboBox;
+
+    @FXML
+    public TextField prixMaxSearchTextField;
+
+    @FXML
+    public TextField prixMinSearchTextField;
+
+    @FXML
+    public ComboBox<String> statutSearchComboBox;
 
 
     @FXML
@@ -1020,4 +1039,88 @@ public class AchatController implements Initializable {
         });
 
     }
+
+    public void onAdvSearchBtn() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/MyPurchasesSearch.fxml"));
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("Recherche avancée des achats");
+        stage.show();
+        AchatController achatController = loader.getController();
+
+        stage.setOnCloseRequest(event -> {
+            AchatController.this.mesAchatsTableView.getItems().clear();
+            AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+            AchatController.this.mesAchatsTableView.refresh();
+        });
+
+        achatController.fournisseurSearchComboBox.setValue("Tous les fournisseurs");
+        achatController.fournisseurSearchComboBox.getItems().add("Tous les fournisseurs");
+        achatController.fournisseurSearchComboBox.getItems().addAll(ParserAchat.getAllFournisseursAchats());
+
+
+        achatController.statutSearchComboBox.setValue("Tous les statuts");
+        achatController.statutSearchComboBox.getItems().add("Tous les statuts");
+        achatController.statutSearchComboBox.getItems().addAll(Arrays.asList("INITIALISÉ","ANNULÉ","CONFIRMÉ","LIVRÉ"));
+
+
+        achatController.RechercherButton.setOnAction(event -> {
+            String fournisseur = achatController.fournisseurSearchComboBox.getValue();
+            String statut = achatController.statutSearchComboBox.getValue();
+            LocalDate localDateApres = achatController.apresDatePicker.getValue();
+            LocalDate localDateAvant = achatController.avantDatePicker.getValue();
+            String dateApres = null;
+            String dateAvant = null;
+
+            if(localDateApres != null){
+                dateApres = String.valueOf(localDateApres);
+            }
+            if(localDateAvant != null){
+                dateApres = String.valueOf(localDateAvant);
+            }
+
+            String prixMin = achatController.prixMinSearchTextField.getText().isEmpty() ?
+                    null:
+                    achatController.prixMinSearchTextField.getText();
+
+            String prixMax = achatController.prixMaxSearchTextField.getText().isEmpty() ?
+                    null:
+                    achatController.prixMaxSearchTextField.getText();
+
+            Map<String,String> searchMap = new HashMap<>();
+            if(!fournisseur.equals("Tous les fournisseurs")){
+                searchMap.put("fournisseur",fournisseur);
+            }
+            if(!statut.equals("Tous les statuts")){
+                searchMap.put("statut",statut);
+            }
+            searchMap.put("dateApres",dateApres);
+            searchMap.put("dateAvant",dateAvant);
+            searchMap.put("prixMin",prixMin);
+            searchMap.put("prixMax",prixMax);
+
+
+            List<AchatDTO> achats = ParserAchat.getAdvSearch(searchMap);
+            if(achats == null){
+                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite.");
+            }else if (achats.isEmpty()){
+                showAlert(Alert.AlertType.INFORMATION,"Information","Aucun achat trouvé ayant ces critères");
+                AchatController.this.mesAchatsTableView.getItems().clear();
+            }else{
+                showAlert(Alert.AlertType.INFORMATION,"Succès","Achats trouvés !");
+                AchatController.this.mesAchatsTableView.getItems().clear();
+                AchatController.this.mesAchatsTableView.getItems().addAll(achats);
+                AchatController.this.mesAchatsTableView.refresh();
+            }
+
+        });
+
+
+
+
+    }
+
+
 }
