@@ -1078,7 +1078,7 @@ public class AchatController implements Initializable {
                 dateApres = String.valueOf(localDateApres);
             }
             if(localDateAvant != null){
-                dateApres = String.valueOf(localDateAvant);
+                dateAvant = String.valueOf(localDateAvant);
             }
 
             String prixMin = achatController.prixMinSearchTextField.getText().isEmpty() ?
