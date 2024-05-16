@@ -5,6 +5,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -41,21 +42,22 @@
                         <Text styleClass="title" text="Créer une Commande" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                         <VBox spacing="5" GridPane.columnIndex="0" GridPane.rowIndex="1">
                             <Label text="Client" />
-                            <ChoiceBox fx:id="ClientField" onAction="#loadClients" prefWidth="200.0" />
+                     <ChoiceBox fx:id="ClientChoiceBox" prefWidth="150.0" />
                             <Label text="Produit" />
-                            <ChoiceBox fx:id="ProductField" prefWidth="200.0" />
+                     <ChoiceBox fx:id="produitChoicebox" prefWidth="150.0" />
                             <Label text="Quantité" />
-                            <TextField fx:id="QuantityField" prefWidth="200.0" />
+                     <Spinner fx:id="QuantiterSpinner" />
                             <Label text="Date Commande" />
                             <DatePicker fx:id="DateCoammndeFiel" prefWidth="200.0" />
                             <Label text="Date Règlement" />
                             <DatePicker fx:id="DateRegelemtField" prefWidth="200.0" />
-                            <Label prefHeight="43.0" prefWidth="113.0" text="État Commande" />
+                            <Label prefHeight="43.0" prefWidth="113.0" text="Reduction" />
+                     <TextField fx:id="ReductionTextField" />
                         </VBox>
                         <HBox GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
                         <HBox prefHeight="355.0" prefWidth="368.0" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                            <Button fx:id="getTotalPriceButton" prefHeight="44.0" prefWidth="106.0" text="Prix" />
+                            <Button fx:id="getTotalPriceButton" onAction="#getTotalPrice" prefHeight="44.0" prefWidth="106.0" text="Prix" />
                             <TextField fx:id="ShowTotalPriceField" prefHeight="45.0" prefWidth="227.0" styleClass="total-price-field" />
                         </HBox>
                         <HBox prefHeight="74.0" prefWidth="368.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
@@ -63,7 +65,6 @@
                         </HBox>
                         <Text styleClass="confirmation-message" GridPane.columnIndex="0" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                         <Label fx:id="ConfirmationMsg" prefHeight="86.0" prefWidth="365.0" styleClass="confirmation-message" GridPane.rowIndex="2" />
-                        <ChoiceBox fx:id="etatCommandeBox" prefWidth="200.0" GridPane.rowIndex="2" />
                     </GridPane>
                 </AnchorPane>
             </Tab>

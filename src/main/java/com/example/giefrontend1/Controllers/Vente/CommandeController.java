@@ -1,17 +1,35 @@
 package com.example.giefrontend1.Controllers.Vente;
 
-import com.example.giefrontend1.Controllers.DTO.CommandeDTO;
-import com.example.giefrontend1.Controllers.DTO.ContactDTO;
+import com.example.giefrontend1.Controllers.Commercant.AchatController;
+import com.example.giefrontend1.Controllers.Commercant.SearchResultController;
+import com.example.giefrontend1.Controllers.DTO.*;
 import com.example.giefrontend1.Parser.ParserCommande;
 import com.example.giefrontend1.Parser.ParserContact;
+import com.example.giefrontend1.Parser.ParserProduit;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -19,16 +37,35 @@ public class CommandeController implements Initializable {
     //create commande attributes
     public Label ConfirmationMsg;
     public Button CreateCommandeButton;
-    public ChoiceBox ClientField;
-    public ChoiceBox ProductField;
-    public TextField QuantityField;
     public Tab Show_Commandes;
     public DatePicker DateCoammndeFiel;
     public DatePicker DateRegelemtField;
     public Button getTotalPriceButton;
     public TextField ShowTotalPriceField;
-    public ChoiceBox etatCommandeBox;
-// list all commande attributes
+    public Spinner<Integer> QuantiterSpinner;
+    public TextField ReductionTextField;
+    //list all clients
+    public TableView contactsTableView;
+    public TableColumn ClientsIdColumn;
+    public TableColumn ClientsnomColumn;
+    public TableColumn ClientsprenomColumn;
+    public TableColumn ClientsraisonSocialeColumn;
+    public TableColumn ClientsformeJuridiqueColumn;
+    public TableColumn ClientsemailColumn;
+    public TableColumn ClientstelColumn;
+    public TableColumn ClientsfaxColumn;
+    public TableColumn ClientsrueColumn;
+    public TableColumn ClientsidAddresseColumn;
+    public TableColumn ClientsnumRueColumn;
+    public TableColumn ClientscodePostalColumn;
+    public TableColumn ClientsquartierColumn;
+    public TableColumn ClientsvilleColumn;
+    public TableColumn ClientspaysColumn;
+    public ChoiceBox<ContactDTO> ClientChoiceBox;
+    public ChoiceBox<ProduitDTO> produitChoicebox;
+    //
+    private List<DetailCommandeDTO> detailsCommandes = new ArrayList<>();
+     // list all commande attributes
     public TableColumn<CommandeDTO, Long> NumClient_tblClm;
     public TableColumn<CommandeDTO, Long> NumBonCommande_tblClm;
     public TableColumn<CommandeDTO, String> DateCommande_tblmd;
@@ -54,13 +91,14 @@ public class CommandeController implements Initializable {
     public Label num_Produit_lbl;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
        setupTableView();
-        loadClients();
-    }
+       populateClientChoiceBox();
+       populateProduitChoiceBox();
+       initQuantiterSpinner();
 
+    }
     private void setupTableView() {
         // Call ParserCommande to get all commands
         List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
@@ -69,7 +107,7 @@ public class CommandeController implements Initializable {
         ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
 
         // Bind the properties of CommandeDTO to the TableView columns
-        NumClient_tblClm.setCellValueFactory(new PropertyValueFactory<>("idClient"));
+        NumBonCommande_tblClm.setCellValueFactory(new PropertyValueFactory<>("id"));
         NumBonCommande_tblClm.setCellValueFactory(new PropertyValueFactory<>("numBonCommande"));
         DateCommande_tblmd.setCellValueFactory(new PropertyValueFactory<>("dateCommande"));
         DateReglement_tblClm.setCellValueFactory(new PropertyValueFactory<>("dateReglement"));
@@ -80,9 +118,92 @@ public class CommandeController implements Initializable {
         tableView.setItems(observableList);
     }
     public void onCreateCommande(ActionEvent actionEvent) {
-    }
+        ContactDTO selectedClient = ClientChoiceBox.getValue();
+        ProduitDTO selectedProduit = produitChoicebox.getValue();
+        int quantite = QuantiterSpinner.getValue();
+        double reduction = !ReductionTextField.getText().isEmpty() ? Double.parseDouble(ReductionTextField.getText()) : 0.0;
+        String dateCommandeSQL = String.valueOf(DateCoammndeFiel.getValue());
+        String dateReglementSQL = String.valueOf(DateRegelemtField.getValue());
+        double prixProduit = selectedProduit.getPrix();
+        double prixTotal = quantite * prixProduit;
+        // Appliquer la réduction si elle est saisie
+        if (reduction > 0) {
+            double reductionValeur = (reduction / 100) * prixTotal;
+            prixTotal -= reductionValeur;
+        }
+        List<DetailCommandeDTO> detailsCommande = new ArrayList<>();
 
-    public void cdetailcommandeBtnMethod(ActionEvent actionEvent) {
+        // Créer un nouveau détail de commande avec les valeurs récupérées
+        DetailCommandeDTO detailCommande = new DetailCommandeDTO(selectedProduit, quantite, selectedProduit.getPrix(), reduction);
+
+        // Ajouter le détail de commande à la liste
+        detailsCommande.add(detailCommande);
+        String etat ="INITIALISÉ";
+
+        // Créer une nouvelle commande avec les valeurs récupérées et les détails de commande
+        CommandeDTO newCommande = new CommandeDTO(selectedClient, detailsCommande, dateCommandeSQL, dateReglementSQL,prixTotal,etat);
+        newCommande.setDetailsCommande(detailsCommande);
+        // Appeler la méthode pour créer la commande dans le backend
+        boolean commandeCreated = ParserCommande.createCommande(newCommande);
+
+        Label confirmationMsg = new Label();
+        confirmationMsg.setFont(Font.font("Arial", 14));
+        confirmationMsg.setWrapText(true);
+
+        if (commandeCreated) {
+            confirmationMsg.setText("Commande créée avec succès !");
+            confirmationMsg.setTextFill(Color.GREEN);
+        } else {
+            confirmationMsg.setText("Erreur lors de la création de la commande.");
+            confirmationMsg.setTextFill(Color.RED);
+        }
+
+        // Ajouter le message de confirmation à votre interface utilisateur
+        // Ici, ConfirmationMsg est le nom de votre élément de l'interface où vous voulez afficher le message
+        ConfirmationMsg.setGraphic(confirmationMsg);
+    }
+    private void populateClientChoiceBox() {
+        try {
+            List<ContactDTO> contacts = getAllContacts();
+            ClientChoiceBox.getItems().addAll(contacts);
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+        }
+    }
+    // Méthode pour récupérer tous les contacts depuis la base de données
+    private List<ContactDTO> getAllContacts() {
+        List<ContactDTO> contacts = new ArrayList<>();
+        try {
+            // Appeler votre méthode pour récupérer tous les contacts
+            contacts = ParserContact.getAllContacts();
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+        }
+        return contacts;
+    }
+    private void populateProduitChoiceBox() {
+        try {
+            List<ProduitDTO> produits = getAllProduits();
+            produitChoicebox.getItems().addAll(produits);
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+        }
+    }
+    // Méthode pour récupérer tous les contacts depuis la base de données
+    private List<ProduitDTO> getAllProduits() {
+        List<ProduitDTO> produits = new ArrayList<>();
+        try {
+            // Appeler votre méthode pour récupérer tous les contacts
+            produits = ParserProduit.getAllProduits();
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+        }
+        return produits;
+    }
+    private void initQuantiterSpinner() {
+        // Définir les valeurs minimales et maximales pour le Spinner
+        SpinnerValueFactory<Integer> valueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 10000, 1);
+        QuantiterSpinner.setValueFactory(valueFactory);
     }
 
     public void onButtonClick(ActionEvent actionEvent) {
@@ -114,8 +235,6 @@ public class CommandeController implements Initializable {
         }
         }
 
-    public void commandeBtnMethod(ActionEvent actionEvent) {}
-
     public void handleRadioSelection(ActionEvent actionEvent) {
         if (commandesRadioBtn.isSelected()) {
             // Afficher les éléments liés à la commande
@@ -143,19 +262,23 @@ public class CommandeController implements Initializable {
 
         }
     }
+    @FXML
+    public void getTotalPrice(ActionEvent actionEvent) {
+        ProduitDTO selectedProduit = produitChoicebox.getValue();
+        if (selectedProduit != null) {
+            int quantite = QuantiterSpinner.getValue();
+            double prixProduit = selectedProduit.getPrix(); // Supposons que le prix soit stocké dans ProduitDTO
+            double prixTotal = quantite * prixProduit;
 
-    public void loadClients() {
-        List<ContactDTO> clients = ParserContact.getAllContacts(); // Call ParserContact to retrieve all contacts
-        ObservableList<String> clientNames = FXCollections.observableArrayList();
-        for (ContactDTO client : clients) {
-            if(client.getRaisonSociale()!=null){
-                clientNames.add(client.getRaisonSociale());
-            }else {
-            clientNames.add(client.getNom()); // Assuming getRaisonSociale() returns the client name
+            // Appliquer la réduction si elle est saisie
+            if (!ReductionTextField.getText().isEmpty()) {
+                double reductionPourcentage = Double.parseDouble(ReductionTextField.getText());
+                // Convertir la réduction en pourcentage en une valeur absolue
+                double reductionValeur = (reductionPourcentage / 100) * prixTotal;
+                prixTotal -= reductionValeur;
+            }
+
+            ShowTotalPriceField.setText(String.valueOf(prixTotal));
         }
-        }
-        ClientField.setItems(clientNames);
     }
-
-
 }

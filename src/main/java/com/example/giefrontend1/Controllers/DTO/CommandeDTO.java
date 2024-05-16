@@ -1,70 +1,98 @@
 package com.example.giefrontend1.Controllers.DTO;
 
-import javafx.beans.property.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommandeDTO {
-    private final LongProperty numBonCommande;
-    private final LongProperty idClient;
-    private final StringProperty dateCommande;
-    private final StringProperty dateReglement;
-    private final DoubleProperty totalCommande;
-    private final StringProperty etatCommande;
+    private String dateCommande,dateReglement,etatCommande;
+    private List<DetailCommandeDTO> detailsCommande;
+    private ContactDTO client;
+    private long idClient;
+    private double totalCommande;
+    private long numBonCommande;
 
 
-    public CommandeDTO(long numBonCommande, long idClient, String dateCommande, String dateReglement, double totalCommande, String etatCommande) {
-        this.numBonCommande = new SimpleLongProperty(numBonCommande);
-        this.idClient = new SimpleLongProperty(idClient);
-        this.dateCommande = new SimpleStringProperty(dateCommande);
-        this.dateReglement = new SimpleStringProperty(dateReglement);
-        this.totalCommande = new SimpleDoubleProperty(totalCommande);
-        this.etatCommande = new SimpleStringProperty(etatCommande);
+    public CommandeDTO(long numBonCommande,ContactDTO client,List<DetailCommandeDTO> detailsCommande,String dateCommande1,String dateReglement1,double totalCommande1,String etatCommande1){
+        this.numBonCommande=numBonCommande;
+        this.client=client;
+        this.detailsCommande=detailsCommande;
+        this.dateCommande=dateCommande1;
+        this.dateReglement=dateReglement1;
+        this.totalCommande=totalCommande1;
+        this.etatCommande=etatCommande1;
+
+    }
+    public CommandeDTO(ContactDTO client,List<DetailCommandeDTO> detailsCommande,String dateCommande1,String dateReglement1,double totalCommande1,String etatCommande1){
+        this.numBonCommande=numBonCommande;
+        this.detailsCommande=new ArrayList<>();
+        this.client=client;
+        this.dateCommande=dateCommande1;
+        this.dateReglement=dateReglement1;
+        this.totalCommande=totalCommande1;
+        this.etatCommande=etatCommande1;
+
     }
 
+    public CommandeDTO(long idClient1,List<DetailCommandeDTO> detailsCommande,String dateCommande1,String dateReglement1,double totalCommande1){
+        this.idClient=idClient1;
+        this.dateCommande=dateCommande1;
+        this.dateReglement=dateReglement1;
+        this.totalCommande=totalCommande1;
+
+    }
     public long getNumBonCommande() {
-        return numBonCommande.get();
+        return numBonCommande;
     }
 
-    public LongProperty numBonCommandeProperty() {
+    public Long numBonCommande() {
         return numBonCommande;
     }
 
     public long getIdClient() {
-        return idClient.get();
+        return idClient;
     }
 
-    public LongProperty idClientProperty() {
+    public Long idClient() {
         return idClient;
     }
 
     public String getDateCommande() {
-        return dateCommande.get();
+        return dateCommande;
     }
 
-    public StringProperty dateCommandeProperty() {
+    public String dateCommande() {
         return dateCommande;
     }
 
     public String getDateReglement() {
-        return dateReglement.get();
+        return dateReglement;
     }
 
-    public StringProperty dateReglementProperty() {
+    public String dateReglement() {
         return dateReglement;
     }
 
     public double getTotalCommande() {
-        return totalCommande.get();
+        return totalCommande;
     }
 
-    public DoubleProperty totalCommandeProperty() {
+    public Double totalCommande() {
         return totalCommande;
     }
 
     public String getEtatCommande() {
-        return etatCommande.get();
+        return etatCommande;
     }
 
-    public StringProperty etatCommandeProperty() {
+    public String etatCommande() {
         return etatCommande;
+    }
+
+    public void setDetailsCommande(List<DetailCommandeDTO> detailsCommande) {
+        this.detailsCommande = detailsCommande;
+    }
+
+    public List<DetailCommandeDTO> getDetailsCommande() {
+        return detailsCommande;
     }
 }

@@ -1,11 +1,12 @@
 package com.example.giefrontend1.Parser;
 
-import com.example.giefrontend1.Controllers.DTO.CommandeDTO;
-import com.example.giefrontend1.Controllers.DTO.ContactDTO;
+import com.example.giefrontend1.Controllers.DTO.*;
 import com.google.gson.*;
+import com.google.gson.stream.JsonReader;
 import okhttp3.*;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,38 +34,108 @@ public class ParserCommande {
 
     public static List<CommandeDTO> parseAllCommandes(String responseBody) {
         List<CommandeDTO> allCommandes = new ArrayList<>();
-
         JsonArray commandesArray = JsonParser.parseString(responseBody).getAsJsonArray();
-
-        for (JsonElement element : commandesArray) {
-            JsonObject commandeJson = element.getAsJsonObject();
-
+        for(int i = 0 ; i < commandesArray.size() ; i++) {
+            JsonObject commandeJson = commandesArray.get(i).getAsJsonObject();
             long numBonCommande = commandeJson.get("numBonCommande").getAsLong();
-            long idClient = commandeJson.getAsJsonObject("client").get("id").getAsLong();
-            String dateCommande = commandeJson.get("dateCommande").getAsString();
-            String dateReglement = commandeJson.get("dateReglement").getAsString();
-            double totalCommande = commandeJson.get("totalCommande").getAsDouble();
-            String etatCommande = commandeJson.get("etatCommande").getAsString();
-            CommandeDTO commandeDTO = new CommandeDTO(numBonCommande, idClient, dateCommande, dateReglement, totalCommande, etatCommande);
+            String dateCommande = commandeJson.has("dateCommande") ?
+                    commandeJson.get("dateCommande").getAsString() : null;
+            String dateReglement = commandeJson.has("dateReglement") ?
+                    commandeJson.get("dateReglement").getAsString() : null;
+            String etatCommande = commandeJson.has("etatCommande") ?
+                    commandeJson.get("etatCommande").getAsString() : null;
+            double totalCommande = commandeJson.has("totalCommande") ?
+                    commandeJson.get("totalCommande").getAsDouble() : 0;
+            ContactDTO client = null;
+            if(commandeJson.has("client")){
+                JsonObject clientJson = commandeJson.get("client").getAsJsonObject();
+                int client_id = clientJson.get("id").getAsInt();
+                client = ParserContact.getContactByID(client_id);
+            }
+            System.out.println(client);
+
+            // Parsing details de commande
+            List<DetailCommandeDTO> detailsCommande = null;
+            if (commandeJson.has("detailsCommande")) {
+                detailsCommande = new ArrayList<>();
+                JsonArray detailsCommandeArray = commandeJson.getAsJsonArray("detailsCommande");
+                for (JsonElement detailElement : detailsCommandeArray) {
+                    JsonObject detailJson = detailElement.getAsJsonObject();
+                    // Parsing chaque détail de commande
+                    int id = detailJson.get("id").getAsInt();
+                    int qteCommande = detailJson.get("qteCommande").getAsInt();
+                    double prixUnitaire = detailJson.get("prixUnitaire").getAsDouble();
+                    double reduction = detailJson.get("reduction").getAsDouble();
+                    JsonObject produitJson = detailJson.get("produitObjet").getAsJsonObject();
+                    int produit_id = produitJson.get("id").getAsInt();
+                    ProduitDTO produitDTO = ParserProduit.getProduitByID(produit_id);
+                    // Ajouter le détail de commande à la liste
+                    detailsCommande.add(new DetailCommandeDTO(produitDTO,qteCommande, prixUnitaire, reduction));
+                }
+            }
+
+            CommandeDTO commandeDTO = new CommandeDTO(numBonCommande,client,detailsCommande , dateCommande, dateReglement, totalCommande, etatCommande);
             allCommandes.add(commandeDTO);
         }
 
         return allCommandes;
     }
     public static CommandeDTO getCommandeById(long id){
-        CommandeDTO commande ;
         String body =null;
+        CommandeDTO commandeDTO=null;
         Request request = new Request.Builder()
                 .url(url+"/api/commande/get/id/"+id)
                 .build();
         try (Response response = client.newCall(request).execute()) {
             body = response.body().string();
-            commande = parseCommande(body);
-            return commande;
+             commandeDTO = parseCommandeByID(body);
+            return commandeDTO;
         } catch (IOException e) {
             System.out.println(e.getMessage());
             return null;
         }
+    }
+    private static CommandeDTO parseCommandeByID(String body) {
+        // Parse JSON string into a JsonObject
+        JsonObject commandeJson = JsonParser.parseString(body).getAsJsonObject();
+
+        long numBonCommande = commandeJson.get("numBonCommande").getAsLong();
+        String dateCommande = commandeJson.has("dateCommande") ?
+                commandeJson.get("dateCommande").getAsString() : null;
+        String dateReglement = commandeJson.has("dateReglement") ?
+                commandeJson.get("dateReglement").getAsString() : null;
+        String etatCommande = commandeJson.has("etatCommande") ?
+                commandeJson.get("etatCommande").getAsString() : null;
+        double totalCommande = commandeJson.has("totalCommande") ?
+                commandeJson.get("totalCommande").getAsDouble() : 0;
+        ContactDTO client = null;
+        if(commandeJson.has("client")){
+            JsonObject clientJson = commandeJson.get("client").getAsJsonObject();
+            int client_id = clientJson.get("id").getAsInt();
+            client = ParserContact.getContactByID(client_id);
+        }
+
+        // Parsing details de commande
+        List<DetailCommandeDTO> detailsCommande = null;
+        if (commandeJson.has("detailsCommande")) {
+            detailsCommande = new ArrayList<>();
+            JsonArray detailsCommandeArray = commandeJson.getAsJsonArray("detailsCommande");
+            for (JsonElement detailElement : detailsCommandeArray) {
+                JsonObject detailJson = detailElement.getAsJsonObject();
+                // Parsing chaque détail de commande
+                int id = detailJson.get("id").getAsInt();
+                int qteCommande = detailJson.get("qteCommande").getAsInt();
+                double prixUnitaire = detailJson.get("prixUnitaire").getAsDouble();
+                double reduction = detailJson.get("reduction").getAsDouble();
+                JsonObject produitJson = detailJson.get("produitObjet").getAsJsonObject();
+                int produit_id = produitJson.get("id").getAsInt();
+                ProduitDTO produitDTO = ParserProduit.getProduitByID(produit_id);
+                // Ajouter le détail de commande à la liste
+                detailsCommande.add(new DetailCommandeDTO(produitDTO,qteCommande, prixUnitaire, reduction));
+            }
+        }
+        return new CommandeDTO(numBonCommande,client,detailsCommande,dateCommande,dateReglement,totalCommande,etatCommande);
+
     }
     public static boolean createCommande(CommandeDTO newCommande) {
         Gson gson = new Gson();
@@ -84,21 +155,7 @@ public class ParserCommande {
             return false;
         }
     }
-    public static CommandeDTO parseCommande(String responseBody) {
-        JsonObject commandeJson = JsonParser.parseString(responseBody).getAsJsonObject();
 
-        long numBonCommande = commandeJson.get("numBonCommande").getAsLong();
-        long idClient = commandeJson.getAsJsonObject("client").get("id").getAsLong();
-        String dateCommande = commandeJson.get("dateCommande").getAsString();
-        String dateReglement = commandeJson.get("dateReglement").getAsString();
-        double totalCommande = commandeJson.get("totalCommande").getAsDouble();
-        String etatCommande = commandeJson.get("etatCommande").getAsString();
-
-        // Vous devrez ajuster cette partie pour obtenir les détails des commandes si nécessaire
-        // Par exemple, vous pourriez itérer sur les "detailsCommandes" si cela est nécessaire.
-
-        return new CommandeDTO(numBonCommande, idClient, dateCommande, dateReglement, totalCommande, etatCommande);
-    }
 
 
 }
