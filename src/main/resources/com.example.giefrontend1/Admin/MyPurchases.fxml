@@ -24,7 +24,7 @@
          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
       </columnResizePolicy>
    </TableView>
-   <Button fx:id="advSearchAchatBtn" layoutX="616.0" layoutY="119.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
+   <Button fx:id="advSearchAchatBtn" layoutX="616.0" layoutY="119.0" mnemonicParsing="false" onAction="#onAdvSearchBtn" prefHeight="38.0" prefWidth="186.0" text="Recherche avancée">
       <font>
          <Font size="17.0" />
       </font>

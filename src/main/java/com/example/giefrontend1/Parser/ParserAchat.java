@@ -13,6 +13,7 @@ import okhttp3.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ParserAchat {
 
@@ -208,7 +209,59 @@ public class ParserAchat {
     }
 
 
+    public static List<String > getAllFournisseursAchats() {
+        List<String > fournisseurs = new ArrayList<>();
+        String body = null;
+
+        Request request = new Request.Builder()
+                .url(url + "/api/achats/get/fournisseurs")
+                        .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            fournisseurs = parseAllFournisseurs(body);
+            return fournisseurs;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    public static List<String> parseAllFournisseurs(String body) {
+        List<String> liste = new ArrayList<>();
+        JsonArray arrayFournisseurs = new JsonParser().parse(body).getAsJsonArray();
+        for(int i = 0; i < arrayFournisseurs.size(); i++) {
+            liste.add(arrayFournisseurs.get(i).getAsString());
+        }
+        return liste;
+    }
 
 
+    public static List<AchatDTO> getAdvSearch(Map<String, String> searchMap) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(searchMap);
+        System.out.println(json);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/achats/advSearch")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                // Read response body and parse it
+                String responseBody = response.body().string();
+                return parseAllAchats(responseBody);
+            } else {
+                System.err.println("Error: " + response.code() + " " + response.message());
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
 }
 
