@@ -22,14 +22,15 @@
       </Text>
       <GridPane layoutX="130.0" layoutY="104.0" prefHeight="291.0" prefWidth="484.0">
         <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="237.0" minWidth="10.0" prefWidth="228.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="256.0" minWidth="10.0" prefWidth="256.0" />
         </columnConstraints>
         <rowConstraints>
           <RowConstraints maxHeight="65.66667175292969" minHeight="10.0" prefHeight="65.66667175292969" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="77.66667175292969" minHeight="10.0" prefHeight="77.66667175292969" vgrow="SOMETIMES" />
             <RowConstraints maxHeight="51.333343505859375" minHeight="10.0" prefHeight="29.333328247070312" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="106.66665649414062" minHeight="10.0" prefHeight="64.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="106.66665649414062" minHeight="10.0" prefHeight="68.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="106.66665649414062" minHeight="3.0" prefHeight="26.0" vgrow="SOMETIMES" />
           <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="51.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
@@ -43,18 +44,18 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Prix" GridPane.rowIndex="3">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Montant" GridPane.rowIndex="3">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Statut" GridPane.rowIndex="4">
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Statut" GridPane.rowIndex="5">
                <font>
                   <Font size="22.0" />
                </font>
             </Text>
-            <ComboBox fx:id="fournisseurSearchComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
-            <ComboBox fx:id="statutSearchComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ComboBox fx:id="fournisseurSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="statutSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="11.0">
@@ -83,22 +84,22 @@
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="11.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Prix min">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Montant min">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="prixMinSearchTextField" />
+                        <TextField fx:id="prixMinSearchTextField" prefHeight="25.0" prefWidth="152.0" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="73.0" prefWidth="260.0" spacing="11.0">
+                  <HBox prefHeight="73.0" prefWidth="260.0" spacing="9.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Prix max">
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Montant max">
                            <font>
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="prixMaxSearchTextField" />
+                        <TextField fx:id="prixMaxSearchTextField" prefHeight="25.0" prefWidth="169.0" />
                      </children>
                   </HBox>
                </children>

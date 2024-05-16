@@ -34,12 +34,22 @@
          <Font size="15.0" />
       </font>
    </Text>
-   <Button fx:id="newAchatBtn" layoutX="39.0" layoutY="115.0" mnemonicParsing="false" onAction="#onCreateAchat" prefHeight="38.0" prefWidth="186.0" text="Nouvel achat">
+   <Button fx:id="newAchatBtn" layoutX="39.0" layoutY="119.0" mnemonicParsing="false" onAction="#onCreateAchat" prefHeight="38.0" prefWidth="186.0" text="Nouvel achat">
       <font>
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="87.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nouvel achat">
+   <Text layoutX="87.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nouvel achat">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Text>
+   <Button fx:id="refreshAchatsBtn" layoutX="325.0" layoutY="119.0" mnemonicParsing="false" onAction="#onRefreshAchats" prefHeight="38.0" prefWidth="186.0" text="Rafraîchir">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
+   <Text layoutX="325.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rafraîchir la liste des achats">
       <font>
          <Font size="15.0" />
       </font>

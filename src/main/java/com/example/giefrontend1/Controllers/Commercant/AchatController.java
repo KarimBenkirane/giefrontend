@@ -31,6 +31,8 @@ import java.util.*;
 
 public class AchatController implements Initializable {
 
+    private Stage changeStatutStage;
+    private Stage resumeAchatStage;
     private AchatDTO selectedAchatToResume;
     private AchatDTO selectedAchatToUpdateStatus;
     private Stage stageDetailsAchats = null;
@@ -299,6 +301,7 @@ public class AchatController implements Initializable {
 
     @FXML
     public ComboBox<String> updateStatusComboBox;
+    private Stage createAchatStage;
 
 
     public AchatController() {
@@ -440,6 +443,7 @@ public class AchatController implements Initializable {
                             AchatController achatController = loader.getController();
                             Stage stage = new Stage();
                             Scene scene = new Scene(root);
+                            AchatController.this.changeStatutStage = stage;
                             stage.setScene(scene);
                             stage.setTitle("Modifier statut achat");
                             stage.show();
@@ -454,6 +458,7 @@ public class AchatController implements Initializable {
                                 boolean status = ParserAchat.updateAchat(AchatController.this.selectedAchatToUpdateStatus,AchatController.this.selectedAchatToUpdateStatus.getId());
                                 if(status){
                                     showAlert(Alert.AlertType.INFORMATION,"Succès","Statut modifié avec succès !");
+                                    AchatController.this.changeStatutStage.close();
                                     AchatController.this.mesAchatsTableView.getItems().clear();
                                     AchatController.this.mesAchatsTableView.getItems().setAll(ParserAchat.getAllAchats());
                                     AchatController.this.mesAchatsTableView.refresh();
@@ -494,6 +499,7 @@ public class AchatController implements Initializable {
                             try {
                                 Parent root = loader.load();
                                 Stage stage  = new Stage();
+                                AchatController.this.resumeAchatStage = stage;
                                 Scene scene = new Scene(root);
                                 stage.setScene(scene);
                                 stage.setTitle("Reprendre mon achat");
@@ -689,6 +695,7 @@ public class AchatController implements Initializable {
                                         achatController.reprisesaveAchatBtn.setDisable(true);
                                         achatController.repriseretourBtn.setDisable(true);
                                         achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                        AchatController.this.resumeAchatStage.close();
                                         AchatController.this.mesAchatsTableView.getItems().clear();
                                         AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                                         AchatController.this.mesAchatsTableView.refresh();
@@ -719,6 +726,7 @@ public class AchatController implements Initializable {
                                         achatController.reprisesaveAchatBtn.setDisable(true);
                                         achatController.repriseretourBtn.setDisable(true);
                                         achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                        AchatController.this.resumeAchatStage.close();
                                         AchatController.this.mesAchatsTableView.getItems().clear();
                                         AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                                         AchatController.this.mesAchatsTableView.refresh();
@@ -763,11 +771,18 @@ public class AchatController implements Initializable {
         alert.showAndWait();
     }
 
+    public void onRefreshAchats(){
+        AchatController.this.mesAchatsTableView.getItems().clear();
+        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+        AchatController.this.mesAchatsTableView.refresh();
+    }
+
     public void onCreateAchat(ActionEvent e) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/MyPurchasesCreate.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
+        AchatController.this.createAchatStage = stage;
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Créer un nouvel achat");
@@ -1001,6 +1016,7 @@ public class AchatController implements Initializable {
                 achatController.confirmAchatBtn.setDisable(true);
                 achatController.saveAchatBtn.setDisable(true);
                 achatController.retourBtn.setDisable(true);
+                AchatController.this.createAchatStage.close();
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                 AchatController.this.mesAchatsTableView.refresh();
@@ -1030,6 +1046,7 @@ public class AchatController implements Initializable {
                 achatController.confirmAchatBtn.setDisable(true);
                 achatController.saveAchatBtn.setDisable(true);
                 achatController.retourBtn.setDisable(true);
+                AchatController.this.createAchatStage.close();
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                 AchatController.this.mesAchatsTableView.refresh();
@@ -1110,6 +1127,7 @@ public class AchatController implements Initializable {
                 AchatController.this.mesAchatsTableView.getItems().clear();
             }else{
                 showAlert(Alert.AlertType.INFORMATION,"Succès","Achats trouvés !");
+                stage.close();
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(achats);
                 AchatController.this.mesAchatsTableView.refresh();
