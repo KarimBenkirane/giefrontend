@@ -50,7 +50,7 @@ public class SearchContactsController implements Initializable {
     @FXML
     public TextField raisonSocialeTextField;
     @FXML
-    public TextField formeJuridiqueTextField;
+    public ComboBox<String> formeJuridiqueComboBox;
 
 
     public static String searchType;
@@ -74,7 +74,7 @@ public class SearchContactsController implements Initializable {
             this.raisonSocialeLabel.setVisible(true);
             this.formeJuridiqueLabel.setVisible(true);
             this.raisonSocialeTextField.setVisible(true);
-            this.formeJuridiqueTextField.setVisible(true);
+            this.formeJuridiqueComboBox.setVisible(true);
 
             this.nomTextField.setVisible(false);
             this.nomLabel.setVisible(false);
@@ -88,7 +88,7 @@ public class SearchContactsController implements Initializable {
             this.raisonSocialeLabel.setVisible(false);
             this.formeJuridiqueLabel.setVisible(false);
             this.raisonSocialeTextField.setVisible(false);
-            this.formeJuridiqueTextField.setVisible(false);
+            this.formeJuridiqueComboBox.setVisible(false);
 
             this.nomTextField.setVisible(true);
             this.nomLabel.setVisible(true);
@@ -102,7 +102,7 @@ public class SearchContactsController implements Initializable {
             this.raisonSocialeLabel.setVisible(false);
             this.formeJuridiqueLabel.setVisible(false);
             this.raisonSocialeTextField.setVisible(false);
-            this.formeJuridiqueTextField.setVisible(false);
+            this.formeJuridiqueComboBox.setVisible(false);
 
             this.nomTextField.setVisible(false);
             this.nomLabel.setVisible(false);
@@ -116,11 +116,15 @@ public class SearchContactsController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        formeJuridiqueComboBox.getItems().addAll("Tout chercher","SARL","SA","SAS");
+
         addListenerToTextField(nomTextField);
         addListenerToTextField(prenomTextField);
         addListenerToTextField(raisonSocialeTextField);
         addListenerToTextField(emailTextField);
-        addListenerToTextField(formeJuridiqueTextField);
+        addListenerToComboBox(formeJuridiqueComboBox);
+
     }
 
 
@@ -172,7 +176,10 @@ public class SearchContactsController implements Initializable {
 
             if(entreprisesRadioBtn.isSelected()){
                 String raisonSociale = this.raisonSocialeTextField.getText();
-                String formeJuridique = this.formeJuridiqueTextField.getText();
+                String formeJuridique = this.formeJuridiqueComboBox.getValue();
+                if(formeJuridique.equals("Tout chercher")){
+                    formeJuridique = "";
+                }
 
                 searchRaisonSociale = raisonSociale;
                 searchFormeJuridique = formeJuridique;
@@ -255,33 +262,56 @@ public class SearchContactsController implements Initializable {
         alert.showAndWait();
     }
 
-    private void enableAllTextFields() {
-        nomTextField.setDisable(false);
-        prenomTextField.setDisable(false);
-        raisonSocialeTextField.setDisable(false);
-        emailTextField.setDisable(false);
-        formeJuridiqueTextField.setDisable(false);
-    }
-
-    private void disableAllTextFieldsExcept(TextField exceptTextField) {
-        nomTextField.setDisable(true);
-        prenomTextField.setDisable(true);
-        raisonSocialeTextField.setDisable(true);
-        emailTextField.setDisable(true);
-        formeJuridiqueTextField.setDisable(true);
-
-        exceptTextField.setDisable(false);
+    private void addListenerToComboBox(ComboBox<String> comboBox) {
+        comboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null && !newValue.isEmpty() && !"Tout chercher".equals(newValue)) {
+                disableAllControlsExcept(comboBox);
+            } else {
+                enableAllControls();
+            }
+        });
     }
 
     private void addListenerToTextField(TextField textField) {
         textField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.isEmpty()) {
-                disableAllTextFieldsExcept(textField);
+                disableAllControlsExcept(textField);
             } else {
-                enableAllTextFields();
+                enableAllControls();
             }
         });
     }
+
+
+    private void disableAllControlsExcept(ComboBox<?> exceptComboBox) {
+        nomTextField.setDisable(true);
+        prenomTextField.setDisable(true);
+        raisonSocialeTextField.setDisable(true);
+        emailTextField.setDisable(true);
+        formeJuridiqueComboBox.setDisable(true);
+
+        exceptComboBox.setDisable(false);
+    }
+
+    private void disableAllControlsExcept(TextField exceptTextField) {
+        nomTextField.setDisable(true);
+        prenomTextField.setDisable(true);
+        raisonSocialeTextField.setDisable(true);
+        emailTextField.setDisable(true);
+        formeJuridiqueComboBox.setDisable(true);
+
+        exceptTextField.setDisable(false);
+    }
+
+    private void enableAllControls() {
+        nomTextField.setDisable(false);
+        prenomTextField.setDisable(false);
+        raisonSocialeTextField.setDisable(false);
+        emailTextField.setDisable(false);
+        formeJuridiqueComboBox.setDisable(false);
+    }
+
+
 
 
 

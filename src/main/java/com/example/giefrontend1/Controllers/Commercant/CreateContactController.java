@@ -60,9 +60,14 @@ public class CreateContactController implements Initializable {
     @FXML
     public Label prenomLabel; // deviendra formeJuridique pour l'entreprise
 
+    @FXML
+    public ComboBox<String> formeJuridiqueComboBox;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        this.formeJuridiqueComboBox.getItems().addAll("SARL","SA","SAS");
 
         typeContactChoiceBox.getItems().add("Particulier");
         typeContactChoiceBox.getItems().add("Entreprise");
@@ -76,6 +81,8 @@ public class CreateContactController implements Initializable {
                     prenomLabel.setText("Forme Juridique:");
 
                     emailTextField.clear();
+                    prenomTextField.setVisible(false);
+                    formeJuridiqueComboBox.setVisible(true);
                     phoneTextField.clear();
                     faxTextField.clear();
                     quartierTextField.clear();
@@ -94,6 +101,8 @@ public class CreateContactController implements Initializable {
                     prenomLabel.setText("Prénom:");
 
                     emailTextField.clear();
+                    prenomTextField.setVisible(true);
+                    formeJuridiqueComboBox.setVisible(false);
                     phoneTextField.clear();
                     faxTextField.clear();
                     quartierTextField.clear();
@@ -135,8 +144,16 @@ public class CreateContactController implements Initializable {
             showAlert(AlertType.WARNING, "Erreur", "Veuillez au moins saisir le nom / la raison sociale du contact !");
             return;
         }
-        if(!prenomTextField.getText().isEmpty())
-            prenom = prenomTextField.getText();
+
+        if(this.typeContactChoiceBox.getValue().equals("Particulier")){
+            if(!prenomTextField.getText().isEmpty())
+                prenom = prenomTextField.getText();
+        }else{
+            if(formeJuridiqueComboBox.getValue() != null && !formeJuridiqueComboBox.getValue().isEmpty()){
+                prenom = formeJuridiqueComboBox.getValue();
+            }
+        }
+
 
         if(!emailTextField.getText().isEmpty())
             email = emailTextField.getText();
