@@ -37,34 +37,25 @@
                 <RowConstraints maxHeight="53.666656494140625" minHeight="0.0" prefHeight="33.66668701171875" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Désignation" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.rowIndex="3">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="modeleSearchTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Marque">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
                   <ComboBox fx:id="marqueSearchComboBox" prefWidth="150.0" GridPane.columnIndex="1" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher par intervalle de prix (chercher par un seul critère est possible)" wrappingWidth="303.33660888671875" GridPane.rowIndex="5">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Text>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantité stock &gt; à" GridPane.rowIndex="7">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="qtStockSupSearchTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <TextField fx:id="modeleSearchTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <MenuButton fx:id="SearchCategoriesMenuButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="154.0" text="Catégorie" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <items>
+                        <CheckMenuItem mnemonicParsing="false" text="Toutes les catégories" />
+                        <CheckMenuItem mnemonicParsing="false" text="APPAREILS_PHOTO_VIDEO" />
+                        <CheckMenuItem mnemonicParsing="false" text="AUDIO_ET_VIDEO" />
+                        <CheckMenuItem mnemonicParsing="false" text="SMARTPHONES" />
+                        <CheckMenuItem mnemonicParsing="false" text="COMPOSANTS_ELECTRONIQUES" />
+                        <CheckMenuItem mnemonicParsing="false" text="ACCESSOIRES_HIGH_TECH" />
+                        <CheckMenuItem mnemonicParsing="false" text="IMPRIMANTES_ET_SCANNERS" />
+                        <CheckMenuItem mnemonicParsing="false" text="ORDINATEURS_ET_TABLETTES" />
+                        <CheckMenuItem mnemonicParsing="false" text="LOGICIELS" />
+                        <CheckMenuItem mnemonicParsing="false" text="PERIPHERIQUES_INFORMATIQUES" />
+                        <CheckMenuItem mnemonicParsing="false" text="RESEAUX_ET_CONNEXION" />
+                        <CheckMenuItem mnemonicParsing="false" text="AUTRES" />
+                     </items>
+                  </MenuButton>
+                  <TextArea fx:id="descriptionSearchTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <VBox alignment="CENTER" prefHeight="0.0" prefWidth="319.0" spacing="15.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                      <children>
                         <HBox prefHeight="0.0" prefWidth="319.0" spacing="20.0">
@@ -89,28 +80,37 @@
                         </HBox>
                      </children>
                   </VBox>
+                  <TextField fx:id="qtStockSupSearchTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Désignation" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Description" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Marque">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chercher par intervalle de prix (chercher par un seul critère est possible)" wrappingWidth="303.33660888671875" GridPane.rowIndex="5">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Text>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Quantité stock &gt; à" GridPane.rowIndex="7">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Text>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Catégorie" wrappingWidth="302.31964111328125" GridPane.rowIndex="2">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Text>
-                  <TextArea fx:id="descriptionSearchTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <MenuButton fx:id="SearchCategoriesMenuButton" mnemonicParsing="false" prefHeight="25.0" prefWidth="154.0" text="Catégorie" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                     <items>
-                        <CheckMenuItem mnemonicParsing="false" text="Toutes les catégories" />
-                        <CheckMenuItem mnemonicParsing="false" text="APPAREILS_PHOTO_VIDEO" />
-                        <CheckMenuItem mnemonicParsing="false" text="AUDIO_ET_VIDEO" />
-                        <CheckMenuItem mnemonicParsing="false" text="SMARTPHONES" />
-                        <CheckMenuItem mnemonicParsing="false" text="COMPOSANTS_ELECTRONIQUES" />
-                        <CheckMenuItem mnemonicParsing="false" text="ACCESSOIRES_HIGH_TECH" />
-                        <CheckMenuItem mnemonicParsing="false" text="IMPRIMANTES_ET_SCANNERS" />
-                        <CheckMenuItem mnemonicParsing="false" text="ORDINATEURS_ET_TABLETTES" />
-                        <CheckMenuItem mnemonicParsing="false" text="LOGICIELS" />
-                        <CheckMenuItem mnemonicParsing="false" text="PERIPHERIQUES_INFORMATIQUES" />
-                        <CheckMenuItem mnemonicParsing="false" text="RESEAUX_ET_CONNEXION" />
-                        <CheckMenuItem mnemonicParsing="false" text="AUTRES" />
-                     </items>
-                  </MenuButton>
                </children>
             </GridPane>
             <VBox prefHeight="112.0" prefWidth="639.0" />

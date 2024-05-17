@@ -706,34 +706,46 @@ public class AchatController implements Initializable {
 //
 //
                                 achatController.repriseconfirmAchatBtn.setOnAction(evt -> {
-                                    AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
-                                    double prix_total = 0;
-                                    for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise){
-                                        ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
-                                        long produit_id = produitDTO.getId();
-                                        int qteAchetee = detailAchatDTO.getQteAchetee();
-                                        produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
-                                        ParserProduit.updateProduit(produitDTO,produit_id);
-                                        prix_total += detailAchatDTO.getPrixAchat();
-                                    }
-                                    achatDTO.setPrix(prix_total);
-                                    achatDTO.setStatutAchat("CONFIRMÉ");
-                                    System.out.println(achatDTO);
-                                    boolean status = ParserAchat.updateAchat(achatDTO,achatDTO.getId());
-                                    if(status) {
-                                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
-                                        achatController.repriseconfirmAchatBtn.setDisable(true);
-                                        achatController.reprisesaveAchatBtn.setDisable(true);
-                                        achatController.repriseretourBtn.setDisable(true);
-                                        achatController.repriseDetailsAchatsTableView.setDisable(true);
-                                        AchatController.this.resumeAchatStage.close();
-                                        AchatController.this.mesAchatsTableView.getItems().clear();
-                                        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
-                                        AchatController.this.mesAchatsTableView.refresh();
-                                    }else{
-                                        showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+                                    // Créer une alerte de confirmation
+                                    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    confirmationAlert.setTitle("Confirmation de la reprise d'achat");
+                                    confirmationAlert.setHeaderText("Voulez-vous vraiment confirmer cette reprise d'achat ?");
+                                    confirmationAlert.setContentText("Cliquez sur OK pour confirmer ou sur Annuler pour annuler.");
+
+                                    // Obtenir la réponse de l'utilisateur
+                                    Optional<ButtonType> result = confirmationAlert.showAndWait();
+                                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                                        // L'utilisateur a cliqué sur OK, continuer avec le traitement de la reprise d'achat
+                                        AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
+                                        double prix_total = 0;
+                                        for (DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise) {
+                                            ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                                            long produit_id = produitDTO.getId();
+                                            int qteAchetee = detailAchatDTO.getQteAchetee();
+                                            produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                                            ParserProduit.updateProduit(produitDTO, produit_id);
+                                            prix_total += detailAchatDTO.getPrixAchat();
+                                        }
+                                        achatDTO.setPrix(prix_total);
+                                        achatDTO.setStatutAchat("CONFIRMÉ");
+                                        System.out.println(achatDTO);
+                                        boolean status = ParserAchat.updateAchat(achatDTO, achatDTO.getId());
+                                        if (status) {
+                                            showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                                            achatController.repriseconfirmAchatBtn.setDisable(true);
+                                            achatController.reprisesaveAchatBtn.setDisable(true);
+                                            achatController.repriseretourBtn.setDisable(true);
+                                            achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                            AchatController.this.resumeAchatStage.close();
+                                            AchatController.this.mesAchatsTableView.getItems().clear();
+                                            AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                                            AchatController.this.mesAchatsTableView.refresh();
+                                        } else {
+                                            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de l'ajout de cet achat.");
+                                        }
                                     }
                                 });
+
 
 
                             } catch (IOException e) {
@@ -760,6 +772,7 @@ public class AchatController implements Initializable {
 
             initialized = true;
         }
+
     }
 
 
@@ -792,6 +805,37 @@ public class AchatController implements Initializable {
 
 
         AchatController achatController = loader.getController();
+
+        TableColumn<DetailAchatDTO, Void> deleteColumn = new TableColumn<>("Supprimer produit");
+        deleteColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteButton = new Button("Supprimer");
+
+            {
+                deleteButton.setOnAction(event -> {
+                    DetailAchatDTO selectedDetailAchat = getTableView().getItems().get(getIndex());
+                    System.out.println(selectedDetailAchat.getId());
+                    AchatController.this.detailsAchats.remove(selectedDetailAchat);
+                    achatController.DetailsAchatsTableView.getItems().clear();
+                    achatController.DetailsAchatsTableView.getItems().addAll(AchatController.this.detailsAchats);
+                    achatController.DetailsAchatsTableView.refresh();
+                    showAlert(Alert.AlertType.INFORMATION,"Succès","Produit supprimé avec succès !");
+
+
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
+
+        achatController.DetailsAchatsTableView.getColumns().add(deleteColumn);
 
         //Populating Fournisseur TableView:
         achatController.FournisseursIdColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
@@ -1027,33 +1071,45 @@ public class AchatController implements Initializable {
 
 
         achatController.confirmAchatBtn.setOnAction(event -> {
-            ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
-            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"CONFIRMÉ");
-            double prix_total = 0;
-            for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
-                ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
-                long produit_id = produitDTO.getId();
-                int qteAchetee = detailAchatDTO.getQteAchetee();
-                produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
-                ParserProduit.updateProduit(produitDTO,produit_id);
-                prix_total += detailAchatDTO.getPrixAchat();
-            }
-            achatDTO.setPrix(prix_total);
-            System.out.println(achatDTO);
-            boolean status = ParserAchat.createAchat(achatDTO);
-            if(status) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
-                achatController.confirmAchatBtn.setDisable(true);
-                achatController.saveAchatBtn.setDisable(true);
-                achatController.retourBtn.setDisable(true);
-                AchatController.this.createAchatStage.close();
-                AchatController.this.mesAchatsTableView.getItems().clear();
-                AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
-                AchatController.this.mesAchatsTableView.refresh();
-            }else{
-                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+            // Créer une alerte de confirmation
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation de l'achat");
+            confirmationAlert.setHeaderText("Voulez-vous vraiment confirmer cet achat ?");
+            confirmationAlert.setContentText("Cliquez sur OK pour confirmer ou sur Annuler pour annuler.");
+
+            // Obtenir la réponse de l'utilisateur
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // L'utilisateur a cliqué sur OK, continuer avec le traitement de l'achat
+                ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
+                AchatDTO achatDTO = new AchatDTO(fournisseur, AchatController.this.detailsAchats, String.valueOf(LocalDate.now()), 0, "CONFIRMÉ");
+                double prix_total = 0;
+                for (DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats) {
+                    ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                    long produit_id = produitDTO.getId();
+                    int qteAchetee = detailAchatDTO.getQteAchetee();
+                    produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                    ParserProduit.updateProduit(produitDTO, produit_id);
+                    prix_total += detailAchatDTO.getPrixAchat();
+                }
+                achatDTO.setPrix(prix_total);
+                System.out.println(achatDTO);
+                boolean status = ParserAchat.createAchat(achatDTO);
+                if (status) {
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                    achatController.confirmAchatBtn.setDisable(true);
+                    achatController.saveAchatBtn.setDisable(true);
+                    achatController.retourBtn.setDisable(true);
+                    AchatController.this.createAchatStage.close();
+                    AchatController.this.mesAchatsTableView.getItems().clear();
+                    AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                    AchatController.this.mesAchatsTableView.refresh();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de l'ajout de cet achat.");
+                }
             }
         });
+
 
     }
 

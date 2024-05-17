@@ -55,7 +55,6 @@
                </font>
             </Text>
             <ComboBox fx:id="fournisseurSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" />
-            <ComboBox fx:id="statutSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="11.0">
@@ -104,6 +103,7 @@
                   </HBox>
                </children>
             </VBox>
+            <ComboBox fx:id="statutSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
       <Button fx:id="RechercherButton" layoutX="292.0" layoutY="436.0" mnemonicParsing="false" prefWidth="139.0" text="Rechercher">

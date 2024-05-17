@@ -614,6 +614,8 @@ public class ProduitController implements Initializable {
                 showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite.");
             }else if (searchResult.isEmpty()){
                 showAlert(Alert.AlertType.INFORMATION,"Aucun produit trouvé","Aucun produit ne correspond à votre recherche !");
+                Stage stage = (Stage) produitController.dispoRadioBtn.getScene().getWindow();
+                stage.close();
             }else{
                 ProduitController.this.searchResultTableView.getItems().clear();
                 ProduitController.this.searchResultTableView.getItems().addAll(searchResult);
