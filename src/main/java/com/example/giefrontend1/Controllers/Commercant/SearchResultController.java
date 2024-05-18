@@ -253,6 +253,8 @@ public class SearchResultController implements Initializable {
             updateController.typeContactChoiceBox.setDisable(true);
             updateController.idTextField.setText(String.valueOf(contactId));
             updateController.idTextField.setDisable(true);
+            updateController.updateFormeJuridiqueComboBox.setVisible(false);
+            updateController.prenomTextField.setVisible(true);
 
             updateController.prenomTextField.setText(contactDTO.getPrenom());
             updateController.nomTextField.setText(contactDTO.getNom());
@@ -263,9 +265,11 @@ public class SearchResultController implements Initializable {
             updateController.typeContactChoiceBox.setDisable(true);
             updateController.idTextField.setText(String.valueOf(contactId));
             updateController.idTextField.setDisable(true);
+            updateController.updateFormeJuridiqueComboBox.setVisible(true);
+            updateController.prenomTextField.setVisible(false);
 
 
-            updateController.prenomTextField.setText(contactDTO.getFormeJuridique());
+            updateController.updateFormeJuridiqueComboBox.setValue(contactDTO.getFormeJuridique());
             updateController.nomTextField.setText(contactDTO.getRaisonSociale());
 
         }

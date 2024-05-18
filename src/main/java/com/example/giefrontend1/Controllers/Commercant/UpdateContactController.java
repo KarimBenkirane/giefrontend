@@ -67,6 +67,9 @@ public class UpdateContactController implements Initializable {
     @FXML
     public Label prenomLabel; // deviendra formeJuridique pour l'entreprise
 
+    @FXML
+    public ComboBox<String> updateFormeJuridiqueComboBox;
+
     public ObservableList<ContactDTO> contactDTOObservableList;
 
 
@@ -75,6 +78,7 @@ public class UpdateContactController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        updateFormeJuridiqueComboBox.getItems().addAll("SARL","SA","SAS");
         typeContactChoiceBox.getItems().add("Particulier");
         typeContactChoiceBox.getItems().add("Entreprise");
         typeContactChoiceBox.setValue("Particulier");
@@ -86,9 +90,13 @@ public class UpdateContactController implements Initializable {
                 if(newValue.equals("Entreprise")){
                     nomLabel.setText("Raison Sociale:");
                     prenomLabel.setText("Forme Juridique:");
+                    updateFormeJuridiqueComboBox.setVisible(true);
+                    prenomTextField.setVisible(false);
                 } else {
                     nomLabel.setText("Nom:");
                     prenomLabel.setText("Prénom:");
+                    updateFormeJuridiqueComboBox.setVisible(false);
+                    prenomTextField.setVisible(true);
                 }
             }
         });
@@ -108,6 +116,7 @@ public class UpdateContactController implements Initializable {
         String email = null;
         String telephone = null;
         String fax = null;
+        String formeJuridique = null;
 
 
         String quartier = null;
@@ -132,6 +141,7 @@ public class UpdateContactController implements Initializable {
         fax = faxTextField.getText();
         quartier = quartierTextField.getText();
         rue = rueTextField.getText();
+        formeJuridique = updateFormeJuridiqueComboBox.getValue();
 
         try {
             numeroRue = Integer.parseInt(numRueTextField.getText());
@@ -168,7 +178,7 @@ public class UpdateContactController implements Initializable {
         }
         else{
             //nom et prénom deviennent raisonSociale et formeJuridique respectivement
-            ContactDTO contactDTO = new ContactDTO(id,email,telephone,fax,adresseDTO,prenom,nom);
+            ContactDTO contactDTO = new ContactDTO(id,email,telephone,fax,adresseDTO,formeJuridique,nom);
             System.out.println(contactDTO);
             boolean status = ParserContact.updateEntreprise(contactDTO);
             if(status) {
