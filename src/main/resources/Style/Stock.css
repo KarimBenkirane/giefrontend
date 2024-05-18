@@ -1,0 +1,61 @@
+.stock_container{
+    -fx-background-color: #EEEEEE;
+}
+.stock_container TextField{
+    -fx-pref-width: 319;
+    -fx-pref-height: 19;
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 1.3em;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.stock_container TextArea{
+    -fx-pref-width: 200;
+    -fx-pref-height: 200;
+    -fx-background-color: #FFFFFF;
+    -fx-font-size: 1.3em;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.stock_container Button{
+    -fx-background-color: linear-gradient(to right,#132A13,#253F25);
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+    -fx-pref-width: 186;
+	-fx-pref-height: 38;
+	-fx-font-size: 1.5em;
+    -fx-font-family: "Calibri Light";
+    -fx-text-fill: #FFFFFF;
+}
+.stock_container Button:hover{
+    -fx-cursor: hand;
+}
+
+.stock_container ComboBox{
+    -fx-background-color: #D3D3D3;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.stock_container MenuButton{
+    -fx-background-color: #D3D3D3;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.stock_container Text{
+    -fx-font-family: "Calibri Light";
+    -fx-fill: #555555;
+}
+
+.stock_container Label{
+    -fx-font-family: "Calibri Light";
+    -fx-fill: #555555;
+}
+
+.stock_tableview Button{
+    -fx-background-color: linear-gradient(to right,#132A13,#253F25);
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+    -fx-pref-width: 80;
+	-fx-pref-height: 30;
+	-fx-font-size: 1.1em;
+    -fx-font-family: "Calibri Light";
+    -fx-text-fill: #FFFFFF;
+}

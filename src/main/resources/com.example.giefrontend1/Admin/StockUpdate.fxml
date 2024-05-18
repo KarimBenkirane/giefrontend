@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="521.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
+<AnchorPane prefHeight="521.0" prefWidth="939.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
    <children>
       <VBox alignment="CENTER" layoutY="54.0" prefHeight="443.0" prefWidth="639.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
          <children>
@@ -64,7 +64,7 @@
                   </Text>
                   <TextField fx:id="updateQtStockTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                   <TextField fx:id="updatePrixTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                  <ComboBox fx:id="updateCategorieComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="updateCategorieComboBox" prefHeight="25.0" prefWidth="283.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextArea fx:id="updateDescriptionTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                </children>
             </GridPane>

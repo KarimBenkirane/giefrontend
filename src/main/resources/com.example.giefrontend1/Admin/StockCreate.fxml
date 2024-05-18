@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="521.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
+<AnchorPane prefHeight="521.0" prefWidth="939.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
    <children>
       <VBox alignment="CENTER" layoutY="54.0" prefHeight="443.0" prefWidth="639.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
          <children>
@@ -71,7 +71,7 @@
                      </font>
                   </Text>
                   <TextField fx:id="createModeleTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                  <ComboBox fx:id="createCategorieComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ComboBox fx:id="createCategorieComboBox" prefWidth="251.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <TextArea fx:id="createDescriptionTextArea" prefHeight="200.0" prefWidth="200.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                   <TextField fx:id="createPrixTextField" prefHeight="30.0" prefWidth="236.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <TextField fx:id="createQtStockTextField" prefHeight="30.0" prefWidth="236.0" promptText="(peut être laissé vide si 0)" GridPane.columnIndex="1" GridPane.rowIndex="5" />

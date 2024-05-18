@@ -1,0 +1,49 @@
+.purchases_search TextField{
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.purchases_search{
+    -fx-background-color: #EEEEEE;
+}
+
+.purchases_search Button{
+    -fx-background-color: linear-gradient(to right,#132A13,#253F25);
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+    -fx-pref-width: 186;
+	-fx-pref-height: 38;
+	-fx-font-size: 1.5em;
+    -fx-font-family: "Calibri Light";
+    -fx-text-fill: #FFFFFF;
+}
+
+.purchases_search Button:hover{
+    -fx-cursor: hand;
+}
+
+.purchases_search ComboBox{
+    -fx-background-color: #D3D3D3;
+    -fx-effect: dropshadow(three-pass-box,#AAAAAA,3,0,0,3);
+}
+
+.purchases_search Text{
+    -fx-font-family: "Calibri Light";
+    -fx-fill: #555555;
+}
+
+.purchases_search Label{
+    -fx-font-family: "Calibri Light";
+    -fx-fill: #555555;
+}
+
+
+.date-picker .arrow-button {
+    -fx-pref-width: 30px; /* Set preferred width */
+    -fx-pref-height: 30px; /* Set preferred height */
+}
+
+.date-picker .spinner .left-button,
+.date-picker .spinner .right-button {
+    -fx-pref-width: 30px; /* Set preferred width */
+    -fx-pref-height: 30px; /* Set preferred height */
+}

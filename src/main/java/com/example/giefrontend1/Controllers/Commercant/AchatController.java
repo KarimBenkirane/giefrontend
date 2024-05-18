@@ -427,7 +427,7 @@ public class AchatController implements Initializable {
             // Create "Edit" column with buttons dynamically
             TableColumn<AchatDTO, Void> editColumn = new TableColumn<>("Modifier statut");
             editColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button editButton = new Button("Modifier statut");
+                private final Button editButton = new Button("Modifier");
 
                 {
                     editButton.setOnAction(event -> {
@@ -490,7 +490,7 @@ public class AchatController implements Initializable {
 
             TableColumn<AchatDTO, Void> reprendreColumn = new TableColumn<>("Reprendre achat");
             reprendreColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button reprendreButton = new Button("Reprendre achat");
+                private final Button reprendreButton = new Button("Reprendre");
 
                 {
                     reprendreButton.setOnAction(event -> {
@@ -736,7 +736,7 @@ public class AchatController implements Initializable {
                                         System.out.println(achatDTO);
                                         boolean status = ParserAchat.updateAchat(achatDTO, achatDTO.getId());
                                         if (status) {
-                                            showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                                            showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat confirmé avec succès !");
                                             achatController.repriseconfirmAchatBtn.setDisable(true);
                                             achatController.reprisesaveAchatBtn.setDisable(true);
                                             achatController.repriseretourBtn.setDisable(true);
@@ -1102,7 +1102,7 @@ public class AchatController implements Initializable {
                 System.out.println(achatDTO);
                 boolean status = ParserAchat.createAchat(achatDTO);
                 if (status) {
-                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat confirmé avec succès !");
                     achatController.confirmAchatBtn.setDisable(true);
                     achatController.saveAchatBtn.setDisable(true);
                     achatController.retourBtn.setDisable(true);

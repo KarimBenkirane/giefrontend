@@ -13,7 +13,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="509.0" prefWidth="727.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
+<AnchorPane prefHeight="509.0" prefWidth="727.0" styleClass="purchases_search" stylesheets="@../../Style/Purchases.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
    <children>
       <Text layoutX="16.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Recherche avancée">
          <font>
@@ -54,7 +54,7 @@
                   <Font size="22.0" />
                </font>
             </Text>
-            <ComboBox fx:id="fournisseurSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" />
+            <ComboBox fx:id="fournisseurSearchComboBox" prefHeight="25.0" prefWidth="177.0" stylesheets="@../../Style/Purchases.css" GridPane.columnIndex="1" />
             <VBox prefHeight="200.0" prefWidth="100.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <children>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="11.0">
@@ -88,7 +88,7 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="prixMinSearchTextField" prefHeight="25.0" prefWidth="152.0" />
+                        <TextField fx:id="prixMinSearchTextField" prefHeight="25.0" prefWidth="152.0" stylesheets="@../../Style/Purchases.css" />
                      </children>
                   </HBox>
                   <HBox prefHeight="73.0" prefWidth="260.0" spacing="9.0">
@@ -98,15 +98,15 @@
                               <Font size="18.0" />
                            </font>
                         </Text>
-                        <TextField fx:id="prixMaxSearchTextField" prefHeight="25.0" prefWidth="169.0" />
+                        <TextField fx:id="prixMaxSearchTextField" prefHeight="25.0" prefWidth="169.0" stylesheets="@../../Style/Purchases.css" />
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <ComboBox fx:id="statutSearchComboBox" prefHeight="25.0" prefWidth="187.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <ComboBox fx:id="statutSearchComboBox" prefHeight="25.0" prefWidth="187.0" stylesheets="@../../Style/Purchases.css" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
-      <Button fx:id="RechercherButton" layoutX="292.0" layoutY="436.0" mnemonicParsing="false" prefWidth="139.0" text="Rechercher">
+      <Button fx:id="RechercherButton" layoutX="292.0" layoutY="436.0" mnemonicParsing="false" prefWidth="139.0" stylesheets="@../../Style/Purchases.css" text="Rechercher">
          <font>
             <Font size="22.0" />
          </font>

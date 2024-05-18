@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <VBox alignment="CENTER" prefHeight="750.0" prefWidth="850.0" spacing="20.0">
+      <children>
+         <ImageView fitHeight="312.0" fitWidth="312.0">
+            <image>
+               <Image url="@../../logo.png" />
+            </image>
+         </ImageView>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bienvenue sur GIE !">
+            <font>
+               <Font size="39.0" />
+            </font>
+         </Text>
+      </children>
+   </VBox>
+</AnchorPane>

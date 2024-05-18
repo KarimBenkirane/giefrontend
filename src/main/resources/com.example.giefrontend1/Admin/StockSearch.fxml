@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="603.0" prefWidth="939.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
+<AnchorPane prefHeight="603.0" prefWidth="939.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
    <children>
       <VBox alignment="CENTER" layoutY="54.0" prefHeight="533.0" prefWidth="639.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0">
          <children>
