@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -229,6 +230,7 @@ public class SearchResultController implements Initializable {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
 
         UpdateContactController updateController = loader.getController();
         updateController.contactDTOObservableList = this.contactsTableView.getItems();
@@ -284,6 +286,7 @@ public class SearchResultController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.show();
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
         SendEmailController controller = loader.getController();
         ContactDTO contactDTO = ParserContact.getContactByID(contactId);
         assert contactDTO != null;

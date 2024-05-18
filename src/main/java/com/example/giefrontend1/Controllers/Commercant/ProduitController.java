@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -184,6 +185,7 @@ public class ProduitController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle(windowTitle);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
         stage.show();
         return loader;
     }

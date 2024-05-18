@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.swing.text.html.parser.Parser;
@@ -350,7 +351,9 @@ public class AchatController implements Initializable {
                             Scene scene = new Scene(root);
                             stage.setScene(scene);
                             stage.setTitle("Details de mon Achat");
+                            stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
                             stage.show();
+
 
                             AchatController.this.stageDetailsAchats = stage;
                         } catch (IOException e) {
@@ -446,6 +449,7 @@ public class AchatController implements Initializable {
                             AchatController.this.changeStatutStage = stage;
                             stage.setScene(scene);
                             stage.setTitle("Modifier statut achat");
+                            stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
                             stage.show();
                             achatController.updateStatusComboBox.setValue("LIVRÉ");
                             achatController.updateStatusComboBox.getItems().add("ANNULÉ");
@@ -501,6 +505,7 @@ public class AchatController implements Initializable {
                                 Stage stage  = new Stage();
                                 AchatController.this.resumeAchatStage = stage;
                                 Scene scene = new Scene(root);
+                                stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
                                 stage.setScene(scene);
                                 stage.setTitle("Reprendre mon achat");
                                 stage.show();
@@ -797,6 +802,7 @@ public class AchatController implements Initializable {
         Stage stage = new Stage();
         AchatController.this.createAchatStage = stage;
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
         stage.setScene(scene);
         stage.setTitle("Créer un nouvel achat");
         stage.show();
@@ -1120,6 +1126,7 @@ public class AchatController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Recherche avancée des achats");
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
         stage.show();
         AchatController achatController = loader.getController();
 

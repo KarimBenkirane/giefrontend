@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.net.URL;
@@ -136,6 +137,7 @@ public class SearchContactsController implements Initializable {
         Parent root = loader.load();
         SearchResultController resultController = loader.getController();
         Stage stage = new Stage();
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
         stage.setScene(new Scene(root));
         stage.setTitle("Résultat de la recherche");
         stage.setMaximized(false);

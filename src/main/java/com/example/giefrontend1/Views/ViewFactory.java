@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -104,6 +105,7 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.setTitle("GIE Entreprise");
         stage.show();
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
     }
 
 
