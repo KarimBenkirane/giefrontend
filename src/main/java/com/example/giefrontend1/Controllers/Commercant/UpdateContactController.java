@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
 public class UpdateContactController implements Initializable {
     @FXML
@@ -171,6 +172,8 @@ public class UpdateContactController implements Initializable {
                     contactDTOObservableList.setAll(SearchResultController.getUpdatedContactList());
                 }
                 showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
+                Stage stage = (Stage)typeContactChoiceBox.getScene().getWindow();
+                stage.close();
             }
             else{
                 showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
@@ -186,6 +189,8 @@ public class UpdateContactController implements Initializable {
                     contactDTOObservableList.setAll(SearchResultController.getUpdatedContactList());
                 }
                 showAlert(AlertType.INFORMATION, "Succès", "Contact modifié avec succès!");
+                Stage stage = (Stage)typeContactChoiceBox.getScene().getWindow();
+                stage.close();
             }
             else{
                 showAlert(AlertType.ERROR, "Erreur", "Erreur lors de la modification du contact");
