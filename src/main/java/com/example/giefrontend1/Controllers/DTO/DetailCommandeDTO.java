@@ -58,6 +58,13 @@ public class DetailCommandeDTO {
     public void setReduction(double reduction) {
         this.reduction = reduction;
     }
+    public long getIdProduit(){
+        return this.produitDTO.getId();
+    }
+    public double getPrixProduit(){
+        return this.produitDTO.getPrix();
+    }
+
 
     @Override
     public String toString() {

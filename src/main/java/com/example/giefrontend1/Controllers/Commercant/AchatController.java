@@ -1078,7 +1078,7 @@ public class AchatController implements Initializable {
                 dateApres = String.valueOf(localDateApres);
             }
             if(localDateAvant != null){
-                dateApres = String.valueOf(localDateAvant);
+                dateAvant = String.valueOf(localDateAvant);
             }
 
             String prixMin = achatController.prixMinSearchTextField.getText().isEmpty() ?
@@ -1103,6 +1103,7 @@ public class AchatController implements Initializable {
 
 
             List<AchatDTO> achats = ParserAchat.getAdvSearch(searchMap);
+            //System.out.println(achats);
             if(achats == null){
                 showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite.");
             }else if (achats.isEmpty()){

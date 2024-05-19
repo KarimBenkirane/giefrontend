@@ -2,13 +2,12 @@ package com.example.giefrontend1.Parser;
 
 import com.example.giefrontend1.Controllers.DTO.*;
 import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ParserCommande {
     private static final String url = "http://localhost:4567";
@@ -52,7 +51,6 @@ public class ParserCommande {
                 int client_id = clientJson.get("id").getAsInt();
                 client = ParserContact.getContactByID(client_id);
             }
-            System.out.println(client);
 
             // Parsing details de commande
             List<DetailCommandeDTO> detailsCommande = null;
@@ -74,7 +72,7 @@ public class ParserCommande {
                 }
             }
 
-            CommandeDTO commandeDTO = new CommandeDTO(numBonCommande,client,detailsCommande , dateCommande, dateReglement, totalCommande, etatCommande);
+            CommandeDTO commandeDTO = new CommandeDTO(numBonCommande,client,null , dateCommande, dateReglement, totalCommande, etatCommande);
             allCommandes.add(commandeDTO);
         }
 
@@ -140,7 +138,7 @@ public class ParserCommande {
     public static boolean createCommande(CommandeDTO newCommande) {
         Gson gson = new Gson();
         String json = gson.toJson(newCommande);
-        System.out.println(json);
+        //System.out.println(json);
 
         RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder()
@@ -154,6 +152,32 @@ public class ParserCommande {
             e.printStackTrace();
             return false;
         }
+    }
+    public static List<CommandeDTO> getAdvSearch(Map<String, Object> searchMap) {
+
+        Gson gson = new Gson();
+        String json = gson.toJson(searchMap);
+        System.out.println(json);
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/commandes/advSearch")
+                .post(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                // Read response body and parse it
+                String responseBody = response.body().string();
+                return parseAllCommandes(responseBody);
+            } else {
+                System.err.println("Error: " + response.code() + " " + response.message());
+                return null;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
     }
 
 

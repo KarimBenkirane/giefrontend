@@ -22,7 +22,7 @@ public class CommandeDTO {
         this.etatCommande=etatCommande1;
 
     }
-    public CommandeDTO(ContactDTO client,List<DetailCommandeDTO> detailsCommande,String dateCommande1,String dateReglement1,double totalCommande1,String etatCommande1){
+    public CommandeDTO(ContactDTO client, List<DetailCommandeDTO> detailsCommande, String dateCommande1, String dateReglement1, double totalCommande1, String etatCommande1){
         this.numBonCommande=numBonCommande;
         this.detailsCommande=new ArrayList<>();
         this.client=client;
@@ -94,5 +94,23 @@ public class CommandeDTO {
 
     public List<DetailCommandeDTO> getDetailsCommande() {
         return detailsCommande;
+    }
+
+    @Override
+    public String toString() {
+        return "CommandeDTO{" +
+                "dateCommande='" + dateCommande + '\'' +
+                ", dateReglement='" + dateReglement + '\'' +
+                ", etatCommande='" + etatCommande + '\'' +
+                ", detailsCommande=" + detailsCommande +
+                ", client=" + client +
+                ", idClient=" + idClient +
+                ", totalCommande=" + totalCommande +
+                ", numBonCommande=" + numBonCommande +
+                '}';
+    }
+
+    public long getClientId() {
+        return client != null ? client.getId() : 0;
     }
 }
