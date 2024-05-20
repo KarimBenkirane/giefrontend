@@ -1,22 +1,34 @@
 package com.example.giefrontend1.Controllers.Vente;
 
+import com.example.giefrontend1.Controllers.Commercant.AchatController;
 import com.example.giefrontend1.Controllers.DTO.*;
+import com.example.giefrontend1.Parser.ParserAchat;
 import com.example.giefrontend1.Parser.ParserCommande;
 import com.example.giefrontend1.Parser.ParserContact;
 import com.example.giefrontend1.Parser.ParserProduit;
 
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Stage;
+import javafx.util.Callback;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
@@ -58,10 +70,15 @@ public class CommandeController implements Initializable {
     public TableColumn<CommandeDTO, Integer> qte_clmn_DC;
     @FXML
     public TableColumn<CommandeDTO, Double> prix_prod_clm;
+    public ComboBox<String> updateStatusComboBox;
+    public Button updateStatusButton;
+    public TableColumn editColumn;
     //
     private List<DetailCommandeDTO> detailsCommandes = new ArrayList<>();
     // list all commande attributes
+    @FXML
     public TableColumn<CommandeDTO, Long> NumClient_tblClm;
+    @FXML
     public TableColumn<CommandeDTO, Long> NumBonCommande_tblClm;
     public TableColumn<CommandeDTO, String> DateCommande_tblmd;
     public TableColumn<CommandeDTO, String> DateReglement_tblClm;
@@ -83,25 +100,83 @@ public class CommandeController implements Initializable {
         //setupDCTableView();
     }
 
-    private void setupTableView() {
-        // Call ParserCommande to get all commands
-        List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
+        // Create "Edit" column with buttons dynamically
+        private void setupTableView() {
+            // Call ParserCommande to get all commands
+            List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
+            CommandeController commandeController = new CommandeController();
 
-        // Convert the list to ObservableList for the TableView
-        ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
+            // Convert the list to ObservableList for the TableView
+            ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
 
-        // Bind the properties of CommandeDTO to the TableView columns
-        NumClient_tblClm.setCellValueFactory(new PropertyValueFactory<>("clientId"));
-        NumBonCommande_tblClm.setCellValueFactory(new PropertyValueFactory<>("numBonCommande"));
-        DateCommande_tblmd.setCellValueFactory(new PropertyValueFactory<>("dateCommande"));
-        DateReglement_tblClm.setCellValueFactory(new PropertyValueFactory<>("dateReglement"));
-        PrixTotal_tblClm.setCellValueFactory(new PropertyValueFactory<>("totalCommande"));
-        EtatCommande_tblClmn.setCellValueFactory(new PropertyValueFactory<>("etatCommande"));
+            // Bind the properties of CommandeDTO to the TableView columns
+            // Bind the properties of CommandeDTO to the TableView columns
+            NumBonCommande_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getNumBonCommande()).asObject());
+            NumClient_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getClientId()).asObject());
+            DateCommande_tblmd.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateCommande()));
+            DateReglement_tblClm.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateReglement()));
+            PrixTotal_tblClm.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalCommande()).asObject());
+            EtatCommande_tblClmn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEtatCommande()));
 
+            // Set the TableView data
+            tableView.setItems(observableList);
 
-        // Set the TableView data
-        tableView.setItems(observableList);
-    }private void setupDCTableView() {
+            TableColumn<CommandeDTO, Void> editColumn = new TableColumn<>("Modifier statut");
+            editColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button editButton = new Button("Info statut");
+                private final ChoiceBox<String> updateStatusChoiceBox = new ChoiceBox<>();
+
+                {
+                    editButton.setOnAction(event -> {
+                        showAlert(Alert.AlertType.ERROR, "Erreur", "Vous ne pouvez pas modifier le statut de cette commande !");
+                    });
+                    updateStatusChoiceBox.setOnAction(event -> {
+                        String newStatus = updateStatusChoiceBox.getValue();
+                        CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
+                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("INITIALISÉ")) {
+                            selectedCommande.setEtatCommande(newStatus);
+                            boolean status = ParserCommande.updateCommande(selectedCommande, selectedCommande.getNumBonCommande());
+                            if (status) {
+                                showAlert(Alert.AlertType.INFORMATION, "Succès", "Statut modifié avec succès !");
+                                tableView.getItems().clear();
+                                tableView.getItems().setAll(ParserCommande.getAllCommandes());
+                                tableView.refresh();
+                            } else {
+                                showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de la modification du statut.");
+                            }
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
+                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("INITIALISÉ")) {
+                            updateStatusChoiceBox.getItems().addAll("ANNULÉ", "LIVRÉ");
+                            setGraphic(updateStatusChoiceBox);
+                        } else {
+                            setGraphic(editButton);
+                        }
+                    }
+                }
+            });
+
+            tableView.getColumns().add(editColumn);
+        }
+
+            private void showAlert(Alert.AlertType alertType, String title, String message) {
+                Alert alert = new Alert(alertType);
+                alert.setTitle(title);
+                alert.setHeaderText(null);
+                alert.setContentText("vous ne pouvez pas modifier le statut d'une commande Annuler ou Livrer");
+                alert.showAndWait();
+            }
+
+        private void setupDCTableView() {
         List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
 
         // Convert the list to ObservableList for the TableView

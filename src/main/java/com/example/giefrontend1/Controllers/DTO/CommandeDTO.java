@@ -96,6 +96,10 @@ public class CommandeDTO {
         return detailsCommande;
     }
 
+    public void setEtatCommande(String etatCommande) {
+        this.etatCommande = etatCommande;
+    }
+
     @Override
     public String toString() {
         return "CommandeDTO{" +
@@ -113,4 +117,6 @@ public class CommandeDTO {
     public long getClientId() {
         return client != null ? client.getId() : 0;
     }
+
+
 }

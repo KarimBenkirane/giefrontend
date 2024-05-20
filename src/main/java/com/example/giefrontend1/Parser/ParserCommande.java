@@ -179,6 +179,24 @@ public class ParserCommande {
         }
 
     }
+    public static boolean updateCommande(CommandeDTO commandeDTO, long id) {
+        Gson gson = new Gson();
+        String json = gson.toJson(commandeDTO);
+        System.out.println(json);
+
+        RequestBody body = RequestBody.create(MediaType.parse("application/json"), json);
+        Request request = new Request.Builder()
+                .url(url + "/api/commandes/update/"+id)
+                .put(body)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            return response.isSuccessful();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 
