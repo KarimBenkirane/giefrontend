@@ -1,0 +1,83 @@
+/* General TableView Styling */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 1px;
+    -fx-font-family: "Arial";
+    -fx-font-size: 14px;
+}
+
+/* Column Header Styling */
+.table-view .column-header-background {
+    -fx-background-color: #3498db;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: grey;
+    -fx-font-weight: bold;
+}
+
+/* Row Styling */
+.table-view .cell {
+    -fx-padding: 8px;
+    -fx-border-color: #dcdcdc;
+    -fx-border-width: 0 0 1px 0;
+}
+
+/* Alternating Row Colors */
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:even {
+    -fx-background-color: white;
+}
+
+/* Selected Row Styling */
+.table-row-cell:filled:selected, .table-row-cell:focused:selected {
+    -fx-background-color: #2980b9;
+    -fx-text-fill: white;
+}
+
+.table-view .cell:selected {
+    -fx-background-color: darkblue;
+}
+
+/* Hovered Row Styling */
+.table-row-cell:hover {
+    -fx-background-color: #ecf0f1;
+}
+
+/* Button Styling */
+.table-view .button {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-border-radius: 3px;
+    -fx-background-radius: 3px;
+    -fx-padding: 5px 10px;
+}
+
+.table-view .button:hover {
+    -fx-background-color: #2980b9;
+}
+
+/* Tooltip Styling */
+.table-view .tooltip {
+    -fx-background-color: #3498db;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 10px;
+}
+
+/* Header Border */
+.table-view .column-header .label {
+    -fx-border-color: transparent transparent #2980b9 transparent;
+    -fx-border-width: 0 0 3px 0;
+}
+
+/* Focus Colors */
+.table-view .focused {
+    -fx-border-color: #3498db;
+    -fx-border-width: 2px;
+}

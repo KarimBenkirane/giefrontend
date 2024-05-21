@@ -1,0 +1,31 @@
+.tab-pane {
+    -fx-tab-max-height: 40px;
+}
+
+.tab {
+    -fx-background-color: #f8f9fa; /* Couleur de fond */
+    -fx-background-insets: 0;
+    -fx-padding: 10 20; /* Espacement intérieur */
+}
+
+.tab:hover {
+    -fx-background-color: #e9ecef; /* Couleur de fond au survol */
+}
+
+.tab:selected {
+    -fx-background-color: #007bff; /* Couleur de fond lorsqu'actif */
+    -fx-text-fill: white; /* Couleur du texte */
+}
+
+.tab-label {
+    -fx-font-size: 14px; /* Taille du texte */
+    -fx-font-weight: bold; /* Gras */
+}
+
+.tab-pane .tab-header-area {
+    -fx-padding: 0 20;
+}
+
+.tab-pane .tab-content-area {
+    -fx-padding: 20;
+}

@@ -117,6 +117,4 @@ public class CommandeDTO {
     public long getClientId() {
         return client != null ? client.getId() : 0;
     }
-
-
 }

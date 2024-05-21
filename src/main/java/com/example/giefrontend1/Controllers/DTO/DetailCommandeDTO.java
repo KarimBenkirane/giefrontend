@@ -5,16 +5,16 @@ public class DetailCommandeDTO {
     private ProduitDTO produitDTO;
     private int qteCommander;
     private double prixCommande,reduction;
-    public DetailCommandeDTO(ProduitDTO produitDTO,int qteCommante,double prixCommande,double reduction, int id){
+    public DetailCommandeDTO(ProduitDTO produitDTO,int qteCommander,double prixCommande,double reduction, int id){
         this.produitDTO=produitDTO;
-        this.qteCommander=qteCommante;
+        this.qteCommander=qteCommander;
         this.prixCommande=prixCommande;
         this.reduction=reduction;
         this.id=id;
     }
-    public DetailCommandeDTO(ProduitDTO produitDTO,int qteCommante,double prixCommande,double reduction){
+    public DetailCommandeDTO(ProduitDTO produitDTO,int qteCommander,double prixCommande,double reduction){
         this.produitDTO=produitDTO;
-        this.qteCommander=qteCommante;
+        this.qteCommander=qteCommander;
         this.prixCommande=prixCommande;
         this.reduction=reduction;
     }
@@ -71,9 +71,14 @@ public class DetailCommandeDTO {
         return "DetailCommandeDTO{" +
                 "id=" + id +
                 ", produitDTO=" + produitDTO +
-                ", qteCommante=" + qteCommander +
+                ", qteCommander=" + qteCommander +
                 ", prixCommande=" + prixCommande +
                 ", reduction=" + reduction +
                 '}';
     }
+
+    public ProduitDTO getProduitObjet() {
+        return this.produitDTO;
+    }
+
 }

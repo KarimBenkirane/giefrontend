@@ -57,22 +57,26 @@ public class CommandeController implements Initializable {
     public Tab Search_commande;
     public TabPane mainTabPane;
     @FXML
-    public TableView<CommandeDTO> DetailCommandeTblView;
+    public TableView<DetailCommandeDTO> DetailCommandeTblView;
     @FXML
-    public TableColumn<CommandeDTO, Integer> detailCommande_ID;
+    public TableColumn<DetailCommandeDTO, Integer> detailCommande_ID;
     @FXML
-    public TableColumn<CommandeDTO, Integer> Commande_ID;
+    public TableColumn<DetailCommandeDTO, Long> Produit_ID;
     @FXML
-    public TableColumn<CommandeDTO, Integer> Produit_ID;
+    public TableColumn<DetailCommandeDTO, Double> remise_clmn;
     @FXML
-    public TableColumn<CommandeDTO, Double> remise_clmn;
+    public TableColumn<DetailCommandeDTO, Integer> qte_clmn_DC;
     @FXML
-    public TableColumn<CommandeDTO, Integer> qte_clmn_DC;
-    @FXML
-    public TableColumn<CommandeDTO, Double> prix_prod_clm;
+    public TableColumn<DetailCommandeDTO, Double> prix_prod_clm;
+
     public ComboBox<String> updateStatusComboBox;
     public Button updateStatusButton;
     public TableColumn editColumn;
+    public Tab detailCommandeTab;
+    public TableColumn<DetailCommandeDTO,String> Commande_id;
+    public Label StatutLabel;
+    public DatePicker DateCommandeField;
+    public DatePicker DateReglementField;
     //
     private List<DetailCommandeDTO> detailsCommandes = new ArrayList<>();
     // list all commande attributes
@@ -97,30 +101,113 @@ public class CommandeController implements Initializable {
         populateProduitChoiceBox();
         initQuantiterSpinner();
         initializeStatutComboBox();
-        //setupDCTableView();
     }
 
-        // Create "Edit" column with buttons dynamically
-        private void setupTableView() {
-            // Call ParserCommande to get all commands
-            List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
-            CommandeController commandeController = new CommandeController();
+    @FXML
+    public void refreshTableView() {
+        tableView.getItems().clear();
+        tableView.getItems().addAll(ParserCommande.getAllCommandes());
+    }
 
-            // Convert the list to ObservableList for the TableView
-            ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
+    public void showCommandeDetails(long id) {
+        // Obtention de tous les détails de la commande par ID
+        List<DetailCommandeDTO> detailCommandeDTOS = ParserCommande.getDetailsCommandesByID(id);
+        // Création de la liste observable pour les détails de commande
+        ObservableList<DetailCommandeDTO> observableList = FXCollections.observableArrayList(detailCommandeDTOS);
 
-            // Bind the properties of CommandeDTO to the TableView columns
-            // Bind the properties of CommandeDTO to the TableView columns
-            NumBonCommande_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getNumBonCommande()).asObject());
-            NumClient_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getClientId()).asObject());
-            DateCommande_tblmd.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateCommande()));
-            DateReglement_tblClm.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateReglement()));
-            PrixTotal_tblClm.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalCommande()).asObject());
-            EtatCommande_tblClmn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEtatCommande()));
+        // Configuration des cellules de la TableView
+        detailCommande_ID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        Produit_ID.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>(cellData.getValue().getProduitDTO().getId()));
+        qte_clmn_DC.setCellValueFactory(new PropertyValueFactory<>("qteCommante"));
 
-            // Set the TableView data
-            tableView.setItems(observableList);
+        // Configuration de la colonne pour afficher les prix
+        prix_prod_clm.setCellValueFactory(new PropertyValueFactory<>("reduction"));
 
+        // Configuration de la colonne pour afficher les remises en pourcentage
+        remise_clmn.setCellValueFactory(new PropertyValueFactory<>("prixCommande"));
+        remise_clmn.setCellFactory(column -> new TableCell<DetailCommandeDTO, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item + " %");
+                }
+            }
+        });
+
+        Commande_id.setCellValueFactory(cellData -> {
+            ProduitDTO produitDTO = cellData.getValue().getProduitObjet();
+            if (produitDTO != null) {
+                return new SimpleStringProperty(produitDTO.getMarque() + " " + produitDTO.getModele());
+            } else {
+                return new SimpleStringProperty("");
+            }
+        });
+
+        // Mise à jour des données dans la TableView
+        DetailCommandeTblView.setItems(observableList);
+
+        detailCommande_ID.setMinWidth(100);
+        Produit_ID.setMinWidth(100);
+        remise_clmn.setMinWidth(100);
+        qte_clmn_DC.setMinWidth(100);
+        prix_prod_clm.setMinWidth(100);
+        Commande_id.setMinWidth(100);
+
+        DetailCommandeTblView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+    }
+
+    private void setupTableView() {
+        List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
+        ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
+
+        NumBonCommande_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getNumBonCommande()).asObject());
+        NumClient_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getClientId()).asObject());
+        DateCommande_tblmd.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateCommande()));
+        DateReglement_tblClm.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateReglement()));
+        PrixTotal_tblClm.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalCommande()).asObject());
+        EtatCommande_tblClmn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEtatCommande()));
+
+        tableView.setItems(observableList);
+
+        // Vérifiez si les colonnes existent déjà pour éviter les doublons
+        boolean detailsColumnExists = tableView.getColumns().stream().anyMatch(col -> col.getText().equals("Details"));
+        boolean editColumnExists = tableView.getColumns().stream().anyMatch(col -> col.getText().equals("Modifier statut"));
+
+        if (!detailsColumnExists) {
+            TableColumn<CommandeDTO, Void> detailsColumn = new TableColumn<>("Details");
+            detailsColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button detailsButton = new Button("Details");
+
+                {
+                    detailsButton.setOnAction(event -> {
+                        CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
+                        if (selectedCommande != null) {
+                            showCommandeDetails(selectedCommande.getNumBonCommande());
+                            mainTabPane.getSelectionModel().select(detailCommandeTab);
+                        }
+                    });
+                }
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(detailsButton);
+                    }
+                }
+            });
+
+            tableView.getColumns().add(detailsColumn);
+        }
+
+        if (!editColumnExists) {
             TableColumn<CommandeDTO, Void> editColumn = new TableColumn<>("Modifier statut");
             editColumn.setCellFactory(param -> new TableCell<>() {
                 private final Button editButton = new Button("Info statut");
@@ -128,7 +215,7 @@ public class CommandeController implements Initializable {
 
                 {
                     editButton.setOnAction(event -> {
-                        showAlert(Alert.AlertType.ERROR, "Erreur", "Vous ne pouvez pas modifier le statut de cette commande !");
+                        showAlert(Alert.AlertType.WARNING, "Erreur", "Vous ne pouvez pas modifier le statut de cette commande !");
                     });
                     updateStatusChoiceBox.setOnAction(event -> {
                         String newStatus = updateStatusChoiceBox.getValue();
@@ -156,7 +243,7 @@ public class CommandeController implements Initializable {
                     } else {
                         CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
                         if (selectedCommande != null && selectedCommande.getEtatCommande().equals("INITIALISÉ")) {
-                            updateStatusChoiceBox.getItems().addAll("ANNULÉ", "LIVRÉ");
+                            updateStatusChoiceBox.getItems().setAll("ANNULÉ", "LIVRÉ");
                             setGraphic(updateStatusChoiceBox);
                         } else {
                             setGraphic(editButton);
@@ -168,41 +255,38 @@ public class CommandeController implements Initializable {
             tableView.getColumns().add(editColumn);
         }
 
-            private void showAlert(Alert.AlertType alertType, String title, String message) {
-                Alert alert = new Alert(alertType);
-                alert.setTitle(title);
-                alert.setHeaderText(null);
-                alert.setContentText("vous ne pouvez pas modifier le statut d'une commande Annuler ou Livrer");
-                alert.showAndWait();
-            }
+        NumClient_tblClm.setPrefWidth(100);
+        NumBonCommande_tblClm.setPrefWidth(100);
+        DateCommande_tblmd.setPrefWidth(150); // Colonnes de date peuvent nécessiter plus d'espace
+        DateReglement_tblClm.setPrefWidth(150);
+        PrixTotal_tblClm.setPrefWidth(100);
+        EtatCommande_tblClmn.setPrefWidth(100);
 
-        private void setupDCTableView() {
-        List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
-
-        // Convert the list to ObservableList for the TableView
-        ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
-
-        // Bind the properties of CommandeDTO to the TableView columns
-        detailCommande_ID.setCellValueFactory(new PropertyValueFactory<>("id"));
-        Commande_ID.setCellValueFactory(new PropertyValueFactory<>("commandeID"));
-        Produit_ID.setCellValueFactory(new PropertyValueFactory<>("produitID"));
-        remise_clmn.setCellValueFactory(new PropertyValueFactory<>("remise"));
-        qte_clmn_DC.setCellValueFactory(new PropertyValueFactory<>("qteCommander"));
-        prix_prod_clm.setCellValueFactory(new PropertyValueFactory<>("prixCommande"));
-
-
-        // Set the TableView data
-        DetailCommandeTblView.setItems(observableList);
+        // Activer le redimensionnement automatique des colonnes
+        tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
 
     public void onCreateCommande(ActionEvent actionEvent) {
-        ContactDTO selectedClient = ClientChoiceBox.getValue();
-        ProduitDTO selectedProduit = produitChoicebox.getValue();
+        DisplayContact selectedDisplayContact = (DisplayContact) ClientChoiceBox.getValue();
+        ContactDTO selectedClient = selectedDisplayContact.getContact();
+        //ystem.out.println(selectedClient);
+
+
+        ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
+        ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
+
         int quantite = QuantiterSpinner.getValue();
         double reduction = !ReductionTextField.getText().isEmpty() ? Double.parseDouble(ReductionTextField.getText()) : 0.0;
-        String dateCommandeSQL = String.valueOf(DateCoammndeFiel.getValue());
-        String dateReglementSQL = String.valueOf(DateRegelemtField.getValue());
+        String dateCommandeSQL = String.valueOf(DateCommandeField.getValue());
+        String dateReglementSQL = String.valueOf(DateReglementField.getValue());
         double prixProduit = selectedProduit.getPrix();
         double prixTotal = quantite * prixProduit;
         // Appliquer la réduction si elle est saisie
@@ -214,6 +298,7 @@ public class CommandeController implements Initializable {
 
         // Créer un nouveau détail de commande avec les valeurs récupérées
         DetailCommandeDTO detailCommande = new DetailCommandeDTO(selectedProduit, quantite, selectedProduit.getPrix(), reduction);
+        //System.out.println(detailCommande);
 
         // Ajouter le détail de commande à la liste
         detailsCommande.add(detailCommande);
@@ -233,23 +318,73 @@ public class CommandeController implements Initializable {
             confirmationMsg.setText("Commande créée avec succès !");
             this.tableView.getItems().setAll(ParserCommande.getAllCommandes());
             confirmationMsg.setTextFill(Color.GREEN);
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Commande Cree avec succès !");
+
         } else {
             confirmationMsg.setText("Erreur lors de la création de la commande.");
             confirmationMsg.setTextFill(Color.RED);
+            showAlert(Alert.AlertType.ERROR, "ERROR", "Un Probleme est survenu lors de la creation de la Commande!");
+
         }
 
-        ConfirmationMsg.setGraphic(confirmationMsg);
+        StatutLabel.setGraphic(confirmationMsg);
     }
 
     private void populateClientChoiceBox() {
         try {
-            List<ContactDTO> contacts = getAllContacts();
-            ClientChoiceBox.getItems().addAll(contacts);
-            clientSearchComboBox.getItems().addAll(contacts);
+            List<ContactDTO> contacts = new ArrayList<>(); // Initialisez une nouvelle liste de ContactDTO
+            for (ContactDTO contact : getAllContacts()) {
+                String displayString;
+                // Afficher seulement une partie du contact sous forme de String
+                if (contact.getRaisonSociale() == null) {
+                    displayString = contact.getPrenom() + " " + contact.getNom();
+                } else {
+                    displayString = contact.getRaisonSociale() + " - " + "("+contact.getFormeJuridique()+ ")";
+                }
+                // Ajouter l'objet DisplayContact à la ChoiceBox
+                ClientChoiceBox.getItems().add(new DisplayContact(contact, displayString));
+                clientSearchComboBox.getItems().add(new DisplayContact(contact, displayString));
+                // Ajouter l'objet ContactDTO extrait de DisplayContact à la liste de contacts
+                contacts.add(contact);
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+        }
+    }private void populateProduitChoiceBox() {
+        try {
+            List<ProduitDTO> produits = getAllProduits();
+            for (ProduitDTO produit : produits) {
+                String displayString;
+                displayString = produit.getMarque() + " " + produit.getModele();
+                produitChoicebox.getItems().add(new ProduitDisplay(produit,displayString));
+            }
         } catch (Exception e) {
             e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
         }
     }
+
+
+    class DisplayContact extends ContactDTO {
+        private ContactDTO contact;
+        private String displayString;
+
+        public DisplayContact(ContactDTO contact, String displayString) {
+            this.contact = contact;
+            this.displayString = displayString;
+        }
+
+        public ContactDTO getContact() {
+            return contact;
+        }
+
+        @Override
+        public String toString() {
+            return displayString;
+        }
+    }
+
+
+
 
     // Méthode pour récupérer tous les contacts depuis la base de données
     private List<ContactDTO> getAllContacts() {
@@ -263,14 +398,27 @@ public class CommandeController implements Initializable {
         return contacts;
     }
 
-    private void populateProduitChoiceBox() {
-        try {
-            List<ProduitDTO> produits = getAllProduits();
-            produitChoicebox.getItems().addAll(produits);
-        } catch (Exception e) {
-            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+
+
+    class ProduitDisplay extends ProduitDTO{
+        private ProduitDTO produit;
+        private String displayString;
+
+        public ProduitDisplay(ProduitDTO produit, String displayString) {
+            this.produit = produit;
+            this.displayString = displayString;
+        }
+
+        public ProduitDTO getProduit() {
+            return produit;
+        }
+
+        @Override
+        public String toString() {
+            return displayString;
         }
     }
+
 
     // Méthode pour récupérer tous les contacts depuis la base de données
     private List<ProduitDTO> getAllProduits() {
@@ -285,7 +433,7 @@ public class CommandeController implements Initializable {
     }
 
     private void initializeStatutComboBox() {
-        statutSearchComboBox.getItems().addAll(Arrays.asList("INITIALISÉ", "ANNULÉ", "CONFIRMÉ", "LIVRÉ"));
+        statutSearchComboBox.getItems().addAll(Arrays.asList("INITIALISÉ", "ANNULÉ", "LIVRÉ"));
     }
 
     private void initQuantiterSpinner() {
@@ -297,23 +445,30 @@ public class CommandeController implements Initializable {
 
     @FXML
     public void getTotalPrice(ActionEvent actionEvent) {
-        ProduitDTO selectedProduit = produitChoicebox.getValue();
+        ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
+        ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
+
         if (selectedProduit != null) {
             int quantite = QuantiterSpinner.getValue();
-            double prixProduit = selectedProduit.getPrix(); // Supposons que le prix soit stocké dans ProduitDTO
+            double prixProduit = selectedProduit.getPrix();
             double prixTotal = quantite * prixProduit;
 
-            // Appliquer la réduction si elle est saisie
+            // Vérifier si ReductionTextField contient une valeur parsable en double
             if (!ReductionTextField.getText().isEmpty()) {
-                double reductionPourcentage = Double.parseDouble(ReductionTextField.getText());
-                // Convertir la réduction en pourcentage en une valeur absolue
-                double reductionValeur = (reductionPourcentage / 100) * prixTotal;
-                prixTotal -= reductionValeur;
+                try {
+                    double reductionPourcentage = Double.parseDouble(ReductionTextField.getText());
+                    // Convertir la réduction en pourcentage en une valeur absolue
+                    double reductionValeur = (reductionPourcentage / 100) * prixTotal;
+                    prixTotal -= reductionValeur;
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
 
             ShowTotalPriceField.setText(String.valueOf(prixTotal));
         }
     }
+
 
     public void onShowAllCommande(Event event) {
         this.tableView.getItems().addAll(ParserCommande.getAllCommandes());
@@ -364,6 +519,7 @@ public class CommandeController implements Initializable {
         searchMap.put("prixMax", prixMax);
 
         List<CommandeDTO> commandes = ParserCommande.getAdvSearch(searchMap);
+        //System.out.println(commandes);
 
         // Convertir la liste en ObservableList
         ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);

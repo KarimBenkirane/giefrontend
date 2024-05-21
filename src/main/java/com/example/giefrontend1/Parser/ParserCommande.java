@@ -198,6 +198,43 @@ public class ParserCommande {
         }
     }
 
+    public static List<DetailCommandeDTO> getDetailsCommandesByID(long id) {
+        String body = null;
+        List<DetailCommandeDTO> detailCommandeDTO = null;
+
+        Request request = new Request.Builder()
+                .url(url + "/api/commandes/get/detailscommandes/"+id)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            body = response.body().string();
+            detailCommandeDTO = parseDetailsCommandesByID(body);
+            return detailCommandeDTO;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
+
+    private static List<DetailCommandeDTO> parseDetailsCommandesByID(String body) {
+        JsonArray detailsCommandeJson = JsonParser.parseString(body).getAsJsonArray();
+        List<DetailCommandeDTO> detailCommandeDTO = null;
+        detailCommandeDTO = new ArrayList<>();
+        for(int j = 0 ; j < detailsCommandeJson.size() ; j++){
+            JsonObject detailJson = detailsCommandeJson.get(j).getAsJsonObject();
+            int detail_id = detailJson.get("id").getAsInt();
+            int qteAchetee = detailJson.get("qteCommande").getAsInt();
+            double prixAchat = detailJson.get("prixCommande").getAsDouble();
+            double reduction = detailJson.get("reduction").getAsDouble();
+            JsonObject produitJson = detailJson.get("produitObjet").getAsJsonObject();
+            int produit_id = produitJson.get("id").getAsInt();
+            ProduitDTO produitDTO = ParserProduit.getProduitByID(produit_id);
+            detailCommandeDTO.add(new DetailCommandeDTO(produitDTO,qteAchetee,prixAchat,reduction,detail_id));
+
+        }
+        return detailCommandeDTO;
+    }
+
 
 
 }
