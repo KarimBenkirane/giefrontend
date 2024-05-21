@@ -7,12 +7,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
+<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.AchatController">
    <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mes achats" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <font>
          <Font size="23.0" />
       </font></Text>
-   <TableView fx:id="mesAchatsTableView" layoutX="3.0" layoutY="165.0" prefHeight="517.0" prefWidth="844.0">
+   <TableView fx:id="mesAchatsTableView" layoutX="3.0" layoutY="165.0" prefHeight="517.0" prefWidth="844.0" styleClass="stock_tableview" stylesheets="@../../Style/Stock.css">
      <columns>
        <TableColumn fx:id="idAchatColumn" prefWidth="75.0" text="ID" />
        <TableColumn fx:id="fournisseurAchatColumn" prefWidth="160.0" text="Fournisseur" />
@@ -29,17 +29,27 @@
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="596.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
+   <Text layoutX="604.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
       <font>
          <Font size="15.0" />
       </font>
    </Text>
-   <Button fx:id="newAchatBtn" layoutX="39.0" layoutY="115.0" mnemonicParsing="false" onAction="#onCreateAchat" prefHeight="38.0" prefWidth="186.0" text="Nouvel achat">
+   <Button fx:id="newAchatBtn" layoutX="39.0" layoutY="119.0" mnemonicParsing="false" onAction="#onCreateAchat" prefHeight="38.0" prefWidth="186.0" text="Nouvel achat">
       <font>
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="87.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nouvel achat">
+   <Text layoutX="87.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nouvel achat">
+      <font>
+         <Font size="15.0" />
+      </font>
+   </Text>
+   <Button fx:id="refreshAchatsBtn" layoutX="325.0" layoutY="119.0" mnemonicParsing="false" onAction="#onRefreshAchats" prefHeight="38.0" prefWidth="186.0" text="Rafraîchir">
+      <font>
+         <Font size="17.0" />
+      </font>
+   </Button>
+   <Text layoutX="330.0" layoutY="111.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rafraîchir la liste des achats">
       <font>
          <Font size="15.0" />
       </font>

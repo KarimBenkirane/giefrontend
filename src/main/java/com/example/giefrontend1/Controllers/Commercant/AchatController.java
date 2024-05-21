@@ -21,6 +21,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import javax.swing.text.html.parser.Parser;
@@ -31,6 +32,8 @@ import java.util.*;
 
 public class AchatController implements Initializable {
 
+    private Stage changeStatutStage;
+    private Stage resumeAchatStage;
     private AchatDTO selectedAchatToResume;
     private AchatDTO selectedAchatToUpdateStatus;
     private Stage stageDetailsAchats = null;
@@ -299,6 +302,7 @@ public class AchatController implements Initializable {
 
     @FXML
     public ComboBox<String> updateStatusComboBox;
+    private Stage createAchatStage;
 
 
     public AchatController() {
@@ -347,7 +351,9 @@ public class AchatController implements Initializable {
                             Scene scene = new Scene(root);
                             stage.setScene(scene);
                             stage.setTitle("Details de mon Achat");
+                            stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
                             stage.show();
+
 
                             AchatController.this.stageDetailsAchats = stage;
                         } catch (IOException e) {
@@ -421,7 +427,7 @@ public class AchatController implements Initializable {
             // Create "Edit" column with buttons dynamically
             TableColumn<AchatDTO, Void> editColumn = new TableColumn<>("Modifier statut");
             editColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button editButton = new Button("Modifier statut");
+                private final Button editButton = new Button("Modifier");
 
                 {
                     editButton.setOnAction(event -> {
@@ -440,8 +446,10 @@ public class AchatController implements Initializable {
                             AchatController achatController = loader.getController();
                             Stage stage = new Stage();
                             Scene scene = new Scene(root);
+                            AchatController.this.changeStatutStage = stage;
                             stage.setScene(scene);
                             stage.setTitle("Modifier statut achat");
+                            stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
                             stage.show();
                             achatController.updateStatusComboBox.setValue("LIVRÉ");
                             achatController.updateStatusComboBox.getItems().add("ANNULÉ");
@@ -454,6 +462,7 @@ public class AchatController implements Initializable {
                                 boolean status = ParserAchat.updateAchat(AchatController.this.selectedAchatToUpdateStatus,AchatController.this.selectedAchatToUpdateStatus.getId());
                                 if(status){
                                     showAlert(Alert.AlertType.INFORMATION,"Succès","Statut modifié avec succès !");
+                                    AchatController.this.changeStatutStage.close();
                                     AchatController.this.mesAchatsTableView.getItems().clear();
                                     AchatController.this.mesAchatsTableView.getItems().setAll(ParserAchat.getAllAchats());
                                     AchatController.this.mesAchatsTableView.refresh();
@@ -481,7 +490,7 @@ public class AchatController implements Initializable {
 
             TableColumn<AchatDTO, Void> reprendreColumn = new TableColumn<>("Reprendre achat");
             reprendreColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button reprendreButton = new Button("Reprendre achat");
+                private final Button reprendreButton = new Button("Reprendre");
 
                 {
                     reprendreButton.setOnAction(event -> {
@@ -494,7 +503,9 @@ public class AchatController implements Initializable {
                             try {
                                 Parent root = loader.load();
                                 Stage stage  = new Stage();
+                                AchatController.this.resumeAchatStage = stage;
                                 Scene scene = new Scene(root);
+                                stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
                                 stage.setScene(scene);
                                 stage.setTitle("Reprendre mon achat");
                                 stage.show();
@@ -689,6 +700,7 @@ public class AchatController implements Initializable {
                                         achatController.reprisesaveAchatBtn.setDisable(true);
                                         achatController.repriseretourBtn.setDisable(true);
                                         achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                        AchatController.this.resumeAchatStage.close();
                                         AchatController.this.mesAchatsTableView.getItems().clear();
                                         AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                                         AchatController.this.mesAchatsTableView.refresh();
@@ -699,33 +711,46 @@ public class AchatController implements Initializable {
 //
 //
                                 achatController.repriseconfirmAchatBtn.setOnAction(evt -> {
-                                    AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
-                                    double prix_total = 0;
-                                    for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise){
-                                        ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
-                                        long produit_id = produitDTO.getId();
-                                        int qteAchetee = detailAchatDTO.getQteAchetee();
-                                        produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
-                                        ParserProduit.updateProduit(produitDTO,produit_id);
-                                        prix_total += detailAchatDTO.getPrixAchat();
-                                    }
-                                    achatDTO.setPrix(prix_total);
-                                    achatDTO.setStatutAchat("CONFIRMÉ");
-                                    System.out.println(achatDTO);
-                                    boolean status = ParserAchat.updateAchat(achatDTO,achatDTO.getId());
-                                    if(status) {
-                                        showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
-                                        achatController.repriseconfirmAchatBtn.setDisable(true);
-                                        achatController.reprisesaveAchatBtn.setDisable(true);
-                                        achatController.repriseretourBtn.setDisable(true);
-                                        achatController.repriseDetailsAchatsTableView.setDisable(true);
-                                        AchatController.this.mesAchatsTableView.getItems().clear();
-                                        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
-                                        AchatController.this.mesAchatsTableView.refresh();
-                                    }else{
-                                        showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+                                    // Créer une alerte de confirmation
+                                    Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    confirmationAlert.setTitle("Confirmation de la reprise d'achat");
+                                    confirmationAlert.setHeaderText("Voulez-vous vraiment confirmer cette reprise d'achat ?");
+                                    confirmationAlert.setContentText("Cliquez sur OK pour confirmer ou sur Annuler pour annuler.");
+
+                                    // Obtenir la réponse de l'utilisateur
+                                    Optional<ButtonType> result = confirmationAlert.showAndWait();
+                                    if (result.isPresent() && result.get() == ButtonType.OK) {
+                                        // L'utilisateur a cliqué sur OK, continuer avec le traitement de la reprise d'achat
+                                        AchatDTO achatDTO = AchatController.this.selectedAchatToResume;
+                                        double prix_total = 0;
+                                        for (DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchatsReprise) {
+                                            ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                                            long produit_id = produitDTO.getId();
+                                            int qteAchetee = detailAchatDTO.getQteAchetee();
+                                            produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                                            ParserProduit.updateProduit(produitDTO, produit_id);
+                                            prix_total += detailAchatDTO.getPrixAchat();
+                                        }
+                                        achatDTO.setPrix(prix_total);
+                                        achatDTO.setStatutAchat("CONFIRMÉ");
+                                        System.out.println(achatDTO);
+                                        boolean status = ParserAchat.updateAchat(achatDTO, achatDTO.getId());
+                                        if (status) {
+                                            showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat confirmé avec succès !");
+                                            achatController.repriseconfirmAchatBtn.setDisable(true);
+                                            achatController.reprisesaveAchatBtn.setDisable(true);
+                                            achatController.repriseretourBtn.setDisable(true);
+                                            achatController.repriseDetailsAchatsTableView.setDisable(true);
+                                            AchatController.this.resumeAchatStage.close();
+                                            AchatController.this.mesAchatsTableView.getItems().clear();
+                                            AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                                            AchatController.this.mesAchatsTableView.refresh();
+                                        } else {
+                                            showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de l'ajout de cet achat.");
+                                        }
                                     }
                                 });
+
 
 
                             } catch (IOException e) {
@@ -752,6 +777,7 @@ public class AchatController implements Initializable {
 
             initialized = true;
         }
+
     }
 
 
@@ -763,12 +789,20 @@ public class AchatController implements Initializable {
         alert.showAndWait();
     }
 
+    public void onRefreshAchats(){
+        AchatController.this.mesAchatsTableView.getItems().clear();
+        AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+        AchatController.this.mesAchatsTableView.refresh();
+    }
+
     public void onCreateAchat(ActionEvent e) throws IOException {
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com.example.giefrontend1/Admin/MyPurchasesCreate.fxml"));
         Parent root = loader.load();
         Stage stage = new Stage();
+        AchatController.this.createAchatStage = stage;
         Scene scene = new Scene(root);
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
         stage.setScene(scene);
         stage.setTitle("Créer un nouvel achat");
         stage.show();
@@ -777,6 +811,37 @@ public class AchatController implements Initializable {
 
 
         AchatController achatController = loader.getController();
+
+        TableColumn<DetailAchatDTO, Void> deleteColumn = new TableColumn<>("Supprimer produit");
+        deleteColumn.setCellFactory(param -> new TableCell<>() {
+            private final Button deleteButton = new Button("Supprimer");
+
+            {
+                deleteButton.setOnAction(event -> {
+                    DetailAchatDTO selectedDetailAchat = getTableView().getItems().get(getIndex());
+                    System.out.println(selectedDetailAchat.getId());
+                    AchatController.this.detailsAchats.remove(selectedDetailAchat);
+                    achatController.DetailsAchatsTableView.getItems().clear();
+                    achatController.DetailsAchatsTableView.getItems().addAll(AchatController.this.detailsAchats);
+                    achatController.DetailsAchatsTableView.refresh();
+                    showAlert(Alert.AlertType.INFORMATION,"Succès","Produit supprimé avec succès !");
+
+
+                });
+            }
+
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(deleteButton);
+                }
+            }
+        });
+
+        achatController.DetailsAchatsTableView.getColumns().add(deleteColumn);
 
         //Populating Fournisseur TableView:
         achatController.FournisseursIdColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getId()).asObject());
@@ -1001,6 +1066,7 @@ public class AchatController implements Initializable {
                 achatController.confirmAchatBtn.setDisable(true);
                 achatController.saveAchatBtn.setDisable(true);
                 achatController.retourBtn.setDisable(true);
+                AchatController.this.createAchatStage.close();
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
                 AchatController.this.mesAchatsTableView.refresh();
@@ -1011,32 +1077,45 @@ public class AchatController implements Initializable {
 
 
         achatController.confirmAchatBtn.setOnAction(event -> {
-            ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
-            AchatDTO achatDTO = new AchatDTO(fournisseur,AchatController.this.detailsAchats, String.valueOf(LocalDate.now()),0,"CONFIRMÉ");
-            double prix_total = 0;
-            for(DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats){
-                ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
-                long produit_id = produitDTO.getId();
-                int qteAchetee = detailAchatDTO.getQteAchetee();
-                produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
-                ParserProduit.updateProduit(produitDTO,produit_id);
-                prix_total += detailAchatDTO.getPrixAchat();
-            }
-            achatDTO.setPrix(prix_total);
-            System.out.println(achatDTO);
-            boolean status = ParserAchat.createAchat(achatDTO);
-            if(status) {
-                showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat ajouté avec succès !");
-                achatController.confirmAchatBtn.setDisable(true);
-                achatController.saveAchatBtn.setDisable(true);
-                achatController.retourBtn.setDisable(true);
-                AchatController.this.mesAchatsTableView.getItems().clear();
-                AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
-                AchatController.this.mesAchatsTableView.refresh();
-            }else{
-                showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite lors de l'ajout de cet achat.");
+            // Créer une alerte de confirmation
+            Alert confirmationAlert = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmationAlert.setTitle("Confirmation de l'achat");
+            confirmationAlert.setHeaderText("Voulez-vous vraiment confirmer cet achat ?");
+            confirmationAlert.setContentText("Cliquez sur OK pour confirmer ou sur Annuler pour annuler.");
+
+            // Obtenir la réponse de l'utilisateur
+            Optional<ButtonType> result = confirmationAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                // L'utilisateur a cliqué sur OK, continuer avec le traitement de l'achat
+                ContactDTO fournisseur = ParserContact.getContactByID(AchatController.this.selected_fournisseur_id);
+                AchatDTO achatDTO = new AchatDTO(fournisseur, AchatController.this.detailsAchats, String.valueOf(LocalDate.now()), 0, "CONFIRMÉ");
+                double prix_total = 0;
+                for (DetailAchatDTO detailAchatDTO : AchatController.this.detailsAchats) {
+                    ProduitDTO produitDTO = detailAchatDTO.getProduitObjet();
+                    long produit_id = produitDTO.getId();
+                    int qteAchetee = detailAchatDTO.getQteAchetee();
+                    produitDTO.setQteStock(produitDTO.getQteStock() + qteAchetee);
+                    ParserProduit.updateProduit(produitDTO, produit_id);
+                    prix_total += detailAchatDTO.getPrixAchat();
+                }
+                achatDTO.setPrix(prix_total);
+                System.out.println(achatDTO);
+                boolean status = ParserAchat.createAchat(achatDTO);
+                if (status) {
+                    showAlert(Alert.AlertType.INFORMATION, "Succès", "Achat confirmé avec succès !");
+                    achatController.confirmAchatBtn.setDisable(true);
+                    achatController.saveAchatBtn.setDisable(true);
+                    achatController.retourBtn.setDisable(true);
+                    AchatController.this.createAchatStage.close();
+                    AchatController.this.mesAchatsTableView.getItems().clear();
+                    AchatController.this.mesAchatsTableView.getItems().addAll(ParserAchat.getAllAchats());
+                    AchatController.this.mesAchatsTableView.refresh();
+                } else {
+                    showAlert(Alert.AlertType.ERROR, "Erreur", "Une erreur s'est produite lors de l'ajout de cet achat.");
+                }
             }
         });
+
 
     }
 
@@ -1047,6 +1126,7 @@ public class AchatController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle("Recherche avancée des achats");
+        stage.getIcons().add(new Image (getClass().getResourceAsStream("/logo.png")));
         stage.show();
         AchatController achatController = loader.getController();
 
@@ -1111,6 +1191,7 @@ public class AchatController implements Initializable {
                 AchatController.this.mesAchatsTableView.getItems().clear();
             }else{
                 showAlert(Alert.AlertType.INFORMATION,"Succès","Achats trouvés !");
+                stage.close();
                 AchatController.this.mesAchatsTableView.getItems().clear();
                 AchatController.this.mesAchatsTableView.getItems().addAll(achats);
                 AchatController.this.mesAchatsTableView.refresh();

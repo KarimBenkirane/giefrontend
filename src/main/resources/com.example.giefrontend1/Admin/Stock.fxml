@@ -7,12 +7,12 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
+<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="stock_container" stylesheets="@../../Style/Stock.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.giefrontend1.Controllers.Commercant.ProduitController">
    <Text layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Consulter le stock" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0">
       <font>
          <Font size="23.0" />
       </font></Text>
-   <TableView fx:id="searchResultTableView" layoutX="8.0" layoutY="204.0" prefHeight="495.0" prefWidth="832.0">
+   <TableView fx:id="searchResultTableView" layoutX="8.0" layoutY="204.0" prefHeight="495.0" prefWidth="832.0" styleClass="stock_tableview" stylesheets="@../../Style/Stock.css">
      <columns>
        <TableColumn fx:id="idProduitColumn" prefWidth="75.0" text="ID" />
        <TableColumn fx:id="categorieProduitColumn" prefWidth="75.0" text="Catégorie" />
@@ -31,9 +31,9 @@
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="583.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
+   <Text layoutX="576.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Effectuer une recherche avancée">
       <font>
-         <Font size="15.0" />
+         <Font size="17.0" />
       </font>
    </Text>
    <Button fx:id="createProduitBtn" layoutX="52.0" layoutY="156.0" mnemonicParsing="false" onAction="#onCreateProductBtn" prefHeight="38.0" prefWidth="186.0" text="Créer un produit">
@@ -41,9 +41,9 @@
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="63.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un nouveau produit">
+   <Text layoutX="58.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Créer un nouveau produit">
       <font>
-         <Font size="15.0" />
+         <Font size="17.0" />
       </font>
    </Text>
    <Button fx:id="refreshBtn" layoutX="333.0" layoutY="156.0" mnemonicParsing="false" onAction="#onRefreshBtn" prefHeight="38.0" prefWidth="186.0" text="Rafraîchir">
@@ -51,9 +51,9 @@
          <Font size="17.0" />
       </font>
    </Button>
-   <Text layoutX="333.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rafraîchir la liste des produits">
+   <Text layoutX="320.0" layoutY="145.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Rafraîchir la liste des produits">
       <font>
-         <Font size="15.0" />
+         <Font size="17.0" />
       </font>
    </Text>
 </AnchorPane>

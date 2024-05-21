@@ -15,6 +15,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -135,12 +136,6 @@ public class ProduitController implements Initializable {
 //    public CheckBox sphoneChk;
 
     @FXML
-    public AnchorPane anchorPane1;
-
-    @FXML
-    public AnchorPane anchorPane2;
-
-    @FXML
     public TextField updateModeleTextField;
 
     @FXML
@@ -176,9 +171,11 @@ public class ProduitController implements Initializable {
     @FXML
     public Button refreshBtn;
 
-    private static boolean initialized = false;
-    private List<CheckBox> catCheckBoxes;
+    @FXML
+    public MenuButton SearchCategoriesMenuButton;
 
+    private static boolean initialized = false;
+    private List<CheckMenuItem> catMenuItems;
 
 
     public FXMLLoader loadScene(String fxmlName,String windowTitle) throws IOException {
@@ -188,15 +185,20 @@ public class ProduitController implements Initializable {
         Stage stage = new Stage();
         stage.setScene(scene);
         stage.setTitle(windowTitle);
+        stage.getIcons().add(new Image(getClass().getResourceAsStream("/logo.png")));
         stage.show();
         return loader;
     }
 
-    public List<CheckBox> getAllCheckboxes(AnchorPane anchorPane) {
-        return anchorPane.getChildren().stream()
-                .filter(node -> node instanceof CheckBox)
-                .map(node -> (CheckBox) node)
-                .collect(Collectors.toList());
+    public List<CheckMenuItem> getAllCategoriesFromMenuButton(MenuButton menuButton) {
+        List<CheckMenuItem> checkMenuItems = new ArrayList<>();
+        for(MenuItem menuItem : menuButton.getItems()){
+            if(menuItem instanceof CheckMenuItem){
+                checkMenuItems.add((CheckMenuItem) menuItem);
+            }
+
+        }
+        return checkMenuItems;
     }
 
 
@@ -318,6 +320,8 @@ public class ProduitController implements Initializable {
                                 boolean status = ParserProduit.updateProduit(produitDTO,produit_id);
                                 if (status) {
                                     showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit modifié avec succès !");
+                                    Stage stage = (Stage) produitController.updateQtStockTextField.getScene().getWindow();
+                                    stage.close();
                                     ProduitController.this.searchResultTableView.getItems().clear();
                                     ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
                                     ProduitController.this.searchResultTableView.refresh();
@@ -528,6 +532,8 @@ public class ProduitController implements Initializable {
             boolean status = ParserProduit.createProduit(produitDTO);
             if (status) {
                 showAlert(Alert.AlertType.INFORMATION, "Succès", "Produit crée avec succès !");
+                Stage stage = (Stage) produitController.createPrixTextField.getScene().getWindow();
+                stage.close();
                 ProduitController.this.searchResultTableView.getItems().clear();
                 ProduitController.this.searchResultTableView.getItems().addAll(ParserProduit.getAllProduits());
                 ProduitController.this.searchResultTableView.refresh();
@@ -550,10 +556,9 @@ public class ProduitController implements Initializable {
         produitController.marqueSearchComboBox.getItems().add("Toutes les marques");
         populateComboBoxMarquesCategories("marques",produitController.marqueSearchComboBox);
 
-        List<CheckBox> checkBoxes = produitController.getAllCheckboxes(produitController.anchorPane1);
-        checkBoxes.addAll(produitController.getAllCheckboxes(produitController.anchorPane2));
+        List<CheckMenuItem> checkMenuItems = produitController.getAllCategoriesFromMenuButton(produitController.SearchCategoriesMenuButton);
 
-        ProduitController.this.catCheckBoxes = checkBoxes;
+        ProduitController.this.catMenuItems = checkMenuItems;
         produitController.marqueSearchComboBox.setValue("Toutes les marques");
 
         produitController.searchProductsBtn.setOnAction(event -> {
@@ -561,10 +566,13 @@ public class ProduitController implements Initializable {
                     null:
                     produitController.marqueSearchComboBox.getValue();
             List<String> categories = new ArrayList<>();
-            for(CheckBox checkBox : ProduitController.this.catCheckBoxes) {
-                if(checkBox.isSelected()) {
-                    categories.add(checkBox.getText());
+            for(CheckMenuItem checkMenuItem : ProduitController.this.catMenuItems) {
+                if(checkMenuItem.isSelected()) {
+                    categories.add(checkMenuItem.getText());
                 }
+            }
+            if(categories.contains("Toutes les catégories")){
+                categories = null;
             }
             System.out.println(categories);
             String modele = produitController.modeleSearchTextField.getText().isEmpty() ?
@@ -608,10 +616,14 @@ public class ProduitController implements Initializable {
                 showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur s'est produite.");
             }else if (searchResult.isEmpty()){
                 showAlert(Alert.AlertType.INFORMATION,"Aucun produit trouvé","Aucun produit ne correspond à votre recherche !");
+                Stage stage = (Stage) produitController.dispoRadioBtn.getScene().getWindow();
+                stage.close();
             }else{
                 ProduitController.this.searchResultTableView.getItems().clear();
                 ProduitController.this.searchResultTableView.getItems().addAll(searchResult);
-                showAlert(Alert.AlertType.INFORMATION,"Succès","Des produits on été trouvés, veuillez consulter le tableau !");
+                showAlert(Alert.AlertType.INFORMATION,"Succès","Produits trouvés !");
+                Stage stage = (Stage) produitController.dispoRadioBtn.getScene().getWindow();
+                stage.close();
             }
         });
     }
