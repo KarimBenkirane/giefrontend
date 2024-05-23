@@ -482,7 +482,9 @@ public class CommandeController implements Initializable {
 
     // Méthode appelée lors de la recherche de commande
     public void onClientSearch(ActionEvent actionEvent) {
-        ContactDTO selectedClient = clientSearchComboBox.getValue();
+        DisplayContact selectedDisplayContact = (DisplayContact) clientSearchComboBox.getValue();
+        ContactDTO selectedClient = selectedDisplayContact != null ? selectedDisplayContact.getContact() : null;
+        //System.out.println(selectedClient);
         String statut = statutSearchComboBox.getValue();
         LocalDate localDateApres = apresDatePicker.getValue();
         LocalDate localDateAvant = avantDatePicker.getValue();

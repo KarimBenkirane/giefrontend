@@ -18,6 +18,7 @@ import java.util.Map;
 public class ParserAchat {
 
     private static final String url = "http://localhost:4567";
+
     private static final OkHttpClient client = new OkHttpClient();
 
     public static List<AchatDTO> getAllAchats() {
