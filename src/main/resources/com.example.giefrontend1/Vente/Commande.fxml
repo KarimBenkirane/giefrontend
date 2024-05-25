@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -161,7 +163,45 @@
                         </TableView>
                     </VBox>
                 </Tab>
-            </TabPane>
+            <Tab onSelectionChanged="#updateChart" text="Statistiques">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@../../Style/Statistique.css">
+                    <Label layoutX="20.0" layoutY="20.0" style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Statistiques des gains" />
+                    <LineChart fx:id="lineChart" layoutX="31.0" layoutY="117.0" prefHeight="368.0" prefWidth="698.0" styleClass="line-chart" title="Gain Evolution Over Time">
+                        <xAxis>
+                            <NumberAxis label="Temps" styleClass="axis-label" />
+                        </xAxis>
+                        <yAxis>
+                            <NumberAxis label="Gain (DH)" />
+                        </yAxis>
+                    </LineChart>
+                </AnchorPane>
+            </Tab>
+
+            <!-- <Tab fx:id="StatistiquesTab" text="Statistiques">
+                &lt;!&ndash; <VBox spacing="10" padding="10">
+                     <LineChart fx:id="lineChart" title="Gain Over Time">
+                         <xAxis>
+                             <NumberAxis label="Time"/>
+                         </xAxis>
+                         <yAxis>
+                             <NumberAxis label="Gain"/>
+                         </yAxis>
+                     </LineChart>
+
+                     <BarChart fx:id="barChart" title="Total Sales per Product">
+                         <xAxis>
+                             <CategoryAxis label="Product"/>
+                         </xAxis>
+                         <yAxis>
+                             <NumberAxis label="Total Sales"/>
+                         </yAxis>
+                     </BarChart>
+
+                     <PieChart fx:id="pieChart" title="Product Sales Distribution"/>
+                 </VBox>&ndash;&gt;
+             </Tab>
+
+         --></TabPane>
         </VBox>
     </children>
 </AnchorPane>

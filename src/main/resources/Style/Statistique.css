@@ -1,0 +1,16 @@
+.tab-pane .tab {
+    -fx-background-color: #f0f0f0;
+    -fx-border-color: #ccc;
+}
+
+.tab-pane .tab .line-chart {
+    -fx-background-color: #fff;
+}
+
+.tab-pane .tab .line-chart .axis {
+    -fx-stroke: #333;
+}
+
+.tab-pane .tab .line-chart .axis-label {
+    -fx-text-fill: #666;
+}

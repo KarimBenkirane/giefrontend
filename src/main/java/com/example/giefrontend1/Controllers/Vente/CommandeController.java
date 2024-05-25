@@ -1,8 +1,6 @@
 package com.example.giefrontend1.Controllers.Vente;
 
-import com.example.giefrontend1.Controllers.Commercant.AchatController;
 import com.example.giefrontend1.Controllers.DTO.*;
-import com.example.giefrontend1.Parser.ParserAchat;
 import com.example.giefrontend1.Parser.ParserCommande;
 import com.example.giefrontend1.Parser.ParserContact;
 import com.example.giefrontend1.Parser.ParserProduit;
@@ -16,31 +14,40 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.PieChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
-import javafx.util.Callback;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+
+import javafx.scene.chart.NumberAxis;
+import javafx.util.StringConverter;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Locale;
 
 public class CommandeController implements Initializable {
     //create commande attributes
     public Label ConfirmationMsg;
     public Button CreateCommandeButton;
     public Tab Show_Commandes;
-    public DatePicker DateCoammndeFiel;
-    public DatePicker DateRegelemtField;
-    public Button getTotalPriceButton;
+
     public TextField ShowTotalPriceField;
     public Spinner<Integer> QuantiterSpinner;
     public TextField ReductionTextField;
@@ -53,8 +60,7 @@ public class CommandeController implements Initializable {
     public DatePicker avantDatePicker;
     public TextField prixMinSearchTextField;
     public TextField prixMaxSearchTextField;
-    public Button RechercherButton;
-    public Tab Search_commande;
+
     public TabPane mainTabPane;
     @FXML
     public TableView<DetailCommandeDTO> DetailCommandeTblView;
@@ -69,16 +75,14 @@ public class CommandeController implements Initializable {
     @FXML
     public TableColumn<DetailCommandeDTO, Double> prix_prod_clm;
 
-    public ComboBox<String> updateStatusComboBox;
-    public Button updateStatusButton;
-    public TableColumn editColumn;
+
     public Tab detailCommandeTab;
     public TableColumn<DetailCommandeDTO,String> Commande_id;
     public Label StatutLabel;
     public DatePicker DateCommandeField;
     public DatePicker DateReglementField;
     //
-    private List<DetailCommandeDTO> detailsCommandes = new ArrayList<>();
+
     // list all commande attributes
     @FXML
     public TableColumn<CommandeDTO, Long> NumClient_tblClm;
@@ -89,10 +93,15 @@ public class CommandeController implements Initializable {
     public TableColumn<CommandeDTO, Double> PrixTotal_tblClm;
     public TableColumn<CommandeDTO, String> EtatCommande_tblClmn;
     public TableView<CommandeDTO> tableView;
+    public Tab StatistiquesTab;
+    @FXML
+    public LineChart<Number, Number> lineChart;
 
+    @FXML
+    public BarChart<String, Number> barChart;
 
-
-
+    @FXML
+    public PieChart pieChart;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -101,6 +110,103 @@ public class CommandeController implements Initializable {
         populateProduitChoiceBox();
         initQuantiterSpinner();
         initializeStatutComboBox();
+        //initializeCharts();
+        setupLineChart();
+    }
+
+   /* public void initializeCharts() {
+        setupLineChart();
+        setupBarChart();
+        setupPieChart();
+    }
+
+    public void setupLineChart() {
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Gains Over Time");
+
+        // Example data - replace with actual data from ParserCommande or other sources
+        series.getData().add(new XYChart.Data<>(1, 200));
+        series.getData().add(new XYChart.Data<>(2, 400));
+        series.getData().add(new XYChart.Data<>(3, 300));
+
+        lineChart.getData().add(series);
+    }
+
+    public void setupBarChart() {
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Total Sales per Product");
+
+        // Example data - replace with actual data from ParserCommande or other sources
+        series.getData().add(new XYChart.Data<>("Product A", 150));
+        series.getData().add(new XYChart.Data<>("Product B", 200));
+        series.getData().add(new XYChart.Data<>("Product C", 250));
+
+        barChart.getData().add(series);
+    }
+
+    public void setupPieChart() {
+        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                new PieChart.Data("Product A", 30),
+                new PieChart.Data("Product B", 25),
+                new PieChart.Data("Product C", 45)
+        );
+
+        pieChart.setData(pieChartData);
+
+        pieChartData.forEach(data ->
+                data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
+                        showAlert(Alert.AlertType.INFORMATION, "Product Info", data.getName() + ": " + data.getPieValue())
+                )
+        );
+    }*/
+    public void updateChart(){setupLineChart();}
+    public void setupLineChart() {
+        // Clear any previous data in the chart
+        lineChart.getData().clear();
+
+        // Create a series to hold the data
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Prix Total des Commandes");
+
+        // Retrieve all commandes
+        List<CommandeDTO> commandes = ParserCommande.getAllCommandes();
+        // Define a DateTimeFormatter for parsing the date with French locale
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, uuuu", Locale.FRENCH);
+
+        // Sort commandes by date
+        commandes.sort(Comparator.comparing(commande -> LocalDate.parse(commande.getDateCommande(), formatter)));
+
+        // Get the first date
+        LocalDate firstDate = LocalDate.parse(commandes.get(0).getDateCommande(), formatter);
+
+        // Iterate over the commandes and add data points to the series
+        for (CommandeDTO commande : commandes) {
+            // Parse the date using the formatter
+            LocalDate dateCommande = LocalDate.parse(commande.getDateCommande(), formatter);
+            double prixTotal = commande.getTotalCommande();
+
+            series.getData().add(new XYChart.Data<>(ChronoUnit.DAYS.between(firstDate, dateCommande), prixTotal)); // Convert LocalDate to days from the first date
+        }
+
+        // Add the series to the chart
+        lineChart.getData().add(series);
+
+        // Set custom label formatter for x-axis
+        DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("MMM/yyyy", Locale.FRENCH);
+        ((NumberAxis) lineChart.getXAxis()).setTickLabelFormatter(new StringConverter<Number>() {
+            @Override
+            public String toString(Number object) {
+                long days = object.longValue();
+                LocalDate date = firstDate.plusDays(days);
+                return customFormatter.format(date);
+            }
+
+            @Override
+            public Number fromString(String string) {
+                // Not needed for axis label formatting
+                return null;
+            }
+        });
     }
 
     @FXML
@@ -326,7 +432,6 @@ public class CommandeController implements Initializable {
             showAlert(Alert.AlertType.ERROR, "ERROR", "Un Probleme est survenu lors de la creation de la Commande!");
 
         }
-
         StatutLabel.setGraphic(confirmationMsg);
     }
 
@@ -348,9 +453,10 @@ public class CommandeController implements Initializable {
                 contacts.add(contact);
             }
         } catch (Exception e) {
-            e.printStackTrace(); // Gérer les erreurs, par exemple en affichant un message à l'utilisateur
+            e.printStackTrace();
         }
-    }private void populateProduitChoiceBox() {
+    }
+    private void populateProduitChoiceBox() {
         try {
             List<ProduitDTO> produits = getAllProduits();
             for (ProduitDTO produit : produits) {
@@ -463,7 +569,9 @@ public class CommandeController implements Initializable {
                 } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
+
             }
+
 
             ShowTotalPriceField.setText(String.valueOf(prixTotal));
         }
@@ -533,8 +641,3 @@ public class CommandeController implements Initializable {
 
     }
 }
-
-
-
-
-
