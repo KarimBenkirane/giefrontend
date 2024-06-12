@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -109,12 +111,36 @@ public class CommandeController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTableView();
         populateClientChoiceBox();
+
+        ClientChoiceBox.setOnMouseClicked(event -> {
+            ClientChoiceBox.getItems().clear();
+            populateClientChoiceBox();
+        });
+
+        ClientChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ContactDTO>() {
+            @Override
+            public void changed(ObservableValue<? extends ContactDTO> observableValue, ContactDTO oldValue, ContactDTO newValue) {
+                System.out.println("Before");
+                System.out.println(CommandeController.this.detailsCommande);
+                CommandeController.this.detailsCommande.clear();
+                System.out.println("After");
+                System.out.println(CommandeController.this.detailsCommande);
+            }
+        });
+
+        produitChoicebox.setOnMouseClicked(event -> {
+            produitChoicebox.getItems().clear();
+            populateProduitChoiceBox();
+        });
+
+
         populateProduitChoiceBox();
         initQuantiterSpinner();
         initializeStatutComboBox();
         //initializeCharts();
         setupLineChart();
     }
+
 
     /* public void initializeCharts() {
          setupLineChart();
@@ -416,13 +442,6 @@ public class CommandeController implements Initializable {
         this.detailsCommande.add(detailCommande);
 
         showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté avec succès !");
-    }
-
-    public void annulerCommande(){
-        if(this.detailsCommande != null){
-            this.detailsCommande.clear();
-            showAlert(Alert.AlertType.INFORMATION,"Succès","Commande annulée avec succès !");
-        }
     }
 
     public void onCreateCommande(ActionEvent actionEvent) {

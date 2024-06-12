@@ -52,8 +52,6 @@
                                 <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
                         <RowConstraints />
                             </rowConstraints>
 
@@ -80,10 +78,9 @@
 
                             <Button onAction="#addToBasket" text="Ajouter au panier" GridPane.rowIndex="9" />
 
-                            <Button onAction="#onCreateCommande" text="Créer commande" GridPane.rowIndex="12" />
-                            <Label fx:id="ConfirmationMsg" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                     <Label fx:id="StatutLabel" prefHeight="53.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                     <Button onAction="#annulerCommande" text="Annuler commande" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                            <Button onAction="#onCreateCommande" text="Créer commande" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                            <Label fx:id="ConfirmationMsg" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                     <Label fx:id="StatutLabel" prefHeight="53.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
                         </GridPane>
                     <ImageView fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -139,7 +136,7 @@
                         </HBox>
                         <TableView fx:id="tableView" prefHeight="400.0" prefWidth="700.0" stylesheets="@../../Style/TableView.css">
                             <columns>
-                                <TableColumn fx:id="NumBonCommande_tblClm" text="Numéro Commande" />
+                                <TableColumn fx:id="NumBonCommande_tblClm" text="Numéro commande" />
                                 <TableColumn fx:id="NumClient_tblClm" text="Client" />
                                 <TableColumn fx:id="DateCommande_tblmd" text="Date commande" />
                                 <TableColumn fx:id="DateReglement_tblClm" text="Date règlement" />
