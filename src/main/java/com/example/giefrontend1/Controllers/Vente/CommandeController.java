@@ -103,6 +103,8 @@ public class CommandeController implements Initializable {
     @FXML
     public PieChart pieChart;
 
+    List<DetailCommandeDTO> detailsCommande = new ArrayList<>();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         setupTableView();
@@ -111,7 +113,7 @@ public class CommandeController implements Initializable {
         initQuantiterSpinner();
         initializeStatutComboBox();
         //initializeCharts();
-        setupLineChart();
+//        setupLineChart();
     }
 
    /* public void initializeCharts() {
@@ -380,12 +382,7 @@ public class CommandeController implements Initializable {
         alert.showAndWait();
     }
 
-    public void onCreateCommande(ActionEvent actionEvent) {
-        DisplayContact selectedDisplayContact = (DisplayContact) ClientChoiceBox.getValue();
-        ContactDTO selectedClient = selectedDisplayContact.getContact();
-        //ystem.out.println(selectedClient);
-
-
+    public void addToBasket(ActionEvent actionEvent){
         ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
         ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
 
@@ -400,18 +397,48 @@ public class CommandeController implements Initializable {
             double reductionValeur = (reduction / 100) * prixTotal;
             prixTotal -= reductionValeur;
         }
-        List<DetailCommandeDTO> detailsCommande = new ArrayList<>();
+
 
         // Créer un nouveau détail de commande avec les valeurs récupérées
         DetailCommandeDTO detailCommande = new DetailCommandeDTO(selectedProduit, quantite, selectedProduit.getPrix(), reduction);
         //System.out.println(detailCommande);
 
         // Ajouter le détail de commande à la liste
-        detailsCommande.add(detailCommande);
-        String etat = "INITIALISÉ";
+        this.detailsCommande.add(detailCommande);
+
+        showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté avec succès !");
+    }
+
+    public void annulerCommande(){
+        if(this.detailsCommande != null){
+            this.detailsCommande.clear();
+            showAlert(Alert.AlertType.INFORMATION,"Succès","Commande annulée avec succès !");
+        }
+    }
+
+    public void onCreateCommande(ActionEvent actionEvent) {
+        DisplayContact selectedDisplayContact = (DisplayContact) ClientChoiceBox.getValue();
+        ContactDTO selectedClient = selectedDisplayContact.getContact();
+        //System.out.println(selectedClient);
+
+
+        ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
+        ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
+
+        int quantite = QuantiterSpinner.getValue();
+        double reduction = !ReductionTextField.getText().isEmpty() ? Double.parseDouble(ReductionTextField.getText()) : 0.0;
+        String dateCommandeSQL = String.valueOf(DateCommandeField.getValue());
+        String dateReglementSQL = String.valueOf(DateReglementField.getValue());
+        double prixProduit = selectedProduit.getPrix();
+        double prixTotal = 0;
+        for(DetailCommandeDTO detailCommandeDTO : this.detailsCommande){
+            double prixTemp = (detailCommandeDTO.getPrixCommande() * detailCommandeDTO.getQteCommante());
+            prixTemp -= prixTemp * (detailCommandeDTO.getReduction()/100);
+            prixTotal += prixTemp;
+        }
 
         // Créer une nouvelle commande avec les valeurs récupérées et les détails de commande
-        CommandeDTO newCommande = new CommandeDTO(selectedClient, detailsCommande, dateCommandeSQL, dateReglementSQL, prixTotal, etat);
+        CommandeDTO newCommande = new CommandeDTO(selectedClient, detailsCommande, dateCommandeSQL, dateReglementSQL, prixTotal, "INITIALISÉ");
         newCommande.setDetailsCommande(detailsCommande);
         // Appeler la méthode pour créer la commande dans le backend
         boolean commandeCreated = ParserCommande.createCommande(newCommande);
@@ -424,14 +451,15 @@ public class CommandeController implements Initializable {
             confirmationMsg.setText("Commande créée avec succès !");
             this.tableView.getItems().setAll(ParserCommande.getAllCommandes());
             confirmationMsg.setTextFill(Color.GREEN);
-            showAlert(Alert.AlertType.INFORMATION, "Succès", "Commande Cree avec succès !");
+            showAlert(Alert.AlertType.INFORMATION, "Succès", "Commande créée avec succès !");
 
         } else {
             confirmationMsg.setText("Erreur lors de la création de la commande.");
             confirmationMsg.setTextFill(Color.RED);
-            showAlert(Alert.AlertType.ERROR, "ERROR", "Un Probleme est survenu lors de la creation de la Commande!");
+            showAlert(Alert.AlertType.ERROR, "ERROR", "Un problème est survenu lors de la création de la commande !");
 
         }
+        this.detailsCommande.clear();
         StatutLabel.setGraphic(confirmationMsg);
     }
 

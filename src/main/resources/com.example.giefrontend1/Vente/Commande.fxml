@@ -34,7 +34,7 @@
             <!-- Onglet Créer une Commande -->
             <Tab text="Créer une Commande">
                 <VBox alignment="CENTER" spacing="10" stylesheets="@../../Style/Commande2.css">
-                    <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="tab-label" text="Créer une Nouvelle Commande" />
+                    <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="tab-label" text="Créer une nouvelle commande" />
                     <GridPane styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css">
 
                     <columnConstraints>
@@ -52,34 +52,38 @@
                                 <RowConstraints />
                         <RowConstraints />
                         <RowConstraints />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                        <RowConstraints />
                             </rowConstraints>
 
-                            <Label styleClass="tab-label" text="Client:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                            <Label styleClass="tab-label" text="Client :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                             <ChoiceBox fx:id="ClientChoiceBox" prefWidth="150" GridPane.columnIndex="0" GridPane.rowIndex="1" />
 
-                            <Label styleClass="tab-label" text="Produit:" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                            <Label styleClass="tab-label" text="Produit :" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                             <ChoiceBox fx:id="produitChoicebox" prefWidth="150" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                            <Label styleClass="tab-label" text="Date de Commande:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                            <Label styleClass="tab-label" text="Date de commande :" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                             <DatePicker fx:id="DateCommandeField" GridPane.columnIndex="0" GridPane.rowIndex="3" />
 
-                            <Label styleClass="tab-label" text="Date de Règlement:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                            <Label styleClass="tab-label" text="Date de règlement :" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                             <DatePicker fx:id="DateReglementField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                            <Label styleClass="tab-label" text="Quantité:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                            <Label styleClass="tab-label" text="Quantité :" GridPane.columnIndex="0" GridPane.rowIndex="4" />
                             <Spinner fx:id="QuantiterSpinner" GridPane.columnIndex="0" GridPane.rowIndex="5" />
 
-                            <Label styleClass="tab-label" text="Réduction (%):" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                            <Label styleClass="tab-label" text="Réduction (%) :" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                             <TextField fx:id="ReductionTextField" prefWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-                            <Label styleClass="tab-label" stylesheets="@../../Style/Commande2.css" text="Prix Total:" GridPane.rowIndex="7" />
-                            <TextField fx:id="ShowTotalPriceField" editable="false" prefWidth="150" GridPane.rowIndex="8" />
+                            <Label styleClass="tab-label" stylesheets="@../../Style/Commande2.css" text="Prix Total:" visible="false" GridPane.rowIndex="7" />
+                            <TextField fx:id="ShowTotalPriceField" editable="false" prefWidth="150" visible="false" GridPane.rowIndex="9" />
 
-                            <Button onAction="#getTotalPrice" text="Calculer Prix Total" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                            <Button onAction="#addToBasket" text="Ajouter au panier" GridPane.rowIndex="9" />
 
-                            <Button onAction="#onCreateCommande" text="Créer Commande" GridPane.rowIndex="9" />
-                            <Label fx:id="ConfirmationMsg" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                     <Label fx:id="StatutLabel" prefHeight="53.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                            <Button onAction="#onCreateCommande" text="Créer commande" GridPane.rowIndex="12" />
+                            <Label fx:id="ConfirmationMsg" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                     <Label fx:id="StatutLabel" prefHeight="53.0" prefWidth="291.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                     <Button onAction="#annulerCommande" text="Annuler commande" GridPane.columnIndex="1" GridPane.rowIndex="12" />
                         </GridPane>
                     <ImageView fitHeight="300.0" fitWidth="600.0" pickOnBounds="true" preserveRatio="true">
                         <image>
@@ -103,7 +107,7 @@
                                 <ComboBox fx:id="clientSearchComboBox" style="-fx-pref-width: 120px;" />
                             </VBox>
                             <VBox spacing="5">
-                                <Label styleClass="tab-label" text="Date de Commande" />
+                                <Label styleClass="tab-label" text="Date de commande" />
                                 <HBox spacing="10">
                                     <Label text="Après le:" />
                                     <DatePicker fx:id="apresDatePicker" />
@@ -131,7 +135,7 @@
 
                         <HBox alignment="CENTER" spacing="10">
                             <Button onAction="#onClientSearch" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120px;" text="Filter" />
-                            <Button onAction="#refreshTableView" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120px;" text="Refresh" />
+                            <Button onAction="#refreshTableView" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-font-weight: bold; -fx-min-width: 120px;" text="Rafraîchir" />
                         </HBox>
                         <TableView fx:id="tableView" prefHeight="400.0" prefWidth="700.0" stylesheets="@../../Style/TableView.css">
                             <columns>
@@ -149,7 +153,7 @@
                 <!-- Onglet Détail Commande -->
                 <Tab fx:id="detailCommandeTab" text="Détail Commande">
                     <VBox spacing="10">
-                        <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css" text="Détails de la Commande" />
+                        <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css" text="Détails de la commande" />
 
                         <TableView fx:id="DetailCommandeTblView" stylesheets="@../../Style/TableView.css">
                             <columns>
