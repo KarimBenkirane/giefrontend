@@ -85,7 +85,7 @@ public class CommandeController implements Initializable {
 
     // list all commande attributes
     @FXML
-    public TableColumn<CommandeDTO, Long> NumClient_tblClm;
+    public TableColumn<CommandeDTO, String> NumClient_tblClm;
     @FXML
     public TableColumn<CommandeDTO, Long> NumBonCommande_tblClm;
     public TableColumn<CommandeDTO, String> DateCommande_tblmd;
@@ -113,54 +113,54 @@ public class CommandeController implements Initializable {
         initQuantiterSpinner();
         initializeStatutComboBox();
         //initializeCharts();
-//        setupLineChart();
-    }
-
-   /* public void initializeCharts() {
         setupLineChart();
-        setupBarChart();
-        setupPieChart();
     }
 
-    public void setupLineChart() {
-        XYChart.Series<Number, Number> series = new XYChart.Series<>();
-        series.setName("Gains Over Time");
+    /* public void initializeCharts() {
+         setupLineChart();
+         setupBarChart();
+         setupPieChart();
+     }
 
-        // Example data - replace with actual data from ParserCommande or other sources
-        series.getData().add(new XYChart.Data<>(1, 200));
-        series.getData().add(new XYChart.Data<>(2, 400));
-        series.getData().add(new XYChart.Data<>(3, 300));
+     public void setupLineChart() {
+         XYChart.Series<Number, Number> series = new XYChart.Series<>();
+         series.setName("Gains Over Time");
 
-        lineChart.getData().add(series);
-    }
+         // Example data - replace with actual data from ParserCommande or other sources
+         series.getData().add(new XYChart.Data<>(1, 200));
+         series.getData().add(new XYChart.Data<>(2, 400));
+         series.getData().add(new XYChart.Data<>(3, 300));
 
-    public void setupBarChart() {
-        XYChart.Series<String, Number> series = new XYChart.Series<>();
-        series.setName("Total Sales per Product");
+         lineChart.getData().add(series);
+     }
 
-        // Example data - replace with actual data from ParserCommande or other sources
-        series.getData().add(new XYChart.Data<>("Product A", 150));
-        series.getData().add(new XYChart.Data<>("Product B", 200));
-        series.getData().add(new XYChart.Data<>("Product C", 250));
+     public void setupBarChart() {
+         XYChart.Series<String, Number> series = new XYChart.Series<>();
+         series.setName("Total Sales per Product");
 
-        barChart.getData().add(series);
-    }
+         // Example data - replace with actual data from ParserCommande or other sources
+         series.getData().add(new XYChart.Data<>("Product A", 150));
+         series.getData().add(new XYChart.Data<>("Product B", 200));
+         series.getData().add(new XYChart.Data<>("Product C", 250));
 
-    public void setupPieChart() {
-        ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
-                new PieChart.Data("Product A", 30),
-                new PieChart.Data("Product B", 25),
-                new PieChart.Data("Product C", 45)
-        );
+         barChart.getData().add(series);
+     }
 
-        pieChart.setData(pieChartData);
+     public void setupPieChart() {
+         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(
+                 new PieChart.Data("Product A", 30),
+                 new PieChart.Data("Product B", 25),
+                 new PieChart.Data("Product C", 45)
+         );
 
-        pieChartData.forEach(data ->
-                data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
-                        showAlert(Alert.AlertType.INFORMATION, "Product Info", data.getName() + ": " + data.getPieValue())
-                )
-        );
-    }*/
+         pieChart.setData(pieChartData);
+
+         pieChartData.forEach(data ->
+                 data.getNode().addEventHandler(MouseEvent.MOUSE_CLICKED, e ->
+                         showAlert(Alert.AlertType.INFORMATION, "Product Info", data.getName() + ": " + data.getPieValue())
+                 )
+         );
+     }*/
     public void updateChart(){setupLineChart();}
     public void setupLineChart() {
         // Clear any previous data in the chart
@@ -274,7 +274,7 @@ public class CommandeController implements Initializable {
         ObservableList<CommandeDTO> observableList = FXCollections.observableArrayList(commandes);
 
         NumBonCommande_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getNumBonCommande()).asObject());
-        NumClient_tblClm.setCellValueFactory(data -> new SimpleLongProperty(data.getValue().getClientId()).asObject());
+        NumClient_tblClm.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getClientId()));
         DateCommande_tblmd.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateCommande()));
         DateReglement_tblClm.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getDateReglement()));
         PrixTotal_tblClm.setCellValueFactory(data -> new SimpleDoubleProperty(data.getValue().getTotalCommande()).asObject());
@@ -318,17 +318,14 @@ public class CommandeController implements Initializable {
         if (!editColumnExists) {
             TableColumn<CommandeDTO, Void> editColumn = new TableColumn<>("Modifier statut");
             editColumn.setCellFactory(param -> new TableCell<>() {
-                private final Button editButton = new Button("Info statut");
+
                 private final ChoiceBox<String> updateStatusChoiceBox = new ChoiceBox<>();
 
                 {
-                    editButton.setOnAction(event -> {
-                        showAlert(Alert.AlertType.WARNING, "Erreur", "Vous ne pouvez pas modifier le statut de cette commande !");
-                    });
                     updateStatusChoiceBox.setOnAction(event -> {
                         String newStatus = updateStatusChoiceBox.getValue();
                         CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
-                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("INITIALISÉ")) {
+                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("CONFIRMÉ")) {
                             selectedCommande.setEtatCommande(newStatus);
                             boolean status = ParserCommande.updateCommande(selectedCommande, selectedCommande.getNumBonCommande());
                             if (status) {
@@ -350,11 +347,11 @@ public class CommandeController implements Initializable {
                         setGraphic(null);
                     } else {
                         CommandeDTO selectedCommande = getTableView().getItems().get(getIndex());
-                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("INITIALISÉ")) {
+                        if (selectedCommande != null && selectedCommande.getEtatCommande().equals("CONFIRMÉ")) {
                             updateStatusChoiceBox.getItems().setAll("ANNULÉ", "LIVRÉ");
                             setGraphic(updateStatusChoiceBox);
                         } else {
-                            setGraphic(editButton);
+
                         }
                     }
                 }
@@ -384,6 +381,18 @@ public class CommandeController implements Initializable {
 
     public void addToBasket(ActionEvent actionEvent){
         ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
+
+
+        if(produitChoicebox.getValue() == null | this.ClientChoiceBox.getValue() == null){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir le client et le produit !");
+            return;
+        }
+
+        if(DateCommandeField.getValue() == null | DateReglementField == null){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez spécifier la date de règlement et de commande !");
+            return;
+        }
+
         ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
 
         int quantite = QuantiterSpinner.getValue();
@@ -417,9 +426,32 @@ public class CommandeController implements Initializable {
     }
 
     public void onCreateCommande(ActionEvent actionEvent) {
+
+        if(ClientChoiceBox.getValue() == null){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir un contact !");
+            return;
+        }
+
+        if(DateReglementField.getValue() == null | DateCommandeField.getValue() == null){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir les dates de commande et de règlement !");
+            return;
+        }
+
         DisplayContact selectedDisplayContact = (DisplayContact) ClientChoiceBox.getValue();
         ContactDTO selectedClient = selectedDisplayContact.getContact();
+
+
         //System.out.println(selectedClient);
+
+        if(this.detailsCommande.isEmpty()){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir des produits pour votre commande !");
+            return;
+        }
+
+        if(this.ClientChoiceBox.getValue() == null){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir le client pour qui ajouter la commande ! !");
+            return;
+        }
 
 
         ProduitDisplay selectedDisplayProduit = (ProduitDisplay) produitChoicebox.getValue();
@@ -438,7 +470,7 @@ public class CommandeController implements Initializable {
         }
 
         // Créer une nouvelle commande avec les valeurs récupérées et les détails de commande
-        CommandeDTO newCommande = new CommandeDTO(selectedClient, detailsCommande, dateCommandeSQL, dateReglementSQL, prixTotal, "INITIALISÉ");
+        CommandeDTO newCommande = new CommandeDTO(selectedClient, detailsCommande, dateCommandeSQL, dateReglementSQL, prixTotal, "CONFIRMÉ");
         newCommande.setDetailsCommande(detailsCommande);
         // Appeler la méthode pour créer la commande dans le backend
         boolean commandeCreated = ParserCommande.createCommande(newCommande);
@@ -567,7 +599,7 @@ public class CommandeController implements Initializable {
     }
 
     private void initializeStatutComboBox() {
-        statutSearchComboBox.getItems().addAll(Arrays.asList("INITIALISÉ", "ANNULÉ", "LIVRÉ"));
+        statutSearchComboBox.getItems().addAll(Arrays.asList("CONFIRMÉ", "ANNULÉ", "LIVRÉ"));
     }
 
     private void initQuantiterSpinner() {

@@ -114,7 +114,15 @@ public class CommandeDTO {
                 '}';
     }
 
-    public long getClientId() {
-        return client != null ? client.getId() : 0;
+    public String getClientId() {
+        String formeJuridique = "";
+        String prenom = "";
+        if(client.getFormeJuridique() != null){
+            formeJuridique = client.getFormeJuridique();
+        }
+        if(client.getPrenom() != null){
+            prenom = client.getPrenom();
+        }
+        return client.getNom() == null ? client.getRaisonSociale() + " " + formeJuridique : client.getNom() + " " + prenom;
     }
 }

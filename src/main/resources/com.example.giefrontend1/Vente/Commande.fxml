@@ -32,7 +32,7 @@
         </padding>
         <TabPane fx:id="mainTabPane" prefHeight="750.0" prefWidth="955.0" tabClosingPolicy="UNAVAILABLE">
             <!-- Onglet Créer une Commande -->
-            <Tab text="Créer une Commande">
+            <Tab text="Créer commande">
                 <VBox alignment="CENTER" spacing="10" stylesheets="@../../Style/Commande2.css">
                     <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="tab-label" text="Créer une nouvelle commande" />
                     <GridPane styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css">
@@ -97,9 +97,9 @@
                 </Tab>
 
                 <!-- Onglet Afficher les Commandes -->
-                <Tab text="Afficher les Commandes">
+                <Tab text="Consulter commandes">
                     <VBox spacing="10" styleClass="tab-header-area" stylesheets="@../../Style/CreateClient.css">
-                        <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="tab-label" text="Liste des Commandes" />
+                        <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="tab-label" text="Liste des commandes" />
 
                         <HBox spacing="10">
                             <VBox spacing="5">
@@ -140,10 +140,10 @@
                         <TableView fx:id="tableView" prefHeight="400.0" prefWidth="700.0" stylesheets="@../../Style/TableView.css">
                             <columns>
                                 <TableColumn fx:id="NumBonCommande_tblClm" text="Numéro Commande" />
-                                <TableColumn fx:id="NumClient_tblClm" text="Numéro Client" />
-                                <TableColumn fx:id="DateCommande_tblmd" text="Date Commande" />
-                                <TableColumn fx:id="DateReglement_tblClm" text="Date Règlement" />
-                                <TableColumn fx:id="PrixTotal_tblClm" text="Prix Total" />
+                                <TableColumn fx:id="NumClient_tblClm" text="Client" />
+                                <TableColumn fx:id="DateCommande_tblmd" text="Date commande" />
+                                <TableColumn fx:id="DateReglement_tblClm" text="Date règlement" />
+                                <TableColumn fx:id="PrixTotal_tblClm" text="Prix total" />
                                 <TableColumn fx:id="EtatCommande_tblClmn" text="Statut" />
                             </columns>
                            </TableView>
@@ -151,7 +151,7 @@
                 </Tab>
 
                 <!-- Onglet Détail Commande -->
-                <Tab fx:id="detailCommandeTab" text="Détail Commande">
+                <Tab fx:id="detailCommandeTab" text="Détails commande">
                     <VBox spacing="10">
                         <Label style="-fx-font-size: 30px; -fx-text-fill: #2c3e50;" styleClass="create_client_container" stylesheets="@../../Style/CreateClient.css" text="Détails de la commande" />
 
