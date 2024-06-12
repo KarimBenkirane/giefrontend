@@ -203,6 +203,12 @@ public class CommandeController implements Initializable {
         // Define a DateTimeFormatter for parsing the date with French locale
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM d, uuuu", Locale.FRENCH);
 
+        if (commandes == null | commandes.isEmpty()) {
+            // Handle the empty list case, e.g., log a message or show an alert
+            System.out.println("No commandes available to display on the chart.");
+            return;
+        }
+
         // Sort commandes by date
         commandes.sort(Comparator.comparing(commande -> LocalDate.parse(commande.getDateCommande(), formatter)));
 
