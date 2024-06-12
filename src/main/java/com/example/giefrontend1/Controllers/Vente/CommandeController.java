@@ -106,6 +106,7 @@ public class CommandeController implements Initializable {
     public PieChart pieChart;
 
     List<DetailCommandeDTO> detailsCommande = new ArrayList<>();
+    Map<Long,Integer> productQuantity = new HashMap<>();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -123,6 +124,7 @@ public class CommandeController implements Initializable {
                 System.out.println("Before");
                 System.out.println(CommandeController.this.detailsCommande);
                 CommandeController.this.detailsCommande.clear();
+                CommandeController.this.productQuantity.clear();
                 System.out.println("After");
                 System.out.println(CommandeController.this.detailsCommande);
             }
@@ -422,6 +424,28 @@ public class CommandeController implements Initializable {
         ProduitDTO selectedProduit = selectedDisplayProduit.getProduit();
 
         int quantite = QuantiterSpinner.getValue();
+
+        if(productQuantity.containsKey(selectedProduit.getId())){
+            if (productQuantity.get(selectedProduit.getId()) == selectedProduit.getQteStock()){
+                showAlert(Alert.AlertType.WARNING,"Erreur","Plus d'éléments en stock !");
+                return;
+            }
+            productQuantity.put(selectedProduit.getId(), productQuantity.get(selectedProduit.getId()) + quantite);
+            if(productQuantity.get(selectedProduit.getId()) > selectedProduit.getQteStock()){
+                showAlert(Alert.AlertType.WARNING,"Erreur","Pas assez de produits en stock pour commander la quantité spécifiée.");
+                productQuantity.put(selectedProduit.getId(),productQuantity.get(selectedProduit.getId()) - quantite);
+                return;
+            }
+        }else if (quantite < selectedProduit.getQteStock()){
+            productQuantity.put(selectedProduit.getId(),quantite);
+        }else if(quantite > selectedProduit.getQteStock()){
+            showAlert(Alert.AlertType.WARNING,"Erreur","Pas assez de produits en stock pour commander la quantité spécifiée.");
+            return;
+        }
+
+
+
+
         double reduction = !ReductionTextField.getText().isEmpty() ? Double.parseDouble(ReductionTextField.getText()) : 0.0;
         String dateCommandeSQL = String.valueOf(DateCommandeField.getValue());
         String dateReglementSQL = String.valueOf(DateReglementField.getValue());
@@ -447,7 +471,7 @@ public class CommandeController implements Initializable {
     public void onCreateCommande(ActionEvent actionEvent) {
 
         if(ClientChoiceBox.getValue() == null){
-            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir un contact !");
+            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir le client pour qui ajouter la commande ! !");
             return;
         }
 
@@ -464,11 +488,6 @@ public class CommandeController implements Initializable {
 
         if(this.detailsCommande.isEmpty()){
             showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir des produits pour votre commande !");
-            return;
-        }
-
-        if(this.ClientChoiceBox.getValue() == null){
-            showAlert(Alert.AlertType.WARNING,"Erreur","Veuillez choisir le client pour qui ajouter la commande ! !");
             return;
         }
 
@@ -503,6 +522,12 @@ public class CommandeController implements Initializable {
             this.tableView.getItems().setAll(ParserCommande.getAllCommandes());
             confirmationMsg.setTextFill(Color.GREEN);
             showAlert(Alert.AlertType.INFORMATION, "Succès", "Commande créée avec succès !");
+            for(DetailCommandeDTO detailCommandeDTO : this.detailsCommande){
+                ProduitDTO produitDTO = detailCommandeDTO.getProduitDTO();
+                int qteCommandee = detailCommandeDTO.getQteCommante();
+                produitDTO.setQteStock(produitDTO.getQteStock() - qteCommandee);
+                ParserProduit.updateProduit(produitDTO,produitDTO.getId());
+            }
 
         } else {
             confirmationMsg.setText("Erreur lors de la création de la commande.");
