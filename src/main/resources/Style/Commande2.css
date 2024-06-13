@@ -29,3 +29,14 @@
 .tab-pane .tab-content-area {
     -fx-padding: 20;
 }
+
+.date-picker .arrow-button {
+    -fx-pref-width: 30px; /* Set preferred width */
+    -fx-pref-height: 30px; /* Set preferred height */
+}
+
+.date-picker .spinner .left-button,
+.date-picker .spinner .right-button {
+    -fx-pref-width: 30px; /* Set preferred width */
+    -fx-pref-height: 30px; /* Set preferred height */
+}
