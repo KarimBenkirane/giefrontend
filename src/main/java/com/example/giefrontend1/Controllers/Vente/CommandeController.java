@@ -116,19 +116,18 @@ public class CommandeController implements Initializable {
         ClientChoiceBox.setOnMouseClicked(event -> {
             ClientChoiceBox.getItems().clear();
             populateClientChoiceBox();
+            System.out.println("Before");
+            System.out.println(CommandeController.this.detailsCommande);
+            System.out.println("Map before:" + CommandeController.this.productQuantity);
+
+            CommandeController.this.detailsCommande.clear();
+            CommandeController.this.productQuantity.clear();
+
+            System.out.println("After");
+            System.out.println(CommandeController.this.detailsCommande);
+            System.out.println("Map after:" + CommandeController.this.productQuantity);
         });
 
-        ClientChoiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<ContactDTO>() {
-            @Override
-            public void changed(ObservableValue<? extends ContactDTO> observableValue, ContactDTO oldValue, ContactDTO newValue) {
-                System.out.println("Before");
-                System.out.println(CommandeController.this.detailsCommande);
-                CommandeController.this.detailsCommande.clear();
-                CommandeController.this.productQuantity.clear();
-                System.out.println("After");
-                System.out.println(CommandeController.this.detailsCommande);
-            }
-        });
 
         produitChoicebox.setOnMouseClicked(event -> {
             produitChoicebox.getItems().clear();
@@ -450,8 +449,6 @@ public class CommandeController implements Initializable {
         }
 
 
-
-
         double reduction = !ReductionTextField.getText().isEmpty() ? Double.parseDouble(ReductionTextField.getText()) : 0.0;
         String dateCommandeSQL = String.valueOf(DateCommandeField.getValue());
         String dateReglementSQL = String.valueOf(DateReglementField.getValue());
@@ -465,13 +462,14 @@ public class CommandeController implements Initializable {
 
 
         // Créer un nouveau détail de commande avec les valeurs récupérées
-        DetailCommandeDTO detailCommande = new DetailCommandeDTO(selectedProduit, quantite, selectedProduit.getPrix(), reduction);
+        DetailCommandeDTO detailCommande = new DetailCommandeDTO(selectedProduit, quantite, prixTotal, reduction);
         //System.out.println(detailCommande);
 
         // Ajouter le détail de commande à la liste
         this.detailsCommande.add(detailCommande);
 
         showAlert(Alert.AlertType.INFORMATION,"Succès","Produit ajouté avec succès !");
+        System.out.println(productQuantity);
     }
 
     public void onCreateCommande(ActionEvent actionEvent) {
